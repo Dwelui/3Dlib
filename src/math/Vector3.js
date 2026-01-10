@@ -1,12 +1,12 @@
 export default class Vector3 {
-    /** @private @type{number} */ #x
-    /** @private @type{number} */ #y
-    /** @private @type{number} */ #z
+    /** @protected @type{number} */ #x
+    /** @protected @type{number} */ #y
+    /** @protected @type{number} */ #z
 
     constructor(x = 0, y = 0, z = 0) {
-        this.#x = x
-        this.#y = y
-        this.#z = z
+        this.x = x
+        this.y = y
+        this.z = z
     }
 
     get x() { return this.#x }

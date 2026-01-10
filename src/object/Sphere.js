@@ -1,6 +1,6 @@
-import Object from "./Object.js"
+import Object3d from "./Object3d.js"
 
-export default class Sphere extends Object {
+export default class Sphere extends Object3d {
     /** @private @type{number} */ #radius
 
     constructor(position, radius) {

@@ -6,7 +6,7 @@
 
 export default class Canvas {
     /** @private @type{HTMLCanvasElement} */ #canvas
-    /** @private @type{CanvasOptions} */ #options
+    /** @private @type{CanvasOptions} */ #options = {}
 
     /**
     * @param {string} querySelector - Query selector to find canvas element by. Throws error if not found.
@@ -31,13 +31,7 @@ export default class Canvas {
 
     /** @param {number} pixels - Must be positive */
     set width(pixels) {
-        if (typeof pixels !== 'number') {
-            throw new TypeError("Parameter 'pixels' is not number")
-        }
-
-        if (pixels <= 0) {
-            throw new Error("Parameter 'pixels' is negative or zero")
-        }
+        this.#validateDimension(pixels)
 
         this.#options.width = pixels
         this.#canvas.width = pixels
@@ -45,15 +39,19 @@ export default class Canvas {
 
     /** @param {number} pixels - Must be positive */
     set height(pixels) {
+        this.#validateDimension(pixels)
+
+        this.#options.height = pixels
+        this.#canvas.height = pixels
+    }
+
+    #validateDimension(pixels) {
         if (typeof pixels !== 'number') {
             throw new TypeError("Parameter 'pixels' is not number")
         }
 
         if (pixels <= 0) {
-            throw new Error("Parameter 'pixels' is negative or zero")
+            throw new RangeError("Parameter 'pixels' is negative or zero")
         }
-
-        this.#options.height = pixels
-        this.#canvas.height = pixels
     }
 }

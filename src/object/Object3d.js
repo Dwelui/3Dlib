@@ -1,6 +1,6 @@
 import Vector3 from "../math/Vector3.js";
 
-export default class Object {
+export default class Object3d {
     /** @private @type{Vector3} */ #position
 
     /**
