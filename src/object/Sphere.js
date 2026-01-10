@@ -14,10 +14,7 @@ export default class Sphere extends Object3d {
     }
 
     set radius(radius) {
-        if (typeof radius !== 'number') {
-            throw new TypeError("Parameter 'radius' is not number")
-        }
-
+        if (typeof radius !== 'number') throw new TypeError("Parameter 'radius' is not number")
         this.#radius = radius
     }
 }

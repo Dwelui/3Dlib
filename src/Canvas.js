@@ -18,23 +18,15 @@ export default class Canvas {
     * @param {CanvasOptions} options
     */
     constructor(querySelector, options) {
-        if (typeof querySelector !== 'string') {
-            throw new TypeError("Parameter 'querySelector' is not string")
-        }
+        if (typeof querySelector !== 'string') throw new TypeError("Parameter 'querySelector' is not string")
 
         this.#canvas = document.querySelector(querySelector)
-        if (this.#canvas === null) {
-            throw new Error("Canvas element not found")
-        }
+        if (this.#canvas === null) throw new Error("Canvas element not found")
 
         this.#context = this.#canvas.getContext('2d')
-        if (this.#canvas === null) {
-            throw new Error("Context not found")
-        }
+        if (this.#canvas === null) throw new Error("Context not found")
 
-        if (typeof options !== 'object') {
-            throw new TypeError("Parameter 'options' is not object")
-        }
+        if (typeof options !== 'object') throw new TypeError("Parameter 'options' is not object")
         this.width = options.width
         this.height = options.height
     }
@@ -60,13 +52,8 @@ export default class Canvas {
     }
 
     #validateDimension(pixels) {
-        if (typeof pixels !== 'number') {
-            throw new TypeError("Parameter 'pixels' is not number")
-        }
-
-        if (pixels <= 0) {
-            throw new RangeError("Parameter 'pixels' is negative or zero")
-        }
+        if (typeof pixels !== 'number') throw new TypeError("Parameter 'pixels' is not number")
+        if (pixels <= 0) throw new RangeError("Parameter 'pixels' is negative or zero")
     }
 
     /**
@@ -75,20 +62,14 @@ export default class Canvas {
     * @param {Color} color
     */
     putPixel(x, y, color) {
-        if (typeof x !== 'number') {
-            throw new TypeError("Parameter 'x' is not number")
-        }
-
-        if (typeof y !== 'number') {
-            throw new TypeError("Parameter 'y' is not number")
-        }
-
-        if (!(color instanceof Color)) {
-            throw new TypeError("Parameter 'color' is not Color")
-        }
+        if (typeof x !== 'number') throw new TypeError("Parameter 'x' is not number")
+        if (typeof y !== 'number') throw new TypeError("Parameter 'y' is not number")
+        if (!(color instanceof Color)) throw new TypeError("Parameter 'color' is not Color")
 
         x += this.width / 2
         y = this.height / 2 - y
+
+        if (x < 0 || x > this.width || y < 0 || y > this.height) console.warn(`pixel is out of bounds: ${x} ${y}`);
 
         this.#context.fillStyle = color.hex;
         this.#context.fillRect(x, y - 1, 1, 1)

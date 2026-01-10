@@ -15,10 +15,7 @@ export default class Object3d {
     }
 
     set position(position) {
-        if (!(position instanceof Vector3)) {
-            throw new TypeError("Parameter 'position' is not Vector3")
-        }
-
+        if (!(position instanceof Vector3)) throw new TypeError("Parameter 'position' is not Vector3")
         this.#position = position
     }
 }

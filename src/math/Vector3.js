@@ -10,16 +10,29 @@ export default class Vector3 {
     }
 
     get x() { return this.#x }
-    set x(number) { this.#x = number }
+    set x(number) {
+        this.#validate(number)
+        this.#x = number
+    }
 
     get y() { return this.#y }
-    set y(number) { this.#y = number }
+    set y(number) {
+        this.#validate(number)
+        this.#y = number
+    }
 
     get z() { return this.#z }
-    set z(number) { this.#z = number }
+    set z(number) {
+        this.#validate(number)
+        this.#z = number
+    }
 
     get magnitude() {
         return Math.sqrt(this.#x * this.#x + this.#y * this.#y + this.#z * this.#z)
+    }
+
+    #validate(number) {
+        if (typeof number !== "number") throw new TypeError("Parameter 'number' must be a number")
     }
 
     normalize() {

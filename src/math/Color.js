@@ -45,12 +45,7 @@ export default class Color extends Vector3 {
     }
 
     #validate(number) {
-        if (typeof number !== "number") {
-            throw new TypeError("Parameter must be a number")
-        }
-
-        if (number < 0 || number > 255) {
-            throw new RangeError("Value must be between 0 and 255")
-        }
+        if (typeof number !== "number") throw new TypeError("Parameter 'number' is not number")
+        if (number < 0 || number > 255) throw new RangeError("Parameter 'number' value is not between 0 and 255")
     }
 }
