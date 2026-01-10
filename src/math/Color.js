@@ -39,6 +39,11 @@ export default class Color extends Vector3 {
         super.z = number
     }
 
+    get hex() {
+        const toHex = v => v.toString(16).padStart(2, "0")
+        return `#${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`
+    }
+
     #validate(number) {
         if (typeof number !== "number") {
             throw new TypeError("Parameter must be a number")
