@@ -13,6 +13,8 @@ export default class Scene extends Object3D {
         super(position ?? new Vector3())
     }
 
+    get objects() { return this.#objects }
+
     /**
     * @param {Object3D} object
     */

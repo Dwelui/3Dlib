@@ -1,9 +1,9 @@
 import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
 import Scene from "./object/Scene.js"
+import Sphere from "./object/Sphere.js"
 
-export default class RayTracer
-{
+export default class RayTracer {
     /** @private @type{Camera} */ #camera
     /** @private @type{Scene} */ #scene
     /** @private @type{number} */ #rayMin
@@ -39,6 +39,43 @@ export default class RayTracer
     trace(viewportPoint) {
         if (!(viewportPoint instanceof Vector3)) throw new TypeError("Parameter 'viewportPoint' is not Vector3")
 
-        
+        let closestIntersection = this.#rayMax
+        let closestObject = null
+
+        for (const object of this.#scene.objects) {
+            if (object instanceof Sphere) {
+                const isClosest = intersection => intersection >= this.#rayMin && intersection <= this.#rayMax && intersection < closestIntersection
+
+                const [intersection1, intersection2] = this.#intersectSphere(viewportPoint, object)
+                if ((isClosest(intersection1))) {
+                    closestIntersection = intersection1
+                    closestObject = object
+                }
+
+                if ((isClosest(intersection2))) {
+                    closestIntersection = intersection2
+                    closestObject = object
+                }
+            } else {
+                console.warn(`Intersection not implemented for ${object.toJSON()}`)
+                return null;
+            }
+        }
+
+        if (closestObject === null) return null
+
+        if (closestObject instanceof Sphere) {
+            return closestObject.color
+        } else {
+            console.warn(`Object color not implemented ${closestObject.toJSON()}`)
+            return null;
+        }
+    }
+
+    #intersectSphere(viewportPoint, sphere) {
+        if (!(viewportPoint instanceof Vector3)) throw new TypeError("Parameter 'viewportPoint' is not Vector3")
+        if (!(sphere instanceof Sphere)) throw new TypeError("Parameter 'sphere' is not Sphere")
+
+        return []
     }
 }
