@@ -37,7 +37,7 @@ export default class Vector3 {
 
     normalize() {
         const mag = this.magnitude
-        if (mag !== 0) this.divideScalar(mag)
+        if (mag !== 0) this.multiplyScalar(1 / mag)
         return this
     }
 
@@ -89,6 +89,17 @@ export default class Vector3 {
         this.#y += otherVector.y
         this.#z += otherVector.z
         return this
+    }
+
+    /**
+    * @param {Vector3} a
+    * @param {Vector3} b
+    */
+    static add(a, b) {
+        if (!(a instanceof Vector3)) throw new TypeError("Parameter 'a' is not Vector3")
+        if (!(b instanceof Vector3)) throw new TypeError("Parameter 'b' is not Vector3")
+
+        return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z)
     }
 
     /**

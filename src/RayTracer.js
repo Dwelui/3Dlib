@@ -3,6 +3,7 @@ import Vector3 from "./math/Vector3.js"
 import AmbientLight from "./object/AmbientLight.js"
 import Camera from "./object/Camera.js"
 import Light from "./object/Light.js"
+import PointLight from "./object/PointLight.js"
 import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
 
@@ -82,8 +83,12 @@ export default class RayTracer {
 
         if (closestObject === null) return null
 
+        const intersectionPoint = Vector3.add(this.#camera.position, Vector3.multiplyScalar(ray, closestIntersection))
+
         if (closestObject instanceof Sphere) {
-            const lightStrenght = this.calculateLightStrengthForSphere(ray, closestObject)
+            const surfaceNormal = Vector3.subtract(intersectionPoint, closestObject.position).normalize()
+
+            const lightStrenght = this.calculateLightStrength(intersectionPoint, surfaceNormal)
             if (lightStrenght < 0) {
                 throw new Error(`Light strenght is negative for object ${closestObject.toJSON()}`)
             }
@@ -120,21 +125,36 @@ export default class RayTracer {
         return [t1, t2]
     }
 
-
     /**
-    * @param {Vector3} ray
-    * @param {Sphere} sphere
+    * @param {Vector3} intersectionPoint
+    * @param {Vector3} surfaceNormal
     */
-    calculateLightStrengthForSphere(ray, sphere) {
-        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
-        if (!(sphere instanceof Sphere)) throw new TypeError("Parameter 'sphere' is not Sphere")
+    calculateLightStrength(intersectionPoint, surfaceNormal) {
+        if (!(intersectionPoint instanceof Vector3)) throw new TypeError("Parameter 'intersectionPoint' is not Vector3")
+        if (!(surfaceNormal instanceof Vector3)) throw new TypeError("Parameter 'surfaceNormal' is not Vector3")
+        if (Math.abs(surfaceNormal.magnitude - 1) > 1e-6) {
+            throw new Error(
+                `Parameter 'surfaceNormal' is not normalized ${surfaceNormal.magnitude}`
+            );
+        }
 
         let result = 0
+
+        let lightDirection = null;
 
         const sceneLights = this.#scene.objects.filter(object => object instanceof Light)
         for (const light of sceneLights) {
             if (light instanceof AmbientLight) {
                 result += light.intensity
+            } else if (light instanceof PointLight) {
+                lightDirection = Vector3.subtract(light.position, intersectionPoint)
+            }
+
+            if (lightDirection) {
+                const strength = Vector3.dot(surfaceNormal, lightDirection)
+                if (strength > 0) {
+                    result += light.intensity
+                }
             }
         }
 
