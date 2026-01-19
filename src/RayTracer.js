@@ -1,6 +1,8 @@
 import Color from "./math/Color.js"
 import Vector3 from "./math/Vector3.js"
+import AmbientLight from "./object/AmbientLight.js"
 import Camera from "./object/Camera.js"
+import Light from "./object/Light.js"
 import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
 
@@ -33,17 +35,21 @@ export default class RayTracer {
     }
 
     /**
-    * Calculates traced color for given viewport point.
+    * Calculates traced color for ray vector.
     *
-    * @param {Vector3} viewportPoint
+    * @param {Vector3} ray
     */
-    trace(viewportPoint) {
-        if (!(viewportPoint instanceof Vector3)) throw new TypeError("Parameter 'viewportPoint' is not Vector3")
+    trace(ray) {
+        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
 
         let closestIntersection = this.#rayMax
         let closestObject = null
 
         for (const object of this.#scene.objects) {
+            if (object instanceof Light) {
+                continue
+            }
+
             if (object instanceof Sphere) {
                 const isClosest = intersection =>
                     intersection !== null &&
@@ -57,7 +63,7 @@ export default class RayTracer {
                 * t > 1 - Infront of the viewport.
                 */
 
-                const [intersection1, intersection2] = this.intersectRaySphere(viewportPoint, object)
+                const [intersection1, intersection2] = this.intersectRaySphere(ray, object)
 
                 if ((isClosest(intersection1))) {
                     closestIntersection = intersection1
@@ -77,7 +83,12 @@ export default class RayTracer {
         if (closestObject === null) return null
 
         if (closestObject instanceof Sphere) {
-            return Color.fromVector3(Vector3.multiplyScalar(closestObject.color, 0.2))
+            const lightStrenght = this.calculateLightStrengthForSphere(ray, closestObject)
+            if (lightStrenght < 0) {
+                throw new Error(`Light strenght is negative for object ${closestObject.toJSON()}`)
+            }
+
+            return Color.fromVector3(Vector3.multiplyScalar(closestObject.color, lightStrenght))
         } else {
             console.warn(`Color for object not implemented ${closestObject.toJSON()}`)
             return null;
@@ -89,7 +100,7 @@ export default class RayTracer {
     * @param {Sphere} sphere
     */
     intersectRaySphere(ray, sphere) {
-        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'viewportPoint' is not Vector3")
+        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
         if (!(sphere instanceof Sphere)) throw new TypeError("Parameter 'sphere' is not Sphere")
 
         const cameraToSphere = Vector3.subtract(this.#camera.position, sphere.position)
@@ -107,5 +118,26 @@ export default class RayTracer {
         const t2 = (-b - Math.sqrt(discriminant)) / (2 * a)
 
         return [t1, t2]
+    }
+
+
+    /**
+    * @param {Vector3} ray
+    * @param {Sphere} sphere
+    */
+    calculateLightStrengthForSphere(ray, sphere) {
+        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
+        if (!(sphere instanceof Sphere)) throw new TypeError("Parameter 'sphere' is not Sphere")
+
+        let result = 0
+
+        const sceneLights = this.#scene.objects.filter(object => object instanceof Light)
+        for (const light of sceneLights) {
+            if (light instanceof AmbientLight) {
+                result += light.intensity
+            }
+        }
+
+        return result
     }
 }

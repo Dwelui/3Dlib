@@ -1,6 +1,7 @@
 import Canvas from "./Canvas.js"
 import Color from "./math/Color.js"
 import Vector3 from "./math/Vector3.js"
+import AmbientLight from "./object/AmbientLight.js"
 import Camera from "./object/Camera.js"
 import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
@@ -14,10 +15,13 @@ const sphere1 = new Sphere(new Vector3(0, -1, 3), 1, new Color(255, 0, 0))
 const sphere2 = new Sphere(new Vector3(2, 0, 4), 1, new Color(0, 0, 255))
 const sphere3 = new Sphere(new Vector3(-2, 0, 4), 1, new Color(0, 255, 0))
 
+const ambientLight = new AmbientLight(0.2)
+
 const scene = new Scene()
 scene.add(sphere1)
 scene.add(sphere2)
 scene.add(sphere3)
+scene.add(ambientLight)
 
 const canvas = new Canvas('#canvas', {
     width: 500,
