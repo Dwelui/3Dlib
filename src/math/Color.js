@@ -40,7 +40,11 @@ export default class Color extends Vector3 {
     }
 
     get hex() {
-        const toHex = v => v.toString(16).padStart(2, "0")
+        const toHex = v =>
+            Math.round(v)
+                .toString(16)
+                .padStart(2, "0")
+
         return `#${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`
     }
 

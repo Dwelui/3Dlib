@@ -30,7 +30,7 @@ const canvas = new Canvas('#canvas', {
     width: 500,
     height: 500,
     backroundColor: new Color(255, 255, 255),
-    rayTraceDrawMode: Canvas.RayTraceDrawMode.FASTEST
+    rayTraceDrawMode: Canvas.RayTraceDrawMode.SLOW
 })
 
 const rayTracer = new RayTracer(camera, scene, viewport.distanceToCamera, 100)

@@ -151,9 +151,9 @@ export default class RayTracer {
             }
 
             if (lightDirection) {
-                const strength = Vector3.dot(surfaceNormal, lightDirection)
-                if (strength > 0) {
-                    result += light.intensity
+                const dot = Vector3.dot(surfaceNormal, lightDirection)
+                if (dot > 0) {
+                    result += light.intensity * dot / (surfaceNormal.magnitude * lightDirection.magnitude)
                 }
             }
         }
