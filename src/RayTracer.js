@@ -147,6 +147,7 @@ export default class RayTracer {
         for (const light of sceneLights) {
             if (light instanceof AmbientLight) {
                 result += light.intensity
+                continue
             } else if (light instanceof PointLight) {
                 lightDirection = Vector3.subtract(light.position, intersectionPoint)
             } else if (light instanceof DirectionalLight) {
