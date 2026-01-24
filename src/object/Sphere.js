@@ -2,44 +2,53 @@ import Color from "../math/Color.js"
 import Vector3 from "../math/Vector3.js"
 import Object3D from "./Object3D.js"
 
+// TODO: Color and Specular properties should be extracted to Material class.
 export default class Sphere extends Object3D {
     /** @private @type{number} */ #radius
+
     /** @private @type{Color} */ #color
+    /** @private @type{number} */ #specular
 
     /**
     * @param {Vector3} position
     * @param {number} radius - Must be positive.
     * @param {Color} color
+    * @param {number} specular - Must be positive.
     */
-    constructor(position, radius, color) {
+    constructor(position, radius, color, specular = 0) {
         super(position)
 
         this.radius = radius
         this.color = color
+        this.specular = specular
     }
 
-    get radius() {
-        return this.#radius
-    }
-
+    get radius() { return this.#radius }
     set radius(radius) {
         if (typeof radius !== 'number') throw new TypeError("Parameter 'radius' is not number")
         if (radius <= 0) throw new RangeError("Parameter 'radius' is not positive")
         this.#radius = radius
     }
 
-    get color() {
-        return this.#color
-    }
-
+    get color() { return this.#color }
     set color(color) {
         if (!(color instanceof Color)) throw new TypeError("Parameter 'color' is not Color")
         this.#color = color
     }
 
+    get specular() { return this.#specular }
+    set specular(specular) {
+        if (typeof specular !== 'number') throw new TypeError("Parameter 'specular' is not number")
+        if (specular < 0) throw new RangeError("Parameter 'specular' is negative")
+
+        this.#specular = specular
+    }
+
     toJSON() {
         return {
             ...super.toJSON(),
+            Radius: this.radius,
+            Specular: this.specular,
             Color: this.color.toJSON()
         }
     }
