@@ -65,6 +65,13 @@ export default class Color extends Vector3 {
     static fromVector3(vector) {
         if (!(vector instanceof Vector3)) throw new TypeError("Parameter 'vector' is not Vector3")
 
-        return new Color(vector.x, vector.y, vector.z)
+        const clamp = number => {
+            number = number > 255 ? 255 : number
+            number = number < 0 ? 0 : number
+
+            return number
+        }
+
+        return new Color(clamp(vector.x), clamp(vector.y), clamp(vector.z))
     }
 }
