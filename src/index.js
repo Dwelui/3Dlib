@@ -13,10 +13,34 @@ import Viewport from "./Viewport.js"
 const viewport = new Viewport({ width: 1, height: 1 }, 1)
 const camera = new Camera(new Vector3())
 
-const sphere1 = new Sphere(new Vector3(0, -1, 3), 1, new Color(255, 0, 0), 200)
-const sphere2 = new Sphere(new Vector3(2, 0, 4), 1, new Color(0, 0, 255), 500)
-const sphere3 = new Sphere(new Vector3(-2, 0, 4), 1, new Color(0, 255, 0))
-const sphere4 = new Sphere(new Vector3(0, -5001, 0), 5000, new Color(255, 255, 0), 1000)
+const sphere1 = new Sphere(
+    new Vector3(0, -1, 3),
+    1,
+    new Color(255, 0, 0),
+    200,
+    0.2
+)
+const sphere2 = new Sphere(
+    new Vector3(2, 0, 4),
+    1,
+    new Color(0, 0, 255),
+    500,
+    0.3
+)
+const sphere3 = new Sphere(
+    new Vector3(-2, 0, 4),
+    1,
+    new Color(0, 255, 0),
+    0,
+    0.4
+)
+const sphere4 = new Sphere(
+    new Vector3(0, -5001, 0),
+    5000,
+    new Color(255, 255, 0),
+    1000,
+    0.5
+)
 
 const ambientLight = new AmbientLight(0.2)
 const pointLight = new PointLight(new Vector3(2, 1, 0), 0.6)
