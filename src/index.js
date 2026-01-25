@@ -32,8 +32,8 @@ scene.add(pointLight)
 scene.add(directionalLight)
 
 const canvas = new Canvas('#canvas', {
-    width: 1000,
-    height: 1000,
+    width: 500,
+    height: 500,
     backroundColor: new Color(255, 255, 255),
     rayTraceDrawMode: Canvas.RayTraceDrawMode.SLOW
 })

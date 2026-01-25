@@ -44,43 +44,7 @@ export default class RayTracer {
     trace(ray) {
         if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
 
-        let closestIntersection = this.#rayMax
-        let closestObject = null
-
-        for (const object of this.#scene.objects) {
-            if (object instanceof Light) {
-                continue
-            }
-
-            if (object instanceof Sphere) {
-                const isClosest = intersection =>
-                    intersection !== null &&
-                    intersection > this.#rayMin &&
-                    intersection <= this.#rayMax &&
-                    intersection < closestIntersection
-
-                /*
-                * t < 0 - Behind the camera.
-                * 0 <= t <= 1 - Between the camera and the viewport.
-                * t > 1 - Infront of the viewport.
-                */
-
-                const [intersection1, intersection2] = this.intersectRaySphere(ray, object)
-
-                if ((isClosest(intersection1))) {
-                    closestIntersection = intersection1
-                    closestObject = object
-                }
-
-                if ((isClosest(intersection2))) {
-                    closestIntersection = intersection2
-                    closestObject = object
-                }
-            } else {
-                console.warn(`Intersection not implemented for ${object.toJSON()}`)
-                return null;
-            }
-        }
+        const { closestObject, closestIntersection } = this.closestIntersection(ray, this.#rayMin, this.#rayMax)
 
         if (closestObject === null) return null
 
@@ -98,6 +62,53 @@ export default class RayTracer {
         } else {
             console.warn(`Color for object not implemented ${closestObject.toJSON()}`)
             return null;
+        }
+    }
+
+    /**
+    * @param {Vector3} ray
+    * @param {number} intersectionMin
+    * @param {number} intersectionMax
+    */
+    closestIntersection(ray, intersectionMin, intersectionMax) {
+        if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
+        if (typeof intersectionMin !== 'number') throw new TypeError("Parameter 'intersectionMin' is not number")
+        if (typeof intersectionMax !== 'number') throw new TypeError("Parameter 'intersectionMax' is not number")
+
+        let closestIntersection = intersectionMax
+        let closestObject = null
+
+        for (const object of this.#scene.objects) {
+            if (object instanceof Light) {
+                continue
+            }
+
+            if (object instanceof Sphere) {
+                const isClosest = intersection =>
+                    intersection !== null &&
+                    intersection > intersectionMin &&
+                    intersection <= intersectionMax &&
+                    intersection < closestIntersection
+
+                const [intersection1, intersection2] = this.intersectRaySphere(ray, object)
+
+                if ((isClosest(intersection1))) {
+                    closestIntersection = intersection1
+                    closestObject = object
+                }
+
+                if ((isClosest(intersection2))) {
+                    closestIntersection = intersection2
+                    closestObject = object
+                }
+            } else {
+                console.warn(`Intersection not implemented for ${object.toJSON()}`)
+            }
+        }
+
+        return {
+            closestObject,
+            closestIntersection
         }
     }
 
