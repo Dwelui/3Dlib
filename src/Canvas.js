@@ -86,20 +86,39 @@ export default class Canvas {
     * @param {Vector3} startPosition
     * @param {Viewport} viewport
     * @param {RayTracer} rayTracer
-    * @param {number} intersectionMin
-    * @param {number} intersectionMax
-    * @param {number} recursionDepth
+    * @param {number} intersectionMin - Must be positive
+    * @param {number} intersectionMax - Must be positive
+    * @param {number} recursionDepth - Must be positive
     */
-    async rayTrace(startPosition, viewport, rayTracer, intersectionMin, intersectionMax, recursionDepth) {
+    async rayTrace(
+        startPosition,
+        viewport,
+        rayTracer,
+        intersectionMin,
+        intersectionMax,
+        recursionDepth
+    ) {
         if (!(viewport instanceof Viewport)) throw new TypeError("Parameter 'viewport' is not Viewport")
         if (!(rayTracer instanceof RayTracer)) throw new TypeError("Parameter 'rayTracer' is not RayTracer")
+        if (typeof intersectionMin !== 'number') throw new TypeError("Parameter 'intersectionMin' is not number")
+        if (intersectionMin < 0) throw new RangeError("Parameter 'intersectionMin' is not positive")
+        if (typeof intersectionMax !== 'number') throw new TypeError("Parameter 'intersectionMax' is not number")
+        if (intersectionMax < 0) throw new RangeError("Parameter 'intersectionMax' is not positive")
+        if (typeof recursionDepth !== 'number') throw new TypeError("Parameter 'recursionDepth' is not number")
+        if (recursionDepth < 0) throw new RangeError("Parameter 'recursionDepth' is not positive")
 
         this.clear()
 
         for (let x = -this.width / 2; x < this.width / 2; x++) {
             for (let y = -this.height / 2; y < this.height / 2; y++) {
                 const rayDirection = viewport.fromCanvas(x, y, this)
-                const color = rayTracer.traceRay(startPosition, rayDirection, intersectionMin, intersectionMax, recursionDepth) ?? this.backroundColor
+                const color = rayTracer.traceRay(
+                    startPosition,
+                    rayDirection,
+                    intersectionMin,
+                    intersectionMax,
+                    recursionDepth
+                ) ?? this.backroundColor
 
                 this.putPixel(x, y, color)
 
