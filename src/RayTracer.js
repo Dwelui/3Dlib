@@ -44,7 +44,7 @@ export default class RayTracer {
     trace(ray) {
         if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
 
-        const { closestObject, closestIntersection } = this.closestIntersection(ray, this.#rayMin, this.#rayMax)
+        const { closestObject, closestIntersection } = this.closestIntersection(this.#camera.position, ray, this.#rayMin, this.#rayMax)
 
         if (closestObject === null) return null
 
@@ -70,7 +70,8 @@ export default class RayTracer {
     * @param {number} intersectionMin
     * @param {number} intersectionMax
     */
-    closestIntersection(ray, intersectionMin, intersectionMax) {
+    closestIntersection(startingPoint, ray, intersectionMin, intersectionMax) {
+        if (!(startingPoint instanceof Vector3)) throw new TypeError("Parameter 'startingPoint' is not Vector3")
         if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
         if (typeof intersectionMin !== 'number') throw new TypeError("Parameter 'intersectionMin' is not number")
         if (typeof intersectionMax !== 'number') throw new TypeError("Parameter 'intersectionMax' is not number")
@@ -90,7 +91,7 @@ export default class RayTracer {
                     intersection <= intersectionMax &&
                     intersection < closestIntersection
 
-                const [intersection1, intersection2] = this.intersectRaySphere(ray, object)
+                const [intersection1, intersection2] = this.intersectRaySphere(startingPoint, ray, object)
 
                 if ((isClosest(intersection1))) {
                     closestIntersection = intersection1
@@ -113,14 +114,16 @@ export default class RayTracer {
     }
 
     /**
+    * @param {Vector3} startingPoint
     * @param {Vector3} ray
     * @param {Sphere} sphere
     */
-    intersectRaySphere(ray, sphere) {
+    intersectRaySphere(startingPoint, ray, sphere) {
+        if (!(startingPoint instanceof Vector3)) throw new TypeError("Parameter 'startingPoint' is not Vector3")
         if (!(ray instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
         if (!(sphere instanceof Sphere)) throw new TypeError("Parameter 'sphere' is not Sphere")
 
-        const cameraToSphere = Vector3.subtract(this.#camera.position, sphere.position)
+        const cameraToSphere = Vector3.subtract(startingPoint, sphere.position)
 
         const a = Vector3.dot(ray, ray)
         const b = 2 * Vector3.dot(cameraToSphere, ray)
@@ -151,13 +154,12 @@ export default class RayTracer {
                 `Parameter 'surfaceNormal' is not normalized ${surfaceNormal.magnitude}`
             );
         }
-
         if (typeof specularExponent !== 'number') throw new TypeError("Parameter 'specularExponent' is not number")
         if (!(viewVector instanceof Vector3)) throw new TypeError("Parameter 'viewVector' is not Vector3")
 
         let result = 0
 
-        let lightVector = null;
+        let lightDirection = null;
 
         const sceneLights = this.#scene.objects.filter(object => object instanceof Light)
         for (const light of sceneLights) {
@@ -165,22 +167,28 @@ export default class RayTracer {
                 result += light.intensity
                 continue
             } else if (light instanceof PointLight) {
-                lightVector = Vector3.subtract(light.position, intersectionPoint)
+                lightDirection = Vector3.subtract(light.position, intersectionPoint)
             } else if (light instanceof DirectionalLight) {
-                lightVector = light.direction.clone()
+                lightDirection = light.direction.clone()
+            }
+
+            // Shadow check
+            const { closestObject } = this.closestIntersection(intersectionPoint, lightDirection, 0.0001, this.#rayMax)
+            if (!closestObject) {
+                continue;
             }
 
             // Calculate defuse surface.
-            if (lightVector) {
-                const dot = Vector3.dot(surfaceNormal, lightVector)
+            if (lightDirection) {
+                const dot = Vector3.dot(surfaceNormal, lightDirection)
                 if (dot > 0) {
-                    result += light.intensity * dot / (surfaceNormal.magnitude * lightVector.magnitude)
+                    result += light.intensity * dot / (surfaceNormal.magnitude * lightDirection.magnitude)
                 }
             }
 
             // Calculate shiny surface.
             if (specularExponent !== 0) {
-                const reflectionVector = surfaceNormal.clone().multiplyScalar(surfaceNormal.dot(lightVector) * 2).subtract(lightVector)
+                const reflectionVector = surfaceNormal.clone().multiplyScalar(surfaceNormal.dot(lightDirection) * 2).subtract(lightDirection)
                 const reflectionDotView = Vector3.dot(reflectionVector, viewVector)
                 if (reflectionDotView > 0) {
                     const reflectionAngleView = reflectionDotView / (reflectionVector.magnitude * viewVector.magnitude)
