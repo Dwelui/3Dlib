@@ -41,7 +41,7 @@ export default class RayTracer {
     *
     * @param {Vector3} rayDirection
     */
-    trace(rayDirection) {
+    traceRay(rayDirection) {
         if (!(rayDirection instanceof Vector3)) throw new TypeError("Parameter 'ray' is not Vector3")
 
         const { closestObject, closestIntersection } = this.closestIntersection(this.#camera.position, rayDirection, this.#rayMin, this.#rayMax)

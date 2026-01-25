@@ -94,7 +94,7 @@ export default class Canvas {
         for (let x = -this.width / 2; x < this.width / 2; x++) {
             for (let y = -this.height / 2; y < this.height / 2; y++) {
                 const ray = viewport.fromCanvas(x, y, this)
-                const color = rayTracer.trace(ray) ?? this.backroundColor
+                const color = rayTracer.traceRay(ray) ?? this.backroundColor
 
                 this.putPixel(x, y, color)
 
