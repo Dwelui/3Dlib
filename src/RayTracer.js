@@ -174,7 +174,7 @@ export default class RayTracer {
 
             // Shadow check
             const { closestObject } = this.closestIntersection(intersectionPoint, lightDirection, 0.0001, this.#rayMax)
-            if (!closestObject) {
+            if (closestObject) {
                 continue;
             }
 
