@@ -5,11 +5,12 @@ export default class Light extends Object3D {
     /** @private @type{number} */ #intensity
 
     /**
-    * @param {Vector3} position
-    * @param {number} intensity - Must be between 0 and 1.
+    * @param {Object} args
+    * @param {Vector3} args.position
+    * @param {number} args.intensity - Must be between 0 and 1.
     */
-    constructor(position, intensity) {
-        super({position})
+    constructor({position, intensity}) {
+        super({ position })
 
         this.intensity = intensity
     }

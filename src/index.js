@@ -45,9 +45,9 @@ const sphere4 = new Sphere({
     reflective: 0.5
 })
 
-const ambientLight = new AmbientLight(0.2)
-const pointLight = new PointLight(new Vector3(2, 1, 0), 0.6)
-const directionalLight = new DirectionalLight(new Vector3(1, 4, 4), 0.2)
+const ambientLight = new AmbientLight({ intensity: 0.2 })
+const pointLight = new PointLight({ position: new Vector3(2, 1, 0), intensity: 0.6})
+const directionalLight = new DirectionalLight({ direction: new Vector3(1, 4, 4), intensity: 0.2 })
 
 const scene = new Scene()
 scene.add(sphere1)
