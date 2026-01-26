@@ -51,7 +51,7 @@ export function assertInstancesNullable(instances, targetInstance) {
 * @param {Function} targetInstance
 * @param {string} name
 */
-export function assertInstanceNullable(value, targetInstance, name) {
+function assertInstanceNullable(value, targetInstance, name) {
     if (value !== null) {
         assertInstance(value, targetInstance, name)
     }
@@ -62,7 +62,7 @@ export function assertInstanceNullable(value, targetInstance, name) {
 * @param {Function} targetInstance
 * @param {string} name
 */
-export function assertInstance(value, targetInstance, name) {
+function assertInstance(value, targetInstance, name) {
     if (!(value instanceof targetInstance)) {
         const actual = value?.constructor?.name ?? typeof value
 
@@ -74,7 +74,7 @@ export function assertInstance(value, targetInstance, name) {
 * @param {number} value
 * @param {string} name
 */
-export function assertPositiveNumber(value, name) {
+function assertPositiveNumber(value, name) {
     assertNumber(value, name)
 
     if (value < 0) {
@@ -127,7 +127,7 @@ export function assertNumberBetween(value, name, from, till) {
 * @param {number} value
 * @param {string} name
 */
-export function assertNumber(value, name) {
+function assertNumber(value, name) {
     if (typeof value !== 'number') {
         throw new TypeError(`Parameter '${name}' is not number`)
     }
@@ -144,7 +144,7 @@ export function assertStrings(strings) {
 * @param {string} value
 * @param {string} name
 */
-export function assertString(value, name) {
+function assertString(value, name) {
     if (typeof value !== 'string') {
         throw new TypeError(`Parameter '${name}' is not string`)
     }
