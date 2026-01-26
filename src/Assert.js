@@ -1,3 +1,4 @@
+import Canvas from "./Canvas.js"
 import Color from "./math/Color.js"
 import Object3D from "./object/Object3D.js"
 import Scene from "./object/Scene.js"
@@ -5,17 +6,18 @@ import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
 const instancesMap = {
-    color: Color,
-    rayTracer: RayTracer,
-    viewport: Viewport,
-    object3D: Object3D,
-    scene: Scene
+    color: () => Color,
+    rayTracer: () => RayTracer,
+    viewport: () => Viewport,
+    object3D: () => Object3D,
+    scene: () => Scene,
+    canvas: () => Canvas,
 }
 
 /** @param {Object.<string, Object>} instances */
 export function assertInstancesMapped(instances) {
     for (const [name, value] of Object.entries(instances)) {
-        const instanceClass = instancesMap[name]
+        const instanceClass = instancesMap[name]?.()
 
         assertInstance(value, instanceClass, name)
     }
