@@ -26,7 +26,7 @@ export default class Sphere extends Object3D {
         specular,
         reflective
     }) {
-        super(position)
+        super({position})
 
         this.radius = radius
         this.color = color

@@ -11,7 +11,7 @@ import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
 const viewport = new Viewport({ width: 1, height: 1 }, 1)
-const camera = new Camera(new Vector3())
+const camera = new Camera({ position: new Vector3() })
 
 const sphere1 = new Sphere({
     position: new Vector3(0, -1, 3),

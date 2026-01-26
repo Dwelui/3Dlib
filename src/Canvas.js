@@ -1,4 +1,4 @@
-import { assertInstance, assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
+import { assertInstances, assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
 import Color from "./math/Color.js"
 import Vector3 from "./math/Vector3.js"
 import RayTracer from "./RayTracer.js"
@@ -96,7 +96,7 @@ export default class Canvas {
         recursionDepth
     }) {
         assertInstancesMapped({rayTracer, viewport})
-        assertInstance(startPosition, Vector3, 'startPosition')
+        assertInstances({startPosition}, Vector3)
         assertPositiveNumbers({intersectionMin, intersectionMax, recursionDepth})
 
         this.clear()

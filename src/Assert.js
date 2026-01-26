@@ -1,4 +1,5 @@
 import Color from "./math/Color.js"
+import Object3D from "./object/Object3D.js"
 import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
@@ -6,11 +7,12 @@ const instancesMap = {
     color: Color,
     rayTracer: RayTracer,
     viewport: Viewport,
+    object3D: Object3D
 }
 
-/** @param {Object.<string, Object>} instance */
-export function assertInstancesMapped(instance) {
-    for (const [name, value] of Object.entries(instance)) {
+/** @param {Object.<string, Object>} instances */
+export function assertInstancesMapped(instances) {
+    for (const [name, value] of Object.entries(instances)) {
         const instanceClass = instancesMap[name]
 
         assertInstance(value, instanceClass, name)
@@ -18,13 +20,46 @@ export function assertInstancesMapped(instance) {
 }
 
 /**
-* @param {Object} value
+* @param {Object.<string, Object>} instances
 * @param {Object} targetInstance
+*/
+export function assertInstances(instances, targetInstance) {
+    for (const [name, value] of Object.entries(instances)) {
+        assertInstance(value, targetInstance, name)
+    }
+}
+
+/**
+* @param {Object.<string, Object>} instances
+* @param {Object} targetInstance
+*/
+export function assertInstancesNullable(instances, targetInstance) {
+    for (const [name, value] of Object.entries(instances)) {
+        assertInstanceNullable(value, targetInstance, name)
+    }
+}
+
+/**
+* @param {Object} value
+* @param {Function} targetInstance
+* @param {string} name
+*/
+export function assertInstanceNullable(value, targetInstance, name) {
+    if (value !== null) {
+        assertInstance(value, targetInstance, name)
+    }
+}
+
+/**
+* @param {Object} value
+* @param {Function} targetInstance
 * @param {string} name
 */
 export function assertInstance(value, targetInstance, name) {
     if (!(value instanceof targetInstance)) {
-        throw new TypeError(`Parameter '${name}' is not ${targetInstance.name}`)
+        const actual = value?.constructor?.name ?? typeof value
+
+        throw new TypeError(`Parameter '${name}' must be an instance of ${targetInstance.name}, got '${actual}'`)
     }
 }
 
