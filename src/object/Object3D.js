@@ -28,4 +28,18 @@ export default class Object3D {
             Rotation: this.rotation.toJSON()
         }
     }
+
+    /**
+    * @param {number} angle - In degress.
+    */
+    rotateX(angle) {
+        const cos = Math.cos(angle)
+        const sin = Math.sin(angle)
+
+        this.rotation.multiplyMatrix3(new Matrix3([
+            cos, -1 * sin, 0,
+            sin, cos, 0,
+            0, 0, 0
+        ]))
+    }
 }

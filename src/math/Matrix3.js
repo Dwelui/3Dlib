@@ -23,6 +23,7 @@ export default class Matrix3 {
         } else if (typeof components === 'undefined') {
             this.components = Matrix3.zero()
         } else {
+            console.assert(false, components)
             throw TypeError("Invalid 'components' format")
         }
     }
@@ -58,6 +59,25 @@ export default class Matrix3 {
             8: this.get(7),
             9: this.get(8),
         }
+    }
+
+    /** @param {Matrix3} matrix */
+    multiplyMatrix3(matrix) {
+        assertInstancesMapped({ matrix })
+
+        return new Matrix3([
+            this.get(0) * matrix.get(0) + this.get(1) * matrix.get(3) + this.get(2) * matrix.get(6),
+            this.get(0) * matrix.get(1) + this.get(1) * matrix.get(4) + this.get(2) * matrix.get(7),
+            this.get(0) * matrix.get(2) + this.get(1) * matrix.get(5) + this.get(2) * matrix.get(8),
+
+            this.get(3) * matrix.get(0) + this.get(4) * matrix.get(3) + this.get(5) * matrix.get(6),
+            this.get(3) * matrix.get(1) + this.get(4) * matrix.get(4) + this.get(5) * matrix.get(7),
+            this.get(3) * matrix.get(2) + this.get(4) * matrix.get(5) + this.get(5) * matrix.get(8),
+
+            this.get(6) * matrix.get(0) + this.get(7) * matrix.get(3) + this.get(8) * matrix.get(6),
+            this.get(6) * matrix.get(1) + this.get(7) * matrix.get(4) + this.get(8) * matrix.get(7),
+            this.get(6) * matrix.get(2) + this.get(7) * matrix.get(5) + this.get(8) * matrix.get(8),
+        ])
     }
 
     static zero() {
