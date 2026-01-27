@@ -69,7 +69,7 @@ const canvas = new Canvas('#canvas', {
 })
 
 canvas.rayTrace({
-    startPosition: camera.position,
+    camera,
     viewport,
     rayTracer: new RayTracer(scene),
     intersectionMin: viewport.distanceToCamera,

@@ -13,7 +13,7 @@ export default class Object3D {
     */
     constructor({ position, rotation }) {
         this.position = position
-        this.rotation = rotation ?? new Matrix3()
+        this.rotation = rotation ?? Matrix3.identity()
     }
 
     get position() { return this.#position }

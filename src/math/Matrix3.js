@@ -1,4 +1,4 @@
-import { assertArrays, assertNumberBetween, assertNumbers } from "../Assert.js"
+import { assertArrays, assertInstancesMapped, assertNumbers, assertNumbersBetween } from "../Assert.js"
 import Vector3 from "./Vector3.js"
 
 export default class Matrix3 {
@@ -30,14 +30,14 @@ export default class Matrix3 {
     /**
     * @param {number} index - Number between 0 and 8.
     */
-    get(index) { assertNumberBetween({ index }, 0, 8); return this.components[index] }
+    get(index) { assertNumbersBetween({ index }, 0, 8); return this.components[index] }
 
     /**
     * @param {number} index - Number between 0 and 8.
     * @param {number} value
     */
     set(index, value) {
-        assertNumberBetween({ index }, 0, 8)
+        assertNumbersBetween({ index }, 0, 8)
         assertNumbers({ value })
 
         this.components[index] = value
@@ -61,10 +61,32 @@ export default class Matrix3 {
     }
 
     static zero() {
-        return [
+        return new Matrix3([
             0, 0, 0,
             0, 0, 0,
             0, 0, 0,
-        ]
+        ])
+    }
+
+    static identity() {
+        return new Matrix3([
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1,
+        ])
+    }
+
+    /**
+    * @param {Matrix3} matrix
+    * @param {Vector3} vector
+    */
+    static multiplyVector3(matrix, vector) {
+        assertInstancesMapped({ matrix, vector })
+
+        return new Vector3(
+            matrix.get(0) * vector.x + matrix.get(1) * vector.y + matrix.get(2) * vector.z,
+            matrix.get(3) * vector.x + matrix.get(4) * vector.y + matrix.get(5) * vector.z,
+            matrix.get(6) * vector.x + matrix.get(7) * vector.y + matrix.get(8) * vector.z,
+        )
     }
 }

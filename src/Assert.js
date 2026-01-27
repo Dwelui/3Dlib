@@ -1,6 +1,8 @@
 import Canvas from "./Canvas.js"
 import Color from "./math/Color.js"
+import Matrix3 from "./math/Matrix3.js"
 import Vector3 from "./math/Vector3.js"
+import Camera from "./object/Camera.js"
 import Object3D from "./object/Object3D.js"
 import Scene from "./object/Scene.js"
 import RayTracer from "./RayTracer.js"
@@ -15,6 +17,9 @@ const instancesMap = {
     canvas: () => Canvas,
     vector: () => Vector3,
     vector3: () => Vector3,
+    matrix: () => Matrix3,
+    matrix3: () => Matrix3,
+    camera: () => Camera,
 }
 
 let enabled = true
@@ -137,7 +142,7 @@ export function assertNumbersBetween(numbers, from, till) {
 * @param {number} from
 * @param {number} till
 */
-export function assertNumberBetween(value, name, from, till) {
+function assertNumberBetween(value, name, from, till) {
     if (!enabled) return
 
     if (typeof value !== 'number') {

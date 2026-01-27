@@ -1,6 +1,8 @@
 import { assertInstances, assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
 import Color from "./math/Color.js"
+import Matrix3 from "./math/Matrix3.js"
 import Vector3 from "./math/Vector3.js"
+import Camera from "./object/Camera.js"
 import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
@@ -82,7 +84,7 @@ export default class Canvas {
      * @param {Object} args
      * @param {RayTracer} args.rayTracer
      * @param {Viewport} args.viewport
-     * @param {Vector3} args.startPosition
+     * @param {Camera} args.camera
      * @param {number} args.intersectionMin
      * @param {number} args.intersectionMax
      * @param {number} args.recursionDepth
@@ -90,13 +92,12 @@ export default class Canvas {
     async rayTrace({
         rayTracer,
         viewport,
-        startPosition,
+        camera,
         intersectionMin,
         intersectionMax,
         recursionDepth
     }) {
-        assertInstancesMapped({ rayTracer, viewport })
-        assertInstances({ startPosition }, Vector3)
+        assertInstancesMapped({ rayTracer, viewport, camera })
         assertPositiveNumbers({ intersectionMin, intersectionMax, recursionDepth })
 
         this.clear()
@@ -105,9 +106,9 @@ export default class Canvas {
 
         for (let x = -this.width / 2; x < this.width / 2; x++) {
             for (let y = -this.height / 2; y < this.height / 2; y++) {
-                const rayDirection = viewport.fromCanvas(x, y, this)
+                const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, this))
                 const color = rayTracer.traceRay(
-                    startPosition,
+                    camera.position,
                     rayDirection,
                     intersectionMin,
                     intersectionMax,
