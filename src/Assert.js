@@ -82,6 +82,7 @@ function assertInstance(value, targetInstance, name) {
     if (!(value instanceof targetInstance)) {
         const actual = value?.constructor?.name ?? typeof value
 
+        console.assert(false, value)
         throw new TypeError(`Parameter '${name}' must be an instance of ${targetInstance.name}, got '${actual}'`)
     }
 }
@@ -94,6 +95,7 @@ function assertPositiveNumber(value, name) {
     assertNumber(value, name)
 
     if (value < 0) {
+        console.assert(false, value)
         throw new RangeError(`Parameter '${name}' must be positive`)
     }
 }
@@ -139,10 +141,12 @@ export function assertNumberBetween(value, name, from, till) {
     if (!enabled) return
 
     if (typeof value !== 'number') {
+        console.assert(false, value)
         throw new TypeError(`Parameter '${name}' is not number`)
     }
 
     if (value < from || value > till) {
+        console.assert(false, value)
         throw new RangeError(`Parameter '${name}' is not between ${from} and ${till}`)
     }
 }
@@ -153,6 +157,7 @@ export function assertNumberBetween(value, name, from, till) {
 */
 function assertNumber(value, name) {
     if (typeof value !== 'number') {
+        console.assert(false, value)
         throw new TypeError(`Parameter '${name}' is not number`)
     }
 }
@@ -172,7 +177,30 @@ export function assertStrings(strings) {
 */
 function assertString(value, name) {
     if (typeof value !== 'string') {
+        console.assert(false, value)
         throw new TypeError(`Parameter '${name}' is not string`)
+    }
+}
+
+/** @param {Object.<string, Array>} arrays */
+export function assertArrays(arrays) {
+    if (!enabled) return
+
+    for (const [name, value] of Object.entries(arrays)) {
+        assertArray(value, name)
+    }
+}
+
+/**
+* @param {Array} value
+* @param {string} name
+*/
+function assertArray(value, name) {
+    if (!Array.isArray(value)) {
+        const actual = value?.constructor?.name ?? typeof value
+
+        console.assert(false, value)
+        throw new TypeError(`Parameter '${name}' must be array, got '${actual}'`)
     }
 }
 
@@ -191,6 +219,7 @@ export function assertObjects(objects) {
 */
 function assertObject(value, name) {
     if (typeof value !== 'object') {
+        console.assert(false, value)
         throw new TypeError(`Parameter '${name}' is not object`)
     }
 }

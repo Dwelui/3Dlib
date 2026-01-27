@@ -20,19 +20,22 @@ export default class Vector3 {
     get z() { return this.#z }
     set z(number) { assertNumbers({number}); this.#z = number }
 
-    get magnitude() {
-        return Math.sqrt(this.#x * this.#x + this.#y * this.#y + this.#z * this.#z)
-    }
+    get magnitude() { return Math.sqrt(this.#x * this.#x + this.#y * this.#y + this.#z * this.#z) }
 
     normalize() {
         const mag = this.magnitude
         if (mag !== 0) this.multiplyScalar(1 / mag)
+
         return this
     }
 
-    clone() {
-        return new Vector3(this.#x, this.#y, this.#z)
+    invert() {
+        this.multiplyScalar(-1)
+
+        return this
     }
+
+    clone() { return new Vector3(this.#x, this.#y, this.#z) }
 
     toJSON() {
         return {
@@ -41,6 +44,8 @@ export default class Vector3 {
             z: this.z,
         }
     }
+
+    toArray() { return [this.x, this.y, this.z] }
 
     /**
     * Mutates vector
@@ -105,12 +110,6 @@ export default class Vector3 {
             this.#z * vector.x - this.#x * vector.z,
             this.#x * vector.y - this.#y * vector.x,
         )
-    }
-
-    invert() {
-        this.multiplyScalar(-1)
-
-        return this
     }
 
     /**
