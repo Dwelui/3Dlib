@@ -1,8 +1,9 @@
 import { assertNumbersBetween } from "../Assert.js"
+import Vector3 from "../math/Vector3.js"
 import Object3D from "./Object3D.js"
 
 export default class Light extends Object3D {
-    /** @private @type{number} */ #intensity
+    /** @type{number} */ #intensity
 
     /**
     * @param {Object} args

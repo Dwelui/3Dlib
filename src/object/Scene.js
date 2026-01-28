@@ -3,25 +3,28 @@ import Vector3 from "../math/Vector3.js"
 import Object3D from "./Object3D.js"
 
 export default class Scene extends Object3D {
-    /** @private @type{Array<Object3D>} */ #objects = []
+    /** @type{Array<Object3D>} */ #objects = []
 
     /**
     * @param {Object} [args]
-    * @param {?Vector3} args.position
+    * @param {Vector3} [args.position]
     */
-    constructor({position = null} = {}) {
-        assertInstancesNullable({position}, Vector3)
+    constructor({ position } = {}) {
+        position = position ?? new Vector3()
 
-        super({position: position ?? new Vector3()})
+        assertInstancesNullable({ position }, Vector3)
+
+        super({ position })
     }
 
     get objects() { return this.#objects }
 
     /** @param {Object3D} object3D */
-    add(object3D) { assertInstancesMapped({object3D}); this.#objects.push(object3D) }
+    add(object3D) { assertInstancesMapped({ object3D }); this.#objects.push(object3D) }
 
     toJSON() {
         return {
+            ...super.toJSON(),
             Objects3D: this.#objects.map(object => object.toJSON())
         }
     }

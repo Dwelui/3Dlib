@@ -5,11 +5,11 @@ import Object3D from "./Object3D.js"
 
 // TODO: Color and Specular properties should be extracted to Material class.
 export default class Sphere extends Object3D {
-    /** @private @type{number} */ #radius
+    /** @type{number} */ #radius
 
-    /** @private @type{Color} */ #color
-    /** @private @type{number} */ #specular
-    /** @private @type{number} */ #reflective
+    /** @type{Color} */ #color
+    /** @type{number} */ #specular
+    /** @type{number} */ #reflective
 
     /**
     * @param {Object} args

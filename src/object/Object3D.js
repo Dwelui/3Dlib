@@ -3,8 +3,8 @@ import Matrix3 from "../math/Matrix3.js";
 import Vector3 from "../math/Vector3.js";
 
 export default class Object3D {
-    /** @private @type{Vector3} */ #position
-    /** @private @type{Matrix3} */ #rotation
+    /** @type{Vector3} */ #position
+    /** @type{Matrix3} */ #rotation
 
     /**
     * @param {Object} args
