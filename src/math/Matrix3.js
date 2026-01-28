@@ -1,27 +1,25 @@
-import { assertArrays, assertInstances, assertInstancesMapped, assertNumbers, assertNumbersBetween } from "../Assert.js"
+import { assertInstances, assertInstancesMapped, assertNumbers, assertNumbersBetween } from "../Assert.js"
 import Vector3 from "./Vector3.js"
 
 export default class Matrix3 {
     /** @private @type{Array<number>} */ #components
 
-    /**
-    * @param {Array<number> | Array<Vector3>} [components]
-    */
+    /** @param {Array<number> | Array<Vector3>} [components] */
     constructor(components) {
         if (
             Array.isArray(components) &&
             components.length === 9 &&
             components.every(c => typeof c === 'number')
         ) {
-            this.components = components
+            this.#components = components
         } else if (
             Array.isArray(components) &&
             components.length === 3 &&
             components.every(c => c instanceof Vector3)
         ) {
-            this.components = components.flatMap(component => component.toArray())
+            this.#components = components.flatMap(component => component.toArray())
         } else if (typeof components === 'undefined') {
-            this.components = Matrix3.zero()
+            this.#components = Matrix3.zero().toArray()
         } else {
             console.assert(false, components)
             throw TypeError("Invalid 'components' format")
@@ -31,7 +29,7 @@ export default class Matrix3 {
     /**
     * @param {number} index - Number between 0 and 8.
     */
-    get(index) { assertNumbersBetween({ index }, 0, 8); return this.components[index] }
+    get(index) { assertNumbersBetween({ index }, 0, 8); return this.#components[index] }
 
     /**
     * @param {number} index - Number between 0 and 8.
@@ -41,11 +39,30 @@ export default class Matrix3 {
         assertNumbersBetween({ index }, 0, 8)
         assertNumbers({ value })
 
-        this.components[index] = value
+        this.#components[index] = value
     }
 
-    get components() { return this.#components }
-    set components(components) { assertArrays({ components }); this.#components = components }
+    /**
+    * @param {number} row - Number between 0 and 2.
+    * @param {number} col - Number between 0 and 2.
+    */
+    getAt(row, col) {
+        assertNumbersBetween({ row, col }, 0, 2)
+
+        return this.#components[row * 3 + col]
+    }
+
+    /**
+    * @param {number} row - Number between 0 and 2.
+    * @param {number} col - Number between 0 and 2.
+    * @param {number} value
+    */
+    setAt(row, col, value) {
+        assertNumbersBetween({ row, col }, 0, 2)
+        assertNumbers({ value })
+
+        this.#components[row * 3 + col] = value
+    }
 
     toJSON() {
         return {
@@ -59,6 +76,20 @@ export default class Matrix3 {
             8: this.get(7),
             9: this.get(8),
         }
+    }
+
+    toArray() {
+        return [
+            this.get(0),
+            this.get(1),
+            this.get(2),
+            this.get(3),
+            this.get(4),
+            this.get(5),
+            this.get(6),
+            this.get(7),
+            this.get(8),
+        ]
     }
 
     static zero() {
