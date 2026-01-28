@@ -1,7 +1,6 @@
-import { assertInstances, assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
+import {  assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
 import Color from "./math/Color.js"
 import Matrix3 from "./math/Matrix3.js"
-import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
 import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
