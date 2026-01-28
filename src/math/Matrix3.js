@@ -22,7 +22,7 @@ export default class Matrix3 {
             this.#components = Matrix3.zero().toArray()
         } else {
             console.assert(false, components)
-            throw TypeError("Invalid 'components' format")
+            throw TypeError(`Bad '...components' parameter ${components}`)
         }
     }
 
@@ -50,7 +50,7 @@ export default class Matrix3 {
 
             index = row * 3 + col
         } else {
-            throw new Error(`Bad '..args' parameters ${args}`)
+            throw new Error(`Bad '..args' parameter ${args}`)
         }
 
         return this.#components[index]
@@ -88,7 +88,7 @@ export default class Matrix3 {
             assertNumbersBetween({ row, col }, 0, 2)
             assertNumbers({ value })
         } else {
-            throw new Error(`Bad '..args' parameters ${args}`)
+            throw new Error(`Bad '..args' parameter ${args}`)
         }
 
         this.#components[index] = value
