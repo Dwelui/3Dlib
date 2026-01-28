@@ -9,13 +9,13 @@ import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
 
 export default class RayTracer {
-    /** @private @type{Scene} */ #scene
+    /** @type{Scene} */ #scene
 
     /**
     * @param {Scene} scene
     */
     constructor(scene) {
-        assertInstancesMapped({scene})
+        assertInstancesMapped({ scene })
         this.#scene = scene
     }
 
@@ -27,10 +27,11 @@ export default class RayTracer {
     * @param {number} intersectionMin - Must be positive.
     * @param {number} intersectionMax - Must be positive.
     * @param {number} recursionDepth - Must be positive.
+    * @returns {Color|null}
     */
     traceRay(startingPoint, rayDirection, intersectionMin, intersectionMax, recursionDepth) {
-        assertInstances({startingPoint, rayDirection}, Vector3)
-        assertPositiveNumbers({intersectionMin, intersectionMax, recursionDepth})
+        assertInstances({ startingPoint, rayDirection }, Vector3)
+        assertPositiveNumbers({ intersectionMin, intersectionMax, recursionDepth })
 
         const { closestObject, closestIntersection } = this.closestIntersection(startingPoint, rayDirection, intersectionMin, intersectionMax)
 
@@ -39,19 +40,14 @@ export default class RayTracer {
         const intersectionPoint = Vector3.add(startingPoint, Vector3.multiplyScalar(rayDirection, closestIntersection))
 
         let localColor = new Color()
-        let surfaceNormal = null
-        if (closestObject instanceof Sphere) {
-            surfaceNormal = Vector3.subtract(intersectionPoint, closestObject.position).normalize()
+        const surfaceNormal = Vector3.subtract(intersectionPoint, closestObject.position).normalize()
 
-            const lightStrenght = this.calculateLightStrength(intersectionPoint, surfaceNormal, closestObject.specular, rayDirection.clone().invert(), intersectionMax)
-            if (lightStrenght < 0) {
-                throw new Error(`Light strenght is negative for object ${closestObject.toJSON()}`)
-            }
-
-            localColor = Color.fromVector3(Vector3.multiplyScalar(closestObject.color, lightStrenght))
-        } else {
-            console.warn(`Color for object not implemented ${closestObject.toJSON()}`)
+        const lightStrenght = this.calculateLightStrength(intersectionPoint, surfaceNormal, closestObject.specular, rayDirection.clone().invert(), intersectionMax)
+        if (lightStrenght < 0) {
+            throw new Error(`Light strenght is negative for object ${closestObject.toJSON()}`)
         }
+
+        localColor = Color.fromVector3(Vector3.multiplyScalar(closestObject.color, lightStrenght))
 
         if (recursionDepth <= 0 || closestObject.reflective <= 0) {
             return localColor
@@ -69,13 +65,14 @@ export default class RayTracer {
     }
 
     /**
+    * @param {Vector3} startingPoint
     * @param {Vector3} rayDirection
     * @param {number} intersectionMin - Must be positive.
     * @param {number} intersectionMax - Must be positive.
     */
     closestIntersection(startingPoint, rayDirection, intersectionMin, intersectionMax) {
-        assertInstances({startingPoint, rayDirection}, Vector3)
-        assertPositiveNumbers({intersectionMin, intersectionMax})
+        assertInstances({ startingPoint, rayDirection }, Vector3)
+        assertPositiveNumbers({ intersectionMin, intersectionMax })
 
         let closestIntersection = intersectionMax
         let closestObject = null
@@ -86,20 +83,20 @@ export default class RayTracer {
             }
 
             if (object instanceof Sphere) {
+                /** @type{(intersection: number) => boolean} */
                 const isClosest = intersection =>
-                    intersection !== null &&
                     intersection > intersectionMin &&
                     intersection <= intersectionMax &&
                     intersection < closestIntersection
 
                 const [intersection1, intersection2] = this.intersectRaySphere(startingPoint, rayDirection, object)
 
-                if ((isClosest(intersection1))) {
+                if (intersection1 !== null && isClosest(intersection1)) {
                     closestIntersection = intersection1
                     closestObject = object
                 }
 
-                if ((isClosest(intersection2))) {
+                if (intersection2 !== null && isClosest(intersection2)) {
                     closestIntersection = intersection2
                     closestObject = object
                 }
@@ -120,8 +117,8 @@ export default class RayTracer {
     * @param {Sphere} sphere
     */
     intersectRaySphere(startingPoint, rayDirection, sphere) {
-        assertInstances({startingPoint, rayDirection}, Vector3)
-        assertInstances({sphere}, Sphere)
+        assertInstances({ startingPoint, rayDirection }, Vector3)
+        assertInstances({ sphere }, Sphere)
 
         const cameraToSphere = Vector3.subtract(startingPoint, sphere.position)
 
@@ -145,7 +142,7 @@ export default class RayTracer {
     * @param {Vector3} surfaceNormalDirection
     */
     reflectRay(rayDirection, surfaceNormalDirection) {
-        assertInstances({rayDirection, surfaceNormalDirection}, Vector3)
+        assertInstances({ rayDirection, surfaceNormalDirection }, Vector3)
 
         surfaceNormalDirection = surfaceNormalDirection.clone()
 
@@ -160,8 +157,8 @@ export default class RayTracer {
     * @param {number} intersectionMax - Must be positive.
     */
     calculateLightStrength(intersectionPoint, surfaceNormal, specularExponent, viewVector, intersectionMax) {
-        assertInstances({intersectionPoint, surfaceNormal, viewVector}, Vector3)
-        assertPositiveNumbers({specularExponent, intersectionMax})
+        assertInstances({ intersectionPoint, surfaceNormal, viewVector }, Vector3)
+        assertPositiveNumbers({ specularExponent, intersectionMax })
 
         if (Math.abs(surfaceNormal.magnitude - 1) > 1e-6) {
             throw new Error(
@@ -184,28 +181,29 @@ export default class RayTracer {
                 lightDirection = light.direction.clone()
             }
 
-            // Shadow check
-            const { closestObject } = this.closestIntersection(intersectionPoint, lightDirection, 0.0001, intersectionMax)
-            if (closestObject) {
-                continue;
-            }
-
             // Calculate defuse surface.
             if (lightDirection) {
+
+                // Shadow check
+                const { closestObject } = this.closestIntersection(intersectionPoint, lightDirection, 0.0001, intersectionMax)
+                if (closestObject) {
+                    continue;
+                }
+
                 const dot = Vector3.dot(surfaceNormal, lightDirection)
                 if (dot > 0) {
                     result += light.intensity * dot / (surfaceNormal.magnitude * lightDirection.magnitude)
                 }
-            }
 
-            // Calculate shiny surface.
-            if (specularExponent !== 0) {
-                const reflectionVector = this.reflectRay(lightDirection, surfaceNormal)
-                const reflectionDotView = Vector3.dot(reflectionVector, viewVector)
-                if (reflectionDotView > 0) {
-                    const reflectionAngleView = reflectionDotView / (reflectionVector.magnitude * viewVector.magnitude)
-                    const specularStrength = Math.pow(reflectionAngleView, specularExponent)
-                    result += light.intensity * specularStrength
+                // Calculate shiny surface.
+                if (specularExponent !== 0) {
+                    const reflectionVector = this.reflectRay(lightDirection, surfaceNormal)
+                    const reflectionDotView = Vector3.dot(reflectionVector, viewVector)
+                    if (reflectionDotView > 0) {
+                        const reflectionAngleView = reflectionDotView / (reflectionVector.magnitude * viewVector.magnitude)
+                        const specularStrength = Math.pow(reflectionAngleView, specularExponent)
+                        result += light.intensity * specularStrength
+                    }
                 }
             }
         }

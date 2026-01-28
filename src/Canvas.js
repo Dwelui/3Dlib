@@ -20,9 +20,14 @@ export default class Canvas {
         SLOWEST: 2
     })
 
-    /** @private @type{HTMLCanvasElement} */ #canvas
-    /** @private @type{CanvasRenderingContext2D} */ #context
-    /** @private @type{CanvasOptions} */ #options = {}
+    /** @type{HTMLCanvasElement} */ #canvas
+    /** @type{CanvasRenderingContext2D} */ #context
+    /** @type{CanvasOptions} */ #options = {
+        width: 0,
+        height: 0,
+        rayTraceDrawMode: Canvas.RayTraceDrawMode.SLOW,
+        backroundColor: new Color()
+    }
 
     /**
     * @param {string} querySelector - Query selector to find canvas element by. Throws error if not found.
@@ -31,11 +36,13 @@ export default class Canvas {
     constructor(querySelector, options) {
         assertStrings({ querySelector })
 
-        this.#canvas = document.querySelector(querySelector)
-        if (this.#canvas === null) throw new Error("Canvas element not found")
+        const canvas = document.querySelector(querySelector)
+        if (!(canvas instanceof HTMLCanvasElement)) throw new Error("Canvas element not found")
+        this.#canvas = canvas
 
-        this.#context = this.#canvas.getContext('2d')
-        if (this.#canvas === null) throw new Error("Context not found")
+        const context = this.#canvas.getContext('2d')
+        if (context === null) throw new Error("Context not found")
+        this.#context = context
 
         assertObjects({ options })
 
@@ -55,7 +62,7 @@ export default class Canvas {
     get rayTraceDrawMode() { return this.#options.rayTraceDrawMode }
     set rayTraceDrawMode(mode) {
         if (!Object.values(Canvas.RayTraceDrawMode).includes(mode)) {
-            throw new TypeError(`Parameter 'options.rayTraceDrawMode' option ${rayTraceDrawMode} does not exist`)
+            throw new TypeError(`Parameter 'options.rayTraceDrawMode' option ${this.rayTraceDrawMode} does not exist`)
         }
 
         this.#options.rayTraceDrawMode = mode
