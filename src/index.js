@@ -10,7 +10,9 @@ import Sphere from "./object/Sphere.js"
 import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
-const viewport = new Viewport({ width: 1, height: 1 }, 1)
+const [width, height] = [window.innerWidth, window.innerHeight]
+
+const viewport = new Viewport({ width: 1, height: height / width }, 1)
 const camera = new Camera({ position: new Vector3(3, 0, 1) })
 camera.rotateY(-45)
 
@@ -63,8 +65,8 @@ scene.add(pointLight)
 scene.add(directionalLight)
 
 const canvas = new Canvas('#canvas', {
-    width: 1000,
-    height: 1000,
+    width,
+    height,
     backroundColor: new Color(255, 255, 255),
     rayTraceDrawMode: Canvas.RayTraceDrawMode.SLOW
 })
