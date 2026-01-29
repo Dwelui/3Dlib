@@ -11,10 +11,12 @@ onmessage = (ev) => {
     *   rayDirectionJSON: any,
     *   intersectionMin: number,
     *   intersectionMax: number,
-    *   recursionDepth: number
+    *   recursionDepth: number,
+*       x: number,
+*       y: number
     * }} data
     */
-    const { sceneJSON, startingPointJSON, rayDirectionJSON, intersectionMin, intersectionMax, recursionDepth } = ev.data
+    const { sceneJSON, startingPointJSON, rayDirectionJSON, intersectionMin, intersectionMax, recursionDepth, x, y } = ev.data
 
     assertObjects({ sceneJSON, startingPointJSON, rayDirectionJSON })
     assertNumbers({ intersectionMin, intersectionMax, recursionDepth })
@@ -29,5 +31,9 @@ onmessage = (ev) => {
         recursionDepth
     )
 
-    postMessage(color ? color.toJSON() : color)
+    postMessage({
+        color:  color ? color.toJSON() : color,
+        x,
+        y
+    })
 }

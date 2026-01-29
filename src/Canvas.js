@@ -114,8 +114,8 @@ export default class Canvas {
         const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
 
         traceRayWorker.onmessage = (e) => {
-            console.log(e.data)
-            console.log("Message received from worker")
+            const color = e.data.color ? Color.fromJSON(e.data.color) : this.backroundColor
+            this.putPixel(e.data.x, e.data.y, color)
         }
 
         for (let x = -this.width / 2; x < this.width / 2; x++) {
@@ -128,7 +128,9 @@ export default class Canvas {
                     rayDirectionJSON: rayDirection.toJSON(),
                     intersectionMin,
                     intersectionMax,
-                    recursionDepth
+                    recursionDepth,
+                    x,
+                    y
                 })
 
 

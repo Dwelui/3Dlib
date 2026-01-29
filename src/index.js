@@ -7,10 +7,9 @@ import DirectionalLight from "./object/DirectionalLight.js"
 import PointLight from "./object/PointLight.js"
 import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
-import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
-const [width, height] = [1, 1]
+const [width, height] = [window.innerWidth, window.innerHeight]
 
 const viewport = new Viewport({ width: 1, height: height / width }, 1)
 const camera = new Camera({ position: new Vector3(3, 0, 1) })

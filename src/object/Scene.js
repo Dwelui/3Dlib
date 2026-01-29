@@ -47,7 +47,6 @@ export default class Scene extends Object3D {
 
         if (Objects3D) {
             for (const objectJSON of Objects3D) {
-                console.log(objectJSON)
                 if (objectJSON.type === "Sphere") {
                     scene.add(Sphere.fromJSON(objectJSON))
                 } else if (objectJSON.type === "AmbientLight") {
