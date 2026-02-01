@@ -12,7 +12,7 @@ import Viewport from "./Viewport.js"
 const [width, height] = [window.innerWidth, window.innerHeight]
 
 const viewport = new Viewport({ width: 1, height: height / width }, 1)
-const camera = new Camera({ position: new Vector3(3, 0, 1) })
+const camera = new Camera({ position: new Vector3(4, -0.5, 1) })
 camera.rotateY(-45)
 
 const sphere1 = new Sphere({

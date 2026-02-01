@@ -109,9 +109,7 @@ export default class Canvas {
 
         const start = performance.now()
 
-        const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
-
-        traceRayWorker.postMessage({
+        const initializeRayWorker = {
             type: 'initialize',
             sceneJSON: scene.toJSON(),
             cameraJSON: camera.toJSON(),
@@ -121,10 +119,9 @@ export default class Canvas {
             recursionDepth,
             width: this.width,
             height: this.height
-        })
+        }
 
-        traceRayWorker.onmessage = (ev) => {
-
+        const handleRayWorker = (ev) => {
             /**
             * @type {[
             *   color: any|null,
@@ -143,9 +140,21 @@ export default class Canvas {
             }
         }
 
-        traceRayWorker.postMessage({
+        const traceRayWorker1 = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
+        traceRayWorker1.postMessage(initializeRayWorker)
+        traceRayWorker1.onmessage = handleRayWorker
+        traceRayWorker1.postMessage({
             type: 'trace',
-            xBounds: [-this.width / 2, this.width / 2],
+            xBounds: [-this.width / 2, 0],
+            yBounds: [-this.height / 2, this.height / 2],
+        })
+
+        const traceRayWorker2 = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
+        traceRayWorker2.postMessage(initializeRayWorker)
+        traceRayWorker2.onmessage = handleRayWorker
+        traceRayWorker2.postMessage({
+            type: 'trace',
+            xBounds: [0, this.width / 2],
             yBounds: [-this.height / 2, this.height / 2],
         })
     }
