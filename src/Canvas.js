@@ -1,4 +1,4 @@
-import {  assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
+import { assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
 import Color from "./math/Color.js"
 import Matrix3 from "./math/Matrix3.js"
 import Camera from "./object/Camera.js"
@@ -113,52 +113,30 @@ export default class Canvas {
 
         const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
 
+        traceRayWorker.postMessage({
+            type: 'initialize',
+            sceneJSON: scene.toJSON(),
+            cameraJSON: camera.toJSON(),
+            viewportJSON: viewport.toJSON(),
+            intersectionMin,
+            intersectionMax,
+            recursionDepth,
+        })
+
         traceRayWorker.onmessage = (e) => {
             const color = e.data.color ? Color.fromJSON(e.data.color) : this.backroundColor
             this.putPixel(e.data.x, e.data.y, color)
-        }
 
-        for (let x = -this.width / 2; x < this.width / 2; x++) {
-            for (let y = -this.height / 2; y < this.height / 2; y++) {
-                const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, this))
-
-                traceRayWorker.postMessage({
-                    sceneJSON: scene.toJSON(),
-                    startingPointJSON: camera.position.toJSON(),
-                    rayDirectionJSON: rayDirection.toJSON(),
-                    intersectionMin,
-                    intersectionMax,
-                    recursionDepth,
-                    x,
-                    y
-                })
-
-
-
-
-
-
-                // const color = new RayTracer(scene).traceRay(
-                //     camera.position,
-                //     rayDirection,
-                //     intersectionMin,
-                //     intersectionMax,
-                //     recursionDepth
-                // ) ?? this.backroundColor
-                //
-                // this.putPixel(x, y, color)
-                //
-                if (this.rayTraceDrawMode === Canvas.RayTraceDrawMode.SLOWEST) {
-                    await new Promise(requestAnimationFrame)
-                }
-            }
-
-            if (this.rayTraceDrawMode === Canvas.RayTraceDrawMode.SLOW) {
-                await new Promise(requestAnimationFrame)
+            if (e.data.x === this.width / 2 - 1 && e.data.y === this.height / 2 - 1) {
+                console.log((performance.now() - start) / 1000)
             }
         }
 
-        console.log((performance.now() - start) / 1000)
+        traceRayWorker.postMessage({
+            type: 'trace',
+            xBounds: [-this.width / 2, this.width / 2],
+            yBounds: [-this.height / 2, this.height / 2],
+        })
     }
 
     /**

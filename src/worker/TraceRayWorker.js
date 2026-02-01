@@ -1,39 +1,75 @@
-import { assertNumbers, assertObjects } from "../Assert.js"
-import Vector3 from "../math/Vector3.js"
+import Matrix3 from "../math/Matrix3.js"
+import Camera from "../object/Camera.js"
 import Scene from "../object/Scene.js"
 import RayTracer from "../RayTracer.js"
+import Viewport from "../Viewport.js"
+
+let scene = null
+/** @type {?RayTracer} */
+let rayTracer = null
+/** @type {?Camera} */
+let camera = null
+/** @type {?Viewport} */
+let viewport = null
+/** @type {?number} */
+let intersectionMin = null
+/** @type {?number} */
+let intersectionMax = null
+/** @type {?number} */
+let recursionDepth = null
+/** @type {?Array<number>} */
+let xBounds = null
+/** @type {?Array<number>} */
+let yBounds = null
 
 onmessage = (ev) => {
     /**
     * @type {{
+    *   type: 'initialize'|'trace',
     *   sceneJSON: any,
-    *   startingPointJSON: any,
-    *   rayDirectionJSON: any,
+    *   cameraJSON: any,
+    *   viewportJSON: any,
     *   intersectionMin: number,
     *   intersectionMax: number,
     *   recursionDepth: number,
-*       x: number,
-*       y: number
+    *   xBounds: Array<number>,
+    *   yBounds: Array<number>,
     * }} data
     */
-    const { sceneJSON, startingPointJSON, rayDirectionJSON, intersectionMin, intersectionMax, recursionDepth, x, y } = ev.data
 
-    assertObjects({ sceneJSON, startingPointJSON, rayDirectionJSON })
-    assertNumbers({ intersectionMin, intersectionMax, recursionDepth })
+    const { type } = ev.data
 
-    const scene = Scene.fromJSON(sceneJSON)
-    const rayTracer = new RayTracer(scene)
-    const color = rayTracer.traceRay(
-        Vector3.fromJSON(startingPointJSON),
-        Vector3.fromJSON(rayDirectionJSON),
-        intersectionMin,
-        intersectionMax,
-        recursionDepth
-    )
+    if (type === 'initialize') {
+        const { sceneJSON, cameraJSON, viewportJSON } = ev.data
+            ({ intersectionMin, intersectionMax, recursionDepth, xBounds, yBounds } = ev.data)
 
-    postMessage({
-        color:  color ? color.toJSON() : color,
-        x,
-        y
-    })
+        scene = Scene.fromJSON(sceneJSON)
+        rayTracer = new RayTracer(scene)
+        camera = Camera.fromJSON(cameraJSON)
+        viewport = Viewport.fromJSON(viewportJSON)
+    }
+
+    if (type === 'trace') {
+        TraceRayBatch()
+    }
+}
+
+function TraceRayBatch() {
+    if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !xBounds || !yBounds) {
+        throw new Error('Worker not initialized')
+    }
+
+    for (let x = xBounds[0]; x < xBounds[1]; x++) {
+        for (let y = yBounds[0]; y < yBounds[1]; y++) {
+            const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, this))
+
+            const color = rayTracer.traceRay(
+                camera.position,
+                rayDirection,
+                intersectionMin,
+                intersectionMax,
+                recursionDepth
+            )
+        }
+    }
 }
