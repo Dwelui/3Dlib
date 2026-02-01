@@ -12,7 +12,7 @@ import Viewport from "./Viewport.js"
 
 disableAsserts()
 
-const [width, height] = [1000, 1000]
+const [width, height] = [window.innerWidth, window.innerHeight]
 
 const viewport = new Viewport({ width: 1, height: height / width }, 1)
 const camera = new Camera({ position: new Vector3(3, 0, 1) })
