@@ -107,8 +107,8 @@ export default class Canvas {
 
         this.clear()
 
-        const xChunkCount = 4
-        const yChunkCount = 4
+        const xChunkCount = 64
+        const yChunkCount = 64
         const xChunkSize = this.width / xChunkCount
         const yChunkSize = this.height / yChunkCount
 
@@ -118,7 +118,7 @@ export default class Canvas {
         *   id: number,
         *   xChunk: Array<number>,
         *   yChunk: Array<number>,
-        *   isFinished: boolean
+        *   status: 'waiting'|'done'|'inprogress'
         * }>}
         */
         const chunks = []
@@ -131,7 +131,7 @@ export default class Canvas {
                     id: chunkCount,
                     xChunk,
                     yChunk,
-                    isFinished: false
+                    status: "waiting"
                 })
 
                 chunkCount++
@@ -140,16 +140,20 @@ export default class Canvas {
 
         const start = performance.now()
 
-        const initializeRayWorker = {
-            type: 'initialize',
-            sceneJSON: scene.toJSON(),
-            cameraJSON: camera.toJSON(),
-            viewportJSON: viewport.toJSON(),
-            intersectionMin,
-            intersectionMax,
-            recursionDepth,
-            width: this.width,
-            height: this.height
+        /** @param {number} id */
+        const initializeRayWorker = (id) => {
+            return {
+                type: 'initialize',
+                id,
+                sceneJSON: scene.toJSON(),
+                cameraJSON: camera.toJSON(),
+                viewportJSON: viewport.toJSON(),
+                intersectionMin,
+                intersectionMax,
+                recursionDepth,
+                width: this.width,
+                height: this.height
+            }
         }
 
         /** @param {any} ev */
@@ -165,7 +169,9 @@ export default class Canvas {
             /** @type {boolean} */
             const isFinished = ev.data.isFinished
             /** @type {number} */
-            const chunkId = ev.data.id
+            const chunkId = ev.data.chunkId
+            /** @type {number} */
+            const workerId = ev.data.workerId
 
             for (const pixel of batch) {
                 const color = pixel.color ? Color.fromJSON(pixel.color) : this.backroundColor
@@ -174,25 +180,47 @@ export default class Canvas {
 
             if (isFinished) {
                 const chunk = chunks.find(chunk => chunk.id === chunkId)
-                if (chunk) chunk.isFinished = true
+                if (chunk) chunk.status = "done"
 
-                if (chunks.filter(chunk => chunk.isFinished).length === chunkCount) {
+                const doneChunks = chunks.filter(chunk => chunk.status === 'done')
+                if (doneChunks.length === chunkCount) {
                     console.log((performance.now() - start) / 1000)
+                    return
                 }
+
+                const waitingChunks = chunks.filter(chunk => chunk.status === 'waiting')
+                if (waitingChunks.length === 0) {
+                    return
+                }
+
+                const nextChunk = waitingChunks[0]
+                nextChunk.status = "inprogress"
+
+                workers[workerId].worker.postMessage({
+                    type: 'trace',
+                    chunk: nextChunk,
+                })
             }
         }
 
+        const workerCount = 4
+        /**
+        * @type {Array<{
+        *   worker: Worker,
+        *   isFinished: boolean
+        * }>}
+        */
         const workers = []
-        for (let i = 0; i < chunkCount; i++) {
+        for (let i = 0; i < workerCount; i++) {
             const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
-            traceRayWorker.postMessage(initializeRayWorker)
+            workers.push({ isFinished: true, worker: traceRayWorker })
+
+            traceRayWorker.postMessage(initializeRayWorker(i))
             traceRayWorker.onmessage = handleRayWorker
             traceRayWorker.postMessage({
                 type: 'trace',
                 chunk: chunks[i],
             })
-
-            workers.push(traceRayWorker)
         }
     }
 

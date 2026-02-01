@@ -4,6 +4,8 @@ import Scene from "../object/Scene.js"
 import RayTracer from "../RayTracer.js"
 import Viewport from "../Viewport.js"
 
+/** @type {?number} */
+let id = null
 let scene = null
 /** @type {?RayTracer} */
 let rayTracer = null
@@ -26,6 +28,7 @@ let batchSize = 100
 onmessage = (ev) => {
     /**
     * @type {{
+    *   id: number,
     *   type: 'initialize'|'trace',
     *   sceneJSON: any,
     *   cameraJSON: any,
@@ -33,8 +36,6 @@ onmessage = (ev) => {
     *   intersectionMin: number,
     *   intersectionMax: number,
     *   recursionDepth: number,
-    *   xBounds: Array<number>,
-    *   yBounds: Array<number>,
     * }} data
     */
 
@@ -42,7 +43,7 @@ onmessage = (ev) => {
 
     if (type === 'initialize') {
         const { sceneJSON, cameraJSON, viewportJSON } = ev.data;
-        ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
+        ({ id, intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
 
         scene = Scene.fromJSON(sceneJSON)
         rayTracer = new RayTracer(scene)
@@ -51,19 +52,19 @@ onmessage = (ev) => {
     }
 
     if (type === 'trace') {
-        TraceRayBatch(ev.data.chunk)
+        TraceRayBatch(ev.data.chunk.id, ev.data.chunk)
     }
 }
 
 /**
+* @param {number} chunkId
 * @param {Object} args
-* @param {number} args.id
 * @param {Array<number>} args.xChunk
 * @param {Array<number>} args.yChunk
 */
-function TraceRayBatch({ id, xChunk, yChunk }) {
+function TraceRayBatch(chunkId, { xChunk, yChunk }) {
     if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !width || !height) {
-        console.log({ rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, width, height })
+        console.log({ id, rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, width, height })
         throw new Error('Worker not initialized')
     }
 
@@ -88,11 +89,11 @@ function TraceRayBatch({ id, xChunk, yChunk }) {
             })
 
             if (result.length === batchSize) {
-                postMessage({ id, isFinished: false, result })
+                postMessage({ workerId: id, chunkId, isFinished: false, result })
                 result = []
             }
         }
     }
 
-    postMessage({ id, isFinished: true, result })
+    postMessage({ workerId: id, chunkId, isFinished: true, result })
 }
