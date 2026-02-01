@@ -42,7 +42,7 @@ onmessage = (ev) => {
 
     if (type === 'initialize') {
         const { sceneJSON, cameraJSON, viewportJSON } = ev.data;
-            ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
+        ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
 
         scene = Scene.fromJSON(sceneJSON)
         rayTracer = new RayTracer(scene)
@@ -51,26 +51,26 @@ onmessage = (ev) => {
     }
 
     if (type === 'trace') {
-        const { xBounds, yBounds } = ev.data;
-
-        TraceRayBatch(xBounds, yBounds)
+        TraceRayBatch(ev.data.chunk)
     }
 }
 
 /**
-* @param {Array<number>} xBounds
-* @param {Array<number>} yBounds
+* @param {Object} args
+* @param {number} args.id
+* @param {Array<number>} args.xChunk
+* @param {Array<number>} args.yChunk
 */
-function TraceRayBatch(xBounds, yBounds) {
-    if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !xBounds || !yBounds || !width || !height) {
-        console.log({rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, xBounds, yBounds, width, height})
+function TraceRayBatch({ id, xChunk, yChunk }) {
+    if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !width || !height) {
+        console.log({ rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, width, height })
         throw new Error('Worker not initialized')
     }
 
     let result = []
 
-    for (let x = xBounds[0]; x < xBounds[1]; x++) {
-        for (let y = yBounds[0]; y < yBounds[1]; y++) {
+    for (let x = xChunk[0]; x < xChunk[1]; x++) {
+        for (let y = yChunk[0]; y < yChunk[1]; y++) {
             const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, width, height))
 
             const color = rayTracer.traceRay(
@@ -88,11 +88,11 @@ function TraceRayBatch(xBounds, yBounds) {
             })
 
             if (result.length === batchSize) {
-                postMessage(result)
+                postMessage({ id, isFinished: false, result })
                 result = []
             }
         }
     }
 
-    postMessage(result)
+    postMessage({ id, isFinished: true, result })
 }

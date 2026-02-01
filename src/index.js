@@ -9,7 +9,7 @@ import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
 import Viewport from "./Viewport.js"
 
-const [width, height] = [window.innerWidth, window.innerHeight]
+const [width, height] = [1000, 1000]
 
 const viewport = new Viewport({ width: 1, height: height / width }, 1)
 const camera = new Camera({ position: new Vector3(4, -0.5, 1) })

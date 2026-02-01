@@ -107,6 +107,37 @@ export default class Canvas {
 
         this.clear()
 
+        const xChunkCount = 4
+        const yChunkCount = 4
+        const xChunkSize = this.width / xChunkCount
+        const yChunkSize = this.height / yChunkCount
+
+        let chunkCount = 0
+        /**
+        * @type {Array<{
+        *   id: number,
+        *   xChunk: Array<number>,
+        *   yChunk: Array<number>,
+        *   isFinished: boolean
+        * }>}
+        */
+        const chunks = []
+        for (let x = 0; x < xChunkCount; x++) {
+            const xChunk = [xChunkSize * x - this.width / 2, xChunkSize * (x + 1) - this.width / 2]
+            for (let y = 0; y < yChunkCount; y++) {
+                const yChunk = [yChunkSize * y - this.height / 2, yChunkSize * (y + 1) - this.height / 2]
+
+                chunks.push({
+                    id: chunkCount,
+                    xChunk,
+                    yChunk,
+                    isFinished: false
+                })
+
+                chunkCount++
+            }
+        }
+
         const start = performance.now()
 
         const initializeRayWorker = {
@@ -121,6 +152,7 @@ export default class Canvas {
             height: this.height
         }
 
+        /** @param {any} ev */
         const handleRayWorker = (ev) => {
             /**
             * @type {[
@@ -129,34 +161,39 @@ export default class Canvas {
             *   y: number
             * ]}
             */
-            const batch = ev.data
+            const batch = ev.data.result
+            /** @type {boolean} */
+            const isFinished = ev.data.isFinished
+            /** @type {number} */
+            const chunkId = ev.data.id
+
             for (const pixel of batch) {
                 const color = pixel.color ? Color.fromJSON(pixel.color) : this.backroundColor
                 this.putPixel(pixel.x, pixel.y, color)
+            }
 
-                if (pixel.x === this.width / 2 - 1 && pixel.y === this.height / 2 - 1) {
+            if (isFinished) {
+                const chunk = chunks.find(chunk => chunk.id === chunkId)
+                if (chunk) chunk.isFinished = true
+
+                if (chunks.filter(chunk => chunk.isFinished).length === chunkCount) {
                     console.log((performance.now() - start) / 1000)
                 }
             }
         }
 
-        const traceRayWorker1 = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
-        traceRayWorker1.postMessage(initializeRayWorker)
-        traceRayWorker1.onmessage = handleRayWorker
-        traceRayWorker1.postMessage({
-            type: 'trace',
-            xBounds: [-this.width / 2, 0],
-            yBounds: [-this.height / 2, this.height / 2],
-        })
+        const workers = []
+        for (let i = 0; i < chunkCount; i++) {
+            const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
+            traceRayWorker.postMessage(initializeRayWorker)
+            traceRayWorker.onmessage = handleRayWorker
+            traceRayWorker.postMessage({
+                type: 'trace',
+                chunk: chunks[i],
+            })
 
-        const traceRayWorker2 = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
-        traceRayWorker2.postMessage(initializeRayWorker)
-        traceRayWorker2.onmessage = handleRayWorker
-        traceRayWorker2.postMessage({
-            type: 'trace',
-            xBounds: [0, this.width / 2],
-            yBounds: [-this.height / 2, this.height / 2],
-        })
+            workers.push(traceRayWorker)
+        }
     }
 
     /**
