@@ -159,11 +159,11 @@ export default class Canvas {
         /** @param {any} ev */
         const handleRayWorker = (ev) => {
             /**
-            * @type {[
-            *   color: any|null,
+            * @type {Array<{
+            *   color: Array<number>,
             *   x: number,
             *   y: number
-            * ]}
+            * }>}
             */
             const batch = ev.data.result
             /** @type {boolean} */
@@ -174,7 +174,7 @@ export default class Canvas {
             const workerId = ev.data.workerId
 
             for (const pixel of batch) {
-                const color = pixel.color ? Color.fromJSON(pixel.color) : this.backroundColor
+                const color = pixel.color ? Color.fromArray(pixel.color) : this.backroundColor
                 this.putPixel(pixel.x, pixel.y, color)
             }
 

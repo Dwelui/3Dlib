@@ -1,3 +1,4 @@
+import { disableAsserts } from "./Assert.js"
 import Canvas from "./Canvas.js"
 import Color from "./math/Color.js"
 import Vector3 from "./math/Vector3.js"
@@ -8,6 +9,8 @@ import PointLight from "./object/PointLight.js"
 import Scene from "./object/Scene.js"
 import Sphere from "./object/Sphere.js"
 import Viewport from "./Viewport.js"
+
+disableAsserts()
 
 const [width, height] = [1000, 1000]
 

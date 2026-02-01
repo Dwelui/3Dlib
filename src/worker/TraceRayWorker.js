@@ -1,8 +1,11 @@
+import { disableAsserts } from "../Assert.js"
 import Matrix3 from "../math/Matrix3.js"
 import Camera from "../object/Camera.js"
 import Scene from "../object/Scene.js"
 import RayTracer from "../RayTracer.js"
 import Viewport from "../Viewport.js"
+
+disableAsserts()
 
 /** @type {?number} */
 let id = null
@@ -83,7 +86,7 @@ function TraceRayBatch(chunkId, { xChunk, yChunk }) {
             )
 
             result.push({
-                color: color ? color.toJSON() : null,
+                color: color ? color.toArray() : null,
                 x,
                 y
             })
