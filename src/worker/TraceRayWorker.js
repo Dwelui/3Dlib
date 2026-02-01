@@ -17,10 +17,11 @@ let intersectionMin = null
 let intersectionMax = null
 /** @type {?number} */
 let recursionDepth = null
-/** @type {?Array<number>} */
-let xBounds = null
-/** @type {?Array<number>} */
-let yBounds = null
+/** @type {?number} */
+let width = null
+/** @type {?number} */
+let height = null
+let batchSize = 1
 
 onmessage = (ev) => {
     /**
@@ -40,8 +41,8 @@ onmessage = (ev) => {
     const { type } = ev.data
 
     if (type === 'initialize') {
-        const { sceneJSON, cameraJSON, viewportJSON } = ev.data
-            ({ intersectionMin, intersectionMax, recursionDepth, xBounds, yBounds } = ev.data)
+        const { sceneJSON, cameraJSON, viewportJSON } = ev.data;
+            ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
 
         scene = Scene.fromJSON(sceneJSON)
         rayTracer = new RayTracer(scene)
@@ -50,18 +51,27 @@ onmessage = (ev) => {
     }
 
     if (type === 'trace') {
-        TraceRayBatch()
+        const { xBounds, yBounds } = ev.data;
+
+        TraceRayBatch(xBounds, yBounds)
     }
 }
 
-function TraceRayBatch() {
-    if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !xBounds || !yBounds) {
+/**
+* @param {Array<number>} xBounds
+* @param {Array<number>} yBounds
+*/
+function TraceRayBatch(xBounds, yBounds) {
+    if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !xBounds || !yBounds || !width || !height) {
+        console.log({rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, xBounds, yBounds, width, height})
         throw new Error('Worker not initialized')
     }
 
+    let result = []
+
     for (let x = xBounds[0]; x < xBounds[1]; x++) {
         for (let y = yBounds[0]; y < yBounds[1]; y++) {
-            const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, this))
+            const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, width, height))
 
             const color = rayTracer.traceRay(
                 camera.position,
@@ -70,6 +80,19 @@ function TraceRayBatch() {
                 intersectionMax,
                 recursionDepth
             )
+
+            result.push({
+                color: color ? color.toJSON() : null,
+                x,
+                y
+            })
+
+            if (result.length === batchSize) {
+                postMessage(result)
+                result = []
+            }
         }
     }
+
+    postMessage(result)
 }

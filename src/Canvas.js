@@ -1,9 +1,7 @@
 import { assertInstancesMapped, assertNumbers, assertObjects, assertPositiveNumbers, assertStrings } from "./Assert.js"
 import Color from "./math/Color.js"
-import Matrix3 from "./math/Matrix3.js"
 import Camera from "./object/Camera.js"
 import Scene from "./object/Scene.js"
-import RayTracer from "./RayTracer.js"
 import Viewport from "./Viewport.js"
 
 /**
@@ -121,14 +119,27 @@ export default class Canvas {
             intersectionMin,
             intersectionMax,
             recursionDepth,
+            width: this.width,
+            height: this.height
         })
 
-        traceRayWorker.onmessage = (e) => {
-            const color = e.data.color ? Color.fromJSON(e.data.color) : this.backroundColor
-            this.putPixel(e.data.x, e.data.y, color)
+        traceRayWorker.onmessage = (ev) => {
 
-            if (e.data.x === this.width / 2 - 1 && e.data.y === this.height / 2 - 1) {
-                console.log((performance.now() - start) / 1000)
+            /**
+            * @type {[
+            *   color: any|null,
+            *   x: number,
+            *   y: number
+            * ]}
+            */
+            const batch = ev.data
+            for (const pixel of batch) {
+                const color = pixel.color ? Color.fromJSON(pixel.color) : this.backroundColor
+                this.putPixel(pixel.x, pixel.y, color)
+
+                if (pixel.x === this.width / 2 - 1 && pixel.y === this.height / 2 - 1) {
+                    console.log((performance.now() - start) / 1000)
+                }
             }
         }
 
