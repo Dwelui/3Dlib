@@ -107,8 +107,8 @@ export default class Canvas {
 
         this.clear()
 
-        const xChunkCount = 48
-        const yChunkCount = 48
+        const xChunkCount = 16
+        const yChunkCount = 16
         const xChunkSize = this.width / xChunkCount
         const yChunkSize = this.height / yChunkCount
 
@@ -137,6 +137,8 @@ export default class Canvas {
                 chunkCount++
             }
         }
+
+        const pixelArray = new Uint8ClampedArray(this.width * this.height * 4)
 
         const start = performance.now()
 
@@ -174,8 +176,13 @@ export default class Canvas {
             const workerId = ev.data.workerId
 
             for (const pixel of batch) {
-                const color = pixel.color ? Color.fromArray(pixel.color) : this.backroundColor
-                this.putPixel(pixel.x, pixel.y, color)
+                if (pixel.color === null) continue
+
+                const pixelIndex = ((Math.floor(this.height / 2 - pixel.y)) * this.width + (Math.floor(pixel.x + this.width / 2))) * 4
+                pixelArray[pixelIndex + 0] = pixel.color[0]
+                pixelArray[pixelIndex + 1] = pixel.color[1]
+                pixelArray[pixelIndex + 2] = pixel.color[2]
+                pixelArray[pixelIndex + 3] = 255
             }
 
             if (isFinished) {
@@ -185,6 +192,7 @@ export default class Canvas {
                 const doneChunks = chunks.filter(chunk => chunk.status === 'done')
                 if (doneChunks.length === chunkCount) {
                     console.log((performance.now() - start) / 1000)
+                    this.#context.putImageData(new ImageData(pixelArray, this.width, this.height), 0, 0)
                     return
                 }
 
