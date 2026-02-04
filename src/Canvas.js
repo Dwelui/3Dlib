@@ -138,9 +138,8 @@ export default class Canvas {
             }
         }
 
-        const pixelArray = new Uint8ClampedArray(this.width * this.height * 4)
         const sab = new SharedArrayBuffer(this.width * this.height * 4)
-        const pixels = new Uint8ClampedArray(sab)
+        const sharedPixels = new Uint8ClampedArray(sab)
 
         const start = performance.now()
 
@@ -163,65 +162,38 @@ export default class Canvas {
 
         // TODO refactor to use shared workers
         // Need to add:
-        // Cross-Origin-Opener-Policy: same-origin
-        // Cross-Origin-Embedder-Policy: require-corp
-        //
-        // Calculate pixel position with chunk data and write raw rgba to shared buffer
-        // Try to use Atomics
 
         /** @param {any} ev */
         const handleRayWorker = (ev) => {
-            /**
-            * @type {Array<{
-            *   color: Array<number>,
-            *   x: number,
-            *   y: number
-            * }>}
-            */
-            const batch = ev.data.result
-            /** @type {boolean} */
-            const isFinished = ev.data.isFinished
             /** @type {number} */
             const chunkId = ev.data.chunkId
             /** @type {number} */
             const workerId = ev.data.workerId
 
-            for (const pixel of batch) {
-                if (pixel.color === null) continue
+            const chunk = chunks.find(chunk => chunk.id === chunkId)
+            if (chunk) chunk.status = "done"
 
-                const pixelIndex = ((Math.floor(this.height / 2 - pixel.y)) * this.width + (Math.floor(pixel.x + this.width / 2))) * 4
-                pixelArray[pixelIndex + 0] = pixel.color[0]
-                pixelArray[pixelIndex + 1] = pixel.color[1]
-                pixelArray[pixelIndex + 2] = pixel.color[2]
-                pixelArray[pixelIndex + 3] = 255
+            const doneChunks = chunks.filter(chunk => chunk.status === 'done')
+            if (doneChunks.length === chunkCount) {
+                const displayPixels = new Uint8ClampedArray(this.width * this.height * 4)
+                displayPixels.set(sharedPixels)
+                this.#context.putImageData(new ImageData(displayPixels, this.width, this.height), 0, 0)
+                console.log((performance.now() - start) / 1000)
+                return
             }
 
-            if (isFinished) {
-                const chunk = chunks.find(chunk => chunk.id === chunkId)
-                if (chunk) chunk.status = "done"
-
-                const doneChunks = chunks.filter(chunk => chunk.status === 'done')
-                if (doneChunks.length === chunkCount) {
-                    console.log((performance.now() - start) / 1000)
-                    const displayPixels = new Uint8ClampedArray(this.width * this.height * 4)
-                    displayPixels.set(pixels)
-                    this.#context.putImageData(new ImageData(displayPixels, this.width, this.height), 0, 0)
-                    return
-                }
-
-                const waitingChunks = chunks.filter(chunk => chunk.status === 'waiting')
-                if (waitingChunks.length === 0) {
-                    return
-                }
-
-                const nextChunk = waitingChunks[0]
-                nextChunk.status = "inprogress"
-
-                workers[workerId].worker.postMessage({
-                    type: 'trace',
-                    chunk: nextChunk,
-                })
+            const waitingChunks = chunks.filter(chunk => chunk.status === 'waiting')
+            if (waitingChunks.length === 0) {
+                return
             }
+
+            const nextChunk = waitingChunks[0]
+            nextChunk.status = "inprogress"
+
+            workers[workerId].worker.postMessage({
+                type: 'trace',
+                chunk: nextChunk,
+            })
         }
 
         let workerCount = 6

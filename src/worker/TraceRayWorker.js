@@ -26,7 +26,6 @@ let recursionDepth = null
 let width = null
 /** @type {?number} */
 let height = null
-let batchSize = 450
 
 /** @type Uint8ClampedArray */
 let pixels
@@ -76,8 +75,6 @@ function TraceRayBatch(chunkId, { xChunk, yChunk }) {
         throw new Error('Worker not initialized')
     }
 
-    let result = []
-
     for (let x = xChunk[0]; x < xChunk[1]; x++) {
         const offsetX = (Math.floor(x + width / 2))
 
@@ -105,19 +102,8 @@ function TraceRayBatch(chunkId, { xChunk, yChunk }) {
                 pixels[pixelIndex + 2] = 255
                 pixels[pixelIndex + 3] = 255
             }
-
-            result.push({
-                color: color ? color.toArray() : null,
-                x,
-                y
-            })
-
-            if (result.length === batchSize) {
-                postMessage({ workerId: id, chunkId, isFinished: false, result })
-                result = []
-            }
         }
     }
 
-    postMessage({ workerId: id, chunkId, isFinished: true, result })
+    postMessage({ workerId: id, chunkId })
 }
