@@ -93,18 +93,18 @@ function TraceRayBatch(chunk) {
                 recursionDepth
             )
 
-            const pixelIndex = ((Math.floor(height / 2 - y)) * width + offsetX) * 4
+            const pixelPosition = ((Math.floor(height / 2 - y)) * width + offsetX) * 4
             const rgba = color?.rgba
             if (rgba) {
-                pixels[pixelIndex + 0] = rgba[0]
-                pixels[pixelIndex + 1] = rgba[1]
-                pixels[pixelIndex + 2] = rgba[2]
-                pixels[pixelIndex + 3] = 255
+                pixels[pixelPosition + 0] = rgba[0]
+                pixels[pixelPosition + 1] = rgba[1]
+                pixels[pixelPosition + 2] = rgba[2]
+                pixels[pixelPosition + 3] = 255
             } else {
-                pixels[pixelIndex + 0] = 255
-                pixels[pixelIndex + 1] = 255
-                pixels[pixelIndex + 2] = 255
-                pixels[pixelIndex + 3] = 255
+                pixels[pixelPosition + 0] = 255
+                pixels[pixelPosition + 1] = 255
+                pixels[pixelPosition + 2] = 255
+                pixels[pixelPosition + 3] = 255
             }
         }
     }
