@@ -169,15 +169,12 @@ export default class Canvas {
 
         let workerCount = 1
         workerCount = chunkCount < workerCount ? chunkCount : workerCount
-        /**
-        * @type {Array<{
-        *   worker: Worker,
-        * }>}
-        */
+
+        /** @type {Array<Worker>} */
         const workers = []
         for (let i = 0; i < workerCount; i++) {
             const traceRayWorker = new Worker('src/worker/TraceRayWorker.js', { type: "module" })
-            workers.push({ worker: traceRayWorker })
+            workers.push(traceRayWorker)
             traceRayWorker.postMessage(initializeRayWorker)
         }
 
@@ -188,6 +185,7 @@ export default class Canvas {
                 this.#context.putImageData(new ImageData(displayPixels, this.width, this.height), 0, 0)
 
                 console.log((performance.now() - start) / 1000)
+                workers.forEach(worker => worker.terminate())
             } else {
                 requestAnimationFrame(waitForCompletion)
             }
