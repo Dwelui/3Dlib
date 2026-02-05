@@ -1,5 +1,5 @@
 import { assertInstances, assertInstancesMapped, assertPositiveNumbers } from "./Assert.js"
-import Color from "./math/Color.js"
+import Color from "./Color.js"
 import Vector3 from "./math/Vector3.js"
 import AmbientLight from "./object/AmbientLight.js"
 import DirectionalLight from "./object/DirectionalLight.js"
@@ -47,7 +47,7 @@ export default class RayTracer {
             throw new Error(`Light strenght is negative for object ${closestObject.toJSON()}`)
         }
 
-        localColor = Color.fromVector3(Vector3.multiplyScalar(closestObject.color, lightStrenght))
+        localColor = Color.fromVector3(Vector3.multiplyScalar(closestObject.color.toVector3(), lightStrenght))
 
         if (recursionDepth <= 0 || closestObject.reflective <= 0) {
             return localColor
@@ -61,7 +61,7 @@ export default class RayTracer {
 
         localColor.multiplyScalar(1 - closestObject.reflective)
         reflectionColor.multiplyScalar(closestObject.reflective)
-        return Color.fromVector3(Vector3.add(localColor, reflectionColor))
+        return Color.fromVector3(Vector3.add(localColor.toVector3(), reflectionColor.toVector3()))
     }
 
     /**
