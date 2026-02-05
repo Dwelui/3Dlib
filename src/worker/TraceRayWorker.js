@@ -94,7 +94,7 @@ function TraceRayBatch(chunk) {
             )
 
             const pixelPosition = ((Math.floor(height / 2 - y)) * width + offsetX) * 4
-            const rgba = color?.rgba
+            const rgba = color?.toArray()
             if (rgba) {
                 pixels[pixelPosition + 0] = rgba[0]
                 pixels[pixelPosition + 1] = rgba[1]
