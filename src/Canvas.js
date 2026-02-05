@@ -152,7 +152,7 @@ export default class Canvas {
             height: this.height
         }
 
-        let workerCount = 8
+        let workerCount = 6
         workerCount = chunkCount < workerCount ? chunkCount : workerCount
 
         /** @type {Array<Worker>} */
@@ -172,7 +172,7 @@ export default class Canvas {
                 console.log((performance.now() - start) / 1000)
                 workers.forEach(worker => worker.terminate())
             } else {
-                if (doneCount % 4 === 0) {
+                if (doneCount % 6 === 0) {
                     displayPixels.set(sharedPixels)
                     this.#context.putImageData(new ImageData(displayPixels, this.width, this.height), 0, 0)
                 }
