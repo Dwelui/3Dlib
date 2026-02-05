@@ -11,6 +11,6 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "npx serve -c serve.json"
   }
 }
