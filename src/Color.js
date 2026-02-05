@@ -55,8 +55,26 @@ export default class Color {
         }
     }
 
+    toVector3() {
+        return new Vector3(this.#components[0], this.#components[1], this.#components[2])
+    }
+
     /** @param {Vector3} vector */
     static fromVector3(vector) {
         return new Color(vector.x, vector.y, vector.z)
+    }
+
+    /**
+    * Mutates vector
+    *
+    * @param {number} number
+    */
+    multiplyScalar(number) {
+        this.#components[0] *= number
+        this.#components[1] *= number
+        this.#components[2] *= number
+        this.#components[3] *= number
+
+        return this
     }
 }
