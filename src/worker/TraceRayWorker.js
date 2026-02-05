@@ -38,39 +38,35 @@ const TOTAL = 2;
 const ABORT = 3;
 
 onmessage = (ev) => {
-    const { type } = ev.data
+    const { sceneJSON, cameraJSON, viewportJSON, sharedPixelBuffer, sharedChunkBuffer, sharedControlBuffer } = ev.data;
+    ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
 
-    if (type === 'initialize') {
-        const { sceneJSON, cameraJSON, viewportJSON, sharedPixelBuffer, sharedChunkBuffer, sharedControlBuffer } = ev.data;
-        ({ intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
+    chunks = new Int32Array(sharedChunkBuffer)
+    pixels = new Uint8ClampedArray(sharedPixelBuffer)
+    controls = new Int32Array(sharedControlBuffer)
 
-        chunks = new Int32Array(sharedChunkBuffer)
-        pixels = new Uint8ClampedArray(sharedPixelBuffer)
-        controls = new Int32Array(sharedControlBuffer)
+    scene = Scene.fromJSON(sceneJSON)
+    rayTracer = new RayTracer(scene)
+    camera = Camera.fromJSON(cameraJSON)
+    viewport = Viewport.fromJSON(viewportJSON)
 
-        scene = Scene.fromJSON(sceneJSON)
-        rayTracer = new RayTracer(scene)
-        camera = Camera.fromJSON(cameraJSON)
-        viewport = Viewport.fromJSON(viewportJSON)
+    while (true) {
+        if (Atomics.load(controls, ABORT)) return
 
-        while (true) {
-            if (Atomics.load(controls, ABORT)) return
+        const chunkId = Atomics.add(controls, NEXT_CHUNK, 1)
+        if (chunkId >= controls[TOTAL]) break;
 
-            const chunkId = Atomics.add(controls, NEXT_CHUNK, 1)
-            if (chunkId >= controls[TOTAL]) break;
+        const chunkPosition = chunkId * 4
+        const chunk = [
+            chunks[chunkPosition + 0],
+            chunks[chunkPosition + 1],
+            chunks[chunkPosition + 2],
+            chunks[chunkPosition + 3],
+        ]
 
-            const chunkPosition = chunkId * 4
-            const chunk = [
-                chunks[chunkPosition + 0],
-                chunks[chunkPosition + 1],
-                chunks[chunkPosition + 2],
-                chunks[chunkPosition + 3],
-            ]
+        TraceRayBatch(chunk)
 
-            TraceRayBatch(chunk)
-
-            Atomics.add(controls, COMPLETED, 1)
-        }
+        Atomics.add(controls, COMPLETED, 1)
     }
 }
 
@@ -80,7 +76,7 @@ onmessage = (ev) => {
 function TraceRayBatch(chunk) {
     if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !width || !height) {
         console.log({ rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, width, height })
-        throw new Error('Worker not initialized')
+        throw new Error('Worker not initialized correctly')
     }
 
     for (let x = chunk[0]; x < chunk[1]; x++) {

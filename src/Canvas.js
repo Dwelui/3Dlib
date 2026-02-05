@@ -153,7 +153,6 @@ export default class Canvas {
         const start = performance.now()
 
         const initializeRayWorker = {
-            type: 'initialize',
             sceneJSON: scene.toJSON(),
             cameraJSON: camera.toJSON(),
             viewportJSON: viewport.toJSON(),
@@ -167,7 +166,7 @@ export default class Canvas {
             height: this.height
         }
 
-        let workerCount = 6
+        let workerCount = 8
         workerCount = chunkCount < workerCount ? chunkCount : workerCount
 
         /** @type {Array<Worker>} */
