@@ -105,12 +105,11 @@ export default class Canvas {
         assertInstancesMapped({ scene, viewport, camera })
         assertPositiveNumbers({ intersectionMin, intersectionMax, recursionDepth })
 
-        const xChunkCount = 16
-        const yChunkCount = 16
-        const xChunkSize = this.width / xChunkCount
-        const yChunkSize = this.height / yChunkCount
+        const xChunkCount = 3
+        const yChunkCount = 4
+        const xChunkSize = Math.floor(this.width / xChunkCount)
+        const yChunkSize = Math.floor(this.height / yChunkCount)
 
-        let chunkCount = 0
         /**
         * @type {Array<{
         *   id: number,
@@ -122,26 +121,37 @@ export default class Canvas {
         const chunks = []
         const widthHalf = this.width / 2
         const heightHalf = this.height / 2
+
+        const chunkBufferSize = xChunkCount * yChunkCount * 4 * Int32Array.BYTES_PER_ELEMENT
+        const sharedChunkBuffer = new SharedArrayBuffer(chunkBufferSize)
+        const sharedChunks = new Int32Array(sharedChunkBuffer)
+
         for (let x = 0; x < xChunkCount; x++) {
             const xChunk = [xChunkSize * x - widthHalf, xChunkSize * (x + 1) - widthHalf]
+            const xChunkIndexOffset = x * yChunkCount
+
             for (let y = 0; y < yChunkCount; y++) {
                 const yChunk = [yChunkSize * y - heightHalf, yChunkSize * (y + 1) - heightHalf]
 
+                const chunkPosition = (xChunkIndexOffset + y) * 4
+                sharedChunks[chunkPosition + 0] = xChunk[0]
+                sharedChunks[chunkPosition + 1] = xChunk[1]
+                sharedChunks[chunkPosition + 2] = yChunk[0]
+                sharedChunks[chunkPosition + 3] = yChunk[1]
+
                 chunks.push({
-                    id: chunkCount,
+                    id: chunkPosition,
                     xChunk,
                     yChunk,
                     status: "waiting"
                 })
-
-                chunkCount++
             }
         }
 
-        const bufferSize = this.width * this.height * 4
-        const sab = new SharedArrayBuffer(bufferSize)
-        const sharedPixels = new Uint8ClampedArray(sab)
-        const displayPixels = new Uint8ClampedArray(bufferSize)
+        const pixelBufferSize = this.width * this.height * 4
+        const sharedPixelBuffer = new SharedArrayBuffer(pixelBufferSize)
+        const sharedPixels = new Uint8ClampedArray(sharedPixelBuffer)
+        const displayPixels = new Uint8ClampedArray(pixelBufferSize)
 
         const start = performance.now()
 
@@ -153,7 +163,8 @@ export default class Canvas {
                 sceneJSON: scene.toJSON(),
                 cameraJSON: camera.toJSON(),
                 viewportJSON: viewport.toJSON(),
-                sab,
+                sharedPixelBuffer,
+                sharedChunkBuffer,
                 intersectionMin,
                 intersectionMax,
                 recursionDepth,
@@ -175,7 +186,7 @@ export default class Canvas {
             if (chunk) chunk.status = "done"
 
             const doneChunks = chunks.filter(chunk => chunk.status === 'done')
-            if (doneChunks.length === chunkCount) {
+            if (doneChunks.length === chunks.length) {
                 displayPixels.set(sharedPixels)
                 this.#context.putImageData(new ImageData(displayPixels, this.width, this.height), 0, 0)
                 console.log((performance.now() - start) / 1000)
@@ -196,7 +207,7 @@ export default class Canvas {
             })
         }
 
-        let workerCount = 6
+        let workerCount = 1
         workerCount = chunks.length < workerCount ? chunks.length : workerCount
         /**
         * @type {Array<{

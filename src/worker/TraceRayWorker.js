@@ -27,31 +27,20 @@ let width = null
 /** @type {?number} */
 let height = null
 
+/** @type Int32Array */
+let chunks
 /** @type Uint8ClampedArray */
 let pixels
 
 onmessage = (ev) => {
-    /**
-    * @type {{
-    *   id: number,
-    *   type: 'initialize'|'trace',
-    *   sceneJSON: any,
-    *   cameraJSON: any,
-    *   viewportJSON: any,
-    *   sab: SharedArrayBuffer
-    *   intersectionMin: number,
-    *   intersectionMax: number,
-    *   recursionDepth: number,
-    * }} data
-    */
-
     const { type } = ev.data
 
     if (type === 'initialize') {
-        const { sceneJSON, cameraJSON, viewportJSON, sab } = ev.data;
+        const { sceneJSON, cameraJSON, viewportJSON, sharedPixelBuffer, sharedChunkBuffer } = ev.data;
         ({ id, intersectionMin, intersectionMax, recursionDepth, width, height } = ev.data)
 
-        pixels = new Uint8ClampedArray(sab)
+        chunks = new Int32Array(sharedChunkBuffer)
+        pixels = new Uint8ClampedArray(sharedPixelBuffer)
         scene = Scene.fromJSON(sceneJSON)
         rayTracer = new RayTracer(scene)
         camera = Camera.fromJSON(cameraJSON)
@@ -59,26 +48,32 @@ onmessage = (ev) => {
     }
 
     if (type === 'trace') {
-        TraceRayBatch(ev.data.chunk.id, ev.data.chunk)
+        const chunkPosition = ev.data.chunk.id
+        const chunk = [
+            chunks[chunkPosition + 0],
+            chunks[chunkPosition + 1],
+            chunks[chunkPosition + 2],
+            chunks[chunkPosition + 3],
+        ]
+
+        TraceRayBatch(ev.data.chunk.id, chunk)
     }
 }
 
 /**
 * @param {number} chunkId
-* @param {Object} args
-* @param {Array<number>} args.xChunk
-* @param {Array<number>} args.yChunk
+* @param {Array<number>} chunk
 */
-function TraceRayBatch(chunkId, { xChunk, yChunk }) {
+function TraceRayBatch(chunkId, chunk) {
     if (!rayTracer || !camera || !viewport || !intersectionMin || !intersectionMax || !recursionDepth || !width || !height) {
         console.log({ id, rayTracer, camera, viewport, intersectionMin, intersectionMax, recursionDepth, width, height })
         throw new Error('Worker not initialized')
     }
 
-    for (let x = xChunk[0]; x < xChunk[1]; x++) {
+    for (let x = chunk[0]; x < chunk[1]; x++) {
         const offsetX = (Math.floor(x + width / 2))
 
-        for (let y = yChunk[0]; y < yChunk[1]; y++) {
+        for (let y = chunk[2]; y < chunk[3]; y++) {
             const rayDirection = Matrix3.multiplyVector3(camera.rotation, viewport.fromCanvas(x, y, width, height))
 
             const color = rayTracer.traceRay(
