@@ -87,36 +87,21 @@ export default class Matrix3 {
         this.#components[index] = value
     }
 
+    toArray() {
+        return this.#components.slice()
+    }
+
     toJSON() {
+        const c = this.#components
         return {
-            1: this.get(0),
-            2: this.get(1),
-            3: this.get(2),
-            4: this.get(3),
-            5: this.get(4),
-            6: this.get(5),
-            7: this.get(6),
-            8: this.get(7),
-            9: this.get(8),
+            1: c[0], 2: c[1], 3: c[2],
+            4: c[3], 5: c[4], 6: c[5],
+            7: c[6], 8: c[7], 9: c[8]
         }
     }
 
     /** @param {Record<string, number> | undefined} object */
     static fromJSON(object) { return new Matrix3(object ? Object.values(object) : object) }
-
-    toArray() {
-        return [
-            this.get(0),
-            this.get(1),
-            this.get(2),
-            this.get(3),
-            this.get(4),
-            this.get(5),
-            this.get(6),
-            this.get(7),
-            this.get(8),
-        ]
-    }
 
     static zero() {
         return new Matrix3([
@@ -139,18 +124,21 @@ export default class Matrix3 {
     * @param {Matrix3} b
     */
     static multiplyMatrix3(a, b) {
+        const ac = a.#components
+        const bc = b.#components
+
         return new Matrix3([
-            a.get(0) * b.get(0) + a.get(1) * b.get(3) + a.get(2) * b.get(6),
-            a.get(0) * b.get(1) + a.get(1) * b.get(4) + a.get(2) * b.get(7),
-            a.get(0) * b.get(2) + a.get(1) * b.get(5) + a.get(2) * b.get(8),
+            ac[0] * bc[0] + ac[1] * bc[3] + ac[2] * bc[6],
+            ac[0] * bc[1] + ac[1] * bc[4] + ac[2] * bc[7],
+            ac[0] * bc[2] + ac[1] * bc[5] + ac[2] * bc[8],
 
-            a.get(3) * b.get(0) + a.get(4) * b.get(3) + a.get(5) * b.get(6),
-            a.get(3) * b.get(1) + a.get(4) * b.get(4) + a.get(5) * b.get(7),
-            a.get(3) * b.get(2) + a.get(4) * b.get(5) + a.get(5) * b.get(8),
+            ac[3] * bc[0] + ac[4] * bc[3] + ac[5] * bc[6],
+            ac[3] * bc[1] + ac[4] * bc[4] + ac[5] * bc[7],
+            ac[3] * bc[2] + ac[4] * bc[5] + ac[5] * bc[8],
 
-            a.get(6) * b.get(0) + a.get(7) * b.get(3) + a.get(8) * b.get(6),
-            a.get(6) * b.get(1) + a.get(7) * b.get(4) + a.get(8) * b.get(7),
-            a.get(6) * b.get(2) + a.get(7) * b.get(5) + a.get(8) * b.get(8),
+            ac[6] * bc[0] + ac[7] * bc[3] + ac[8] * bc[6],
+            ac[6] * bc[1] + ac[7] * bc[4] + ac[8] * bc[7],
+            ac[6] * bc[2] + ac[7] * bc[5] + ac[8] * bc[8],
         ])
     }
 
@@ -159,10 +147,13 @@ export default class Matrix3 {
     * @param {Vector3} vector
     */
     static multiplyVector3(matrix, vector) {
+        const m = matrix.#components
+        const x = vector.x, y = vector.y, z = vector.z
+
         return new Vector3(
-            matrix.get(0) * vector.x + matrix.get(1) * vector.y + matrix.get(2) * vector.z,
-            matrix.get(3) * vector.x + matrix.get(4) * vector.y + matrix.get(5) * vector.z,
-            matrix.get(6) * vector.x + matrix.get(7) * vector.y + matrix.get(8) * vector.z,
+            m[0] * x + m[1] * y + m[2] * z,
+            m[3] * x + m[4] * y + m[5] * z,
+            m[6] * x + m[7] * y + m[8] * z
         )
     }
 }
