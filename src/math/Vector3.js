@@ -14,12 +14,10 @@ export default class Vector3 {
     clone() { return new Vector3(this.x, this.y, this.z) }
 
     toJSON() {
-        return {
-            x: this.x,
-            y: this.y,
-            z: this.z,
-        }
+        return { x: this.x, y: this.y, z: this.z }
     }
+
+    toArray() { return [this.x, this.y, this.z] }
 
     /**
     * @param {{
@@ -31,8 +29,6 @@ export default class Vector3 {
     static fromJSON({ x, y, z } = {}) {
         return new Vector3(x, y, z)
     }
-
-    toArray() { return [this.x, this.y, this.z] }
 
     /** @param {Vector3} vector */
     static normalize(vector) {
