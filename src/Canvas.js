@@ -188,6 +188,19 @@ export default class Canvas {
     /**
     * @param {Vector2} p1
     * @param {Vector2} p2
+    * @param {Vector2} p3
+    * @param {Color} color
+    */
+
+    drawWireframeTriangle(p1, p2, p3, color = new Color()) {
+        this.drawLine(p1, p2, color)
+        this.drawLine(p2, p3, color)
+        this.drawLine(p3, p1, color)
+    }
+
+    /**
+    * @param {Vector2} p1
+    * @param {Vector2} p2
     * @param {Color} color
     */
     drawLine(p1, p2, color) {

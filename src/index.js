@@ -71,8 +71,14 @@ const canvas = new Canvas('#canvas', {
     rayTraceDrawMode: Canvas.RayTraceDrawMode.SLOW
 })
 
-canvas.drawLine(new Vector2(-200, -100), new Vector2(240, 120), new Color())
-canvas.drawLine(new Vector2(-50, -200), new Vector2(60, 240), new Color())
+// canvas.drawLine(new Vector2(-200, -100), new Vector2(240, 120), new Color())
+// canvas.drawLine(new Vector2(-50, -200), new Vector2(60, 240), new Color())
+
+canvas.drawWireframeTriangle(
+    new Vector2(-200, -250),
+    new Vector2(200, 50),
+    new Vector2(20, 250),
+)
 
 // canvas.rayTrace({
 //     camera,
