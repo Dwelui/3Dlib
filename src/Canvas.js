@@ -1,5 +1,6 @@
 import Color from "./Color.js"
 import Vector2 from "./math/Vector2.js"
+import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
 import Scene from "./object/Scene.js"
 import Viewport from "./Viewport.js"
@@ -197,11 +198,10 @@ export default class Canvas {
         this.drawLine(p3, p1, color)
     }
 
-
     /**
-    * @param {Vector2} p1
-    * @param {Vector2} p2
-    * @param {Vector2} p3
+    * @param {Vector3} p1 - h is z
+    * @param {Vector3} p2 - h is z
+    * @param {Vector3} p3 - h is z
     * @param {Color} color
     */
     drawFilledTriangle(p1, p2, p3, color = new Color()) {
@@ -212,23 +212,38 @@ export default class Canvas {
 
         // compute x coordinates of the triangle edges
         const x12 = this.interpolate(p1.y, p1.x, p2.y, p2.x) // short
+        const h12 = this.interpolate(p1.y, p1.z, p2.y, p2.z)
         const x23 = this.interpolate(p2.y, p2.x, p3.y, p3.x) // short
+        const h23 = this.interpolate(p2.y, p2.z, p3.y, p3.z)
         const x13 = this.interpolate(p1.y, p1.x, p3.y, p3.x) // tall
+        const h13 = this.interpolate(p1.y, p1.z, p3.y, p3.z)
 
         // remove dublicate value of x for y and concatenate "short" sides
         x12.pop()
         const x123 = [...x12, ...x23]
 
+        h12.pop()
+        const h123 = [...h12, ...h23]
+
         let xLeft = x123, xRight = x13
+        let hLeft = h123, hRight = h13
         const middle = Math.floor(x13.length / 2)
         if (x13[middle] < x123[middle]) {
             xLeft = x13
+            hLeft = h13
+
             xRight = x123
+            hRight = h123
         }
 
         for (let y = p1.y; y <= p3.y; y++) {
-            for (let x = xLeft[y - p1.y]; x <= xRight[y - p1.y]; x++) {
-                this.putPixel(x, y, color)
+            const xL = xLeft[y - p1.y]
+            const xR = xRight[y - p1.y]
+
+            const hSegment = this.interpolate(xL, hLeft[y - p1.y], xR, hRight[y - p1.y])
+            for (let x = xL; x <= xR; x++) {
+                const shadedColor = Color.multiplyScalar(color, hSegment[x - xL])
+                this.putPixel(x, y, shadedColor)
             }
         }
     }

@@ -75,9 +75,9 @@ const canvas = new Canvas('#canvas', {
 // canvas.drawLine(new Vector2(-50, -200), new Vector2(60, 240), new Color())
 
 canvas.drawFilledTriangle(
-    new Vector2(-200, -250),
-    new Vector2(200, 50),
-    new Vector2(20, 250),
+    new Vector3(-200, -250, 1),
+    new Vector3(200, 50, 0),
+    new Vector3(20, 250, 1),
     new Color(0, 200, 70)
 )
 
