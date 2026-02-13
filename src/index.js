@@ -1,6 +1,7 @@
 import Canvas from "./Canvas.js"
 import Color from "./Color.js"
 import Vector3 from "./math/Vector3.js"
+import Box from "./object/Box.js"
 import Triangle from "./render/Triangle.js"
 import Viewport from "./Viewport.js"
 
@@ -14,6 +15,8 @@ const canvas = new Canvas('#canvas', {
     backroundColor: new Color(255, 255, 255),
     viewport
 })
+
+const box = new Box()
 
 const blue = new Color(0, 0, 200)
 const red = new Color(200, 0, 0)

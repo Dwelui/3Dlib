@@ -9,11 +9,11 @@ export default class Object3D {
 
     /**
     * @param {Object} args
-    * @param {Vector3} args.position
+    * @param {Vector3} [args.position]
     * @param {Matrix3} [args.rotation]
     */
     constructor({ position, rotation }) {
-        this.position = position
+        this.position = position ?? new Vector3()
         this.rotation = rotation ?? Matrix3.identity()
     }
 
