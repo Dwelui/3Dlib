@@ -65,7 +65,7 @@ export default class Renderer {
     applyTransform(vertex, object) {
         vertex = vertex.clone()
         vertex.position.multiplyScalar(object.scale)
-        vertex.position = Matrix3.multiplyVector3(object.rotation, vertex.position)
+        vertex.position.multiplyMatrix3(object.rotation)
         vertex.position.add(object.position)
 
         return vertex

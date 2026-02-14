@@ -1,3 +1,5 @@
+import Matrix3 from "./Matrix3.js"
+
 export default class Vector3 {
     /** @type{number} */ x
     /** @type{number} */ y
@@ -31,6 +33,16 @@ export default class Vector3 {
         this.x *= number
         this.y *= number
         this.z *= number
+    }
+
+    /** @param {Matrix3} matrix */
+    multiplyMatrix3(matrix) {
+        const m = matrix.toArray()
+        const x = this.x, y = this.y, z = this.z
+
+        this.x = m[0] * x + m[1] * y + m[2] * z
+        this.y = m[3] * x + m[4] * y + m[5] * z
+        this.z = m[6] * x + m[7] * y + m[8] * z
     }
 
     /**
