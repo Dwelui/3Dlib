@@ -1,5 +1,7 @@
+import Color from "../Color.js";
 import Matrix3 from "../math/Matrix3.js";
 import Vector3 from "../math/Vector3.js";
+import Triangle from "../render/Triangle.js";
 import Vertex from "../render/Vertex.js";
 import Object3D from "./Object3D.js";
 
@@ -25,6 +27,28 @@ export default class Box extends Object3D {
         this.#length = length
 
         this.updateMesh()
+
+        const blue = new Color(0, 0, 200)
+        const red = new Color(200, 0, 0)
+        const green = new Color(0, 200, 0)
+        const yellow = new Color(200, 200, 0)
+        const purple = new Color(200, 0, 200)
+        const cyan = new Color(0, 200, 200)
+
+        this.mesh.triangles = [
+            new Triangle(0, 1, 2, red),
+            new Triangle(0, 2, 3, red),
+            new Triangle(4, 0, 3, green),
+            new Triangle(4, 3, 7, green),
+            new Triangle(5, 4, 7, blue),
+            new Triangle(5, 7, 6, blue),
+            new Triangle(1, 5, 6, yellow),
+            new Triangle(1, 6, 2, yellow),
+            new Triangle(4, 5, 1, purple),
+            new Triangle(4, 1, 0, purple),
+            new Triangle(2, 6, 7, cyan),
+            new Triangle(2, 7, 3, cyan),
+        ]
     }
 
     get width() { return this.#width }
