@@ -4,9 +4,9 @@ export default class Vertex {
     /** @type {Vector3} */ position
 
     /**
-    * @param {Vector3} position
+    * @param {Vector3} [position]
     */
     constructor(position) {
-        this.position = position
+        this.position = position ?? new Vector3()
     }
 }

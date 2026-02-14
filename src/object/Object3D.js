@@ -1,20 +1,24 @@
 import Matrix3 from "../math/Matrix3.js";
 import Vector3 from "../math/Vector3.js";
+import Mesh from "../render/Mesh.js";
 
 export default class Object3D {
     /** @type {string} */ type = "Object3D"
 
     /** @type{Vector3} */ #position
     /** @type{Matrix3} */ #rotation
+    /** @type{Mesh} */ #mesh
 
     /**
     * @param {Object} args
     * @param {Vector3} [args.position]
     * @param {Matrix3} [args.rotation]
+    * @param {Mesh} [args.mesh]
     */
-    constructor({ position, rotation }) {
+    constructor({ position, rotation, mesh }) {
         this.position = position ?? new Vector3()
         this.rotation = rotation ?? Matrix3.identity()
+        this.mesh = mesh ?? new Mesh()
     }
 
     get position() { return this.#position }
@@ -22,6 +26,9 @@ export default class Object3D {
 
     get rotation() { return this.#rotation }
     set rotation(rotation) { this.#rotation = rotation }
+
+    get mesh() { return this.#mesh }
+    set mesh(mesh) { this.#mesh = mesh }
 
     toJSON() {
         return {
@@ -44,20 +51,15 @@ export default class Object3D {
         })
     }
 
-    /** @param {number} units */
-    translateX(units) {
-        this.position.x += units
+    /**
+    * @param {Vector3} vector
+    */
+    translate(vector) {
+        this.position.add(vector)
+        this.updateMesh()
     }
 
-    /** @param {number} units */
-    translateY(units) {
-        this.position.y += units
-    }
-
-    /** @param {number} units */
-    translateZ(units) {
-        this.position.z += units
-    }
+    updateMesh() { }
 
     /** @param {number} degress */
     rotateX(degress) {

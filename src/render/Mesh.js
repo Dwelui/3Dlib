@@ -6,10 +6,10 @@ export default class Mesh {
     /** @type {Array<Triangle>} */ triangles = []
 
     /**
-    * @param {Array<Vertex>} vertices
-    * @param {Array<Triangle>} triangles
+    * @param {Array<Vertex>} [vertices]
+    * @param {Array<Triangle>} [triangles]
     */
-    constructor(vertices, triangles) {
+    constructor(vertices = [], triangles = []) {
         this.vertices = vertices
         this.triangles = triangles
     }
