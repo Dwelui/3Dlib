@@ -18,19 +18,16 @@ const canvas = new Canvas('#canvas', {
     viewport
 })
 
-const boxMesh = new BoxMesh()
-const box1 = new Object3D({
-    mesh: boxMesh,
-    position: new Vector3(0, 0, 5)
-})
-const box2 = new Object3D({
-    mesh: boxMesh,
-    position: new Vector3(1, 2, 3)
-})
-
+const mesh = new BoxMesh()
 const scene = new Scene()
-scene.add(box1)
-scene.add(box2)
+scene.add(new Object3D({
+    mesh,
+    position: new Vector3(0, 0, 5)
+}))
+scene.add(new Object3D({
+    mesh,
+    position: new Vector3(1, 2, 3)
+}))
 
 const renderer = new Renderer({ canvas })
 renderer.renderScene(scene)
