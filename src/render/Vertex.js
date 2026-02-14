@@ -15,4 +15,8 @@ export default class Vertex {
             Position: this.position.toJSON()
         }
     }
+
+    clone() {
+        return new Vertex(this.position)
+    }
 }

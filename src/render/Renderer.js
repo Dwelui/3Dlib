@@ -28,15 +28,18 @@ export default class Renderer {
     * @param {Object3D} object
     */
     renderObject(object) {
-        if (!object.mesh) return
+        const mesh = object.mesh
+        if (!mesh) return
 
         /** @type {Array<Vector2>} */
         const projectedVertices = []
-        for (let vertex of object.mesh.vertices) {
-            projectedVertices.push(this.#canvas.projectVertex(vertex))
+        for (const vertex of mesh.vertices) {
+            const vertexTranslated = vertex.clone()
+            vertexTranslated.position.add(object.position)
+            projectedVertices.push(this.#canvas.projectVertex(vertexTranslated))
         }
 
-        for (let triangle of object.mesh.triangles) {
+        for (let triangle of mesh.triangles) {
             this.renderTriangle(triangle, projectedVertices)
         }
     }
