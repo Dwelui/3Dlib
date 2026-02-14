@@ -2,7 +2,9 @@ import Canvas from "./Canvas.js"
 import Color from "./Color.js"
 import Vector3 from "./math/Vector3.js"
 import Object3D from "./object/Object3D.js"
+import Scene from "./object/Scene.js"
 import BoxMesh from "./render/BoxMesh.js"
+import Renderer from "./render/Renderer.js"
 import Viewport from "./Viewport.js"
 
 const [width, height] = [window.innerWidth, window.innerHeight]
@@ -17,18 +19,18 @@ const canvas = new Canvas('#canvas', {
 })
 
 const boxMesh = new BoxMesh()
-
 const box1 = new Object3D({
     mesh: boxMesh,
     position: new Vector3(0, 0, 5)
 })
+const box2 = new Object3D({
+    mesh: boxMesh,
+    position: new Vector3(1, 2, 3)
+})
 
-console.log(box1)
+const scene = new Scene()
+scene.add(box1)
+scene.add(box2)
 
-// const box2 = new Object3D({
-//     mesh: boxMesh,
-//     position: new Vector3(1, 2, 3)
-// })
-
-canvas.renderObject(box1)
-// canvas.renderObject(box2.mesh.vertices, box2.mesh.triangles)
+const renderer = new Renderer({ canvas })
+renderer.renderScene(scene)

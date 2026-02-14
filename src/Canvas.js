@@ -325,17 +325,6 @@ export default class Canvas {
     }
 
     /**
-    * @param {number} x
-    * @param {number} y
-    */
-    viewportToCanvas(x, y) {
-        return new Vector2(
-            x * this.width / this.#options.viewport.width,
-            y * this.height / this.#options.viewport.height
-        )
-    }
-
-    /**
     * @param {Vertex} vertex
     */
     projectVertex(vertex) {
@@ -346,32 +335,13 @@ export default class Canvas {
     }
 
     /**
-    * @param {Object3D} object
+    * @param {number} x
+    * @param {number} y
     */
-    renderObject(object) {
-        if (! object.mesh) return
-
-        /** @type {Array<Vector2>} */
-        const projectedVertices = []
-        for (let vertex of object.mesh.vertices) {
-            projectedVertices.push(this.projectVertex(vertex))
-        }
-
-        for (let triangle of object.mesh.triangles) {
-            this.renderTriangle(triangle, projectedVertices)
-        }
-    }
-
-    /**
-    * @param {Triangle} triangle
-    * @param {Array<Vector2>} projectedVertices
-    */
-    renderTriangle(triangle, projectedVertices) {
-        this.drawWireframeTriangle(
-            projectedVertices[triangle.vertices[0]],
-            projectedVertices[triangle.vertices[1]],
-            projectedVertices[triangle.vertices[2]],
-            triangle.color
+    viewportToCanvas(x, y) {
+        return new Vector2(
+            x * this.width / this.#options.viewport.width,
+            y * this.height / this.#options.viewport.height
         )
     }
 }

@@ -1,0 +1,56 @@
+import Canvas from "../Canvas.js"
+import Vector2 from "../math/Vector2.js"
+import Object3D from "../object/Object3D.js"
+import Scene from "../object/Scene.js"
+import Triangle from "./Triangle.js"
+
+export default class Renderer {
+    /** @type {Canvas} canvas */ #canvas
+
+    /**
+    * @param {Object} args
+    * @param {Canvas} args.canvas
+    */
+    constructor({ canvas }) {
+        this.#canvas = canvas
+    }
+
+    /**
+    * @param {Scene} scene
+    */
+    renderScene(scene) {
+        for (const object of scene.objects) {
+            this.renderObject(object)
+        }
+    }
+
+    /**
+    * @param {Object3D} object
+    */
+    renderObject(object) {
+        if (!object.mesh) return
+
+        /** @type {Array<Vector2>} */
+        const projectedVertices = []
+        for (let vertex of object.mesh.vertices) {
+            projectedVertices.push(this.#canvas.projectVertex(vertex))
+        }
+
+        for (let triangle of object.mesh.triangles) {
+            this.renderTriangle(triangle, projectedVertices)
+        }
+    }
+
+    /**
+    * @param {Triangle} triangle
+    * @param {Array<Vector2>} projectedVertices
+    */
+    renderTriangle(triangle, projectedVertices) {
+        this.#canvas.drawWireframeTriangle(
+            projectedVertices[triangle.vertices[0]],
+            projectedVertices[triangle.vertices[1]],
+            projectedVertices[triangle.vertices[2]],
+            triangle.color
+        )
+    }
+}
