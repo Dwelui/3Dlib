@@ -2,6 +2,7 @@ import Canvas from "./Canvas.js"
 import Color from "./Color.js"
 import Vector3 from "./math/Vector3.js"
 import Box from "./object/Box.js"
+import BoxMesh from "./render/BoxMesh.js"
 import Viewport from "./Viewport.js"
 
 const [width, height] = [window.innerWidth, window.innerHeight]
@@ -15,8 +16,15 @@ const canvas = new Canvas('#canvas', {
     viewport
 })
 
-const box = new Box({
-    position: new Vector3(-1.5, 0, 7)
+const boxMesh = new BoxMesh()
+const box1 = new Box({
+    mesh: boxMesh,
+    position: new Vector3(0, 0, 5)
 })
 
-canvas.renderObject(box.mesh.vertices, box.mesh.triangles)
+const box2 = new Box({
+    mesh: boxMesh,
+    position: new Vector3(1, 2, 3)
+})
+
+canvas.renderObject(box1.mesh.vertices, box1.mesh.triangles)
