@@ -10,6 +10,7 @@ import Viewport from "./Viewport.js"
 
 const [width, height] = [window.innerWidth, window.innerHeight]
 const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
+// TODO implement rotation to be passed into initilization
 const camera = new Camera({
     position: new Vector3(0, 0, -3)
 })
@@ -24,6 +25,7 @@ const canvas = new Canvas('#canvas', {
 })
 
 const boxMesh = new BoxMesh()
+// TODO implement rotation to be passed into initilization
 const box1 = new Object3D({
     mesh: boxMesh,
     scale: 3,
@@ -38,6 +40,7 @@ const box2 = new Object3D({
 })
 
 const scene = new Scene()
+// TODO overload to accept array of objects
 scene.add(box1)
 scene.add(box2)
 
