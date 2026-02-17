@@ -14,9 +14,7 @@ const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
 // TODO implement rotation to be passed into initilization
 const camera = new Camera({
     position: new Vector3(0, 0, -3),
-})
-
-camera.rotateY(25)
+}).rotateY(25)
 
 const canvas = new Canvas('#canvas', {
     width,
