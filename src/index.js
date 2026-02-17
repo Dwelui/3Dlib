@@ -1,5 +1,6 @@
 import Canvas from "./Canvas.js"
 import Color from "./Color.js"
+import Matrix3 from "./math/Matrix3.js"
 import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
 import Object3D from "./object/Object3D.js"
@@ -12,7 +13,7 @@ const [width, height] = [window.innerWidth, window.innerHeight]
 const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
 // TODO implement rotation to be passed into initilization
 const camera = new Camera({
-    position: new Vector3(0, 0, -3)
+    position: new Vector3(0, 0, -3),
 })
 
 camera.rotateY(25)
