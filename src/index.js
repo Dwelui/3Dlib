@@ -39,10 +39,6 @@ const box2 = new Object3D({
     position: new Vector3(1, 2, 3)
 })
 
-const scene = new Scene()
-// TODO overload to accept array of objects
-scene.add(box1)
-scene.add(box2)
-
-const renderer = new Renderer({ canvas, camera })
-renderer.renderScene(scene)
+new Renderer({ canvas, camera }).renderScene(
+    new Scene().add([box1, box2])
+)
