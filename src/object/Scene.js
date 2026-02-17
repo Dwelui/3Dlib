@@ -24,15 +24,13 @@ export default class Scene extends Object3D {
      * @overload
      * @param {Object3D} object
      * @return Scene
-     */
-
-    /**
+     *
      * @overload
      * @param {Array<Object3D>} objects
      * @return Scene
-     */
-
-    /** @param {Array<Object3D>|Object3D} args */
+     *
+     * @param {Array<Object3D>|Object3D} args
+    */
     add(args) {
         if (Array.isArray(args)) {
             for (const object of args) {
