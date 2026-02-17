@@ -1,6 +1,5 @@
 import Canvas from "./Canvas.js"
 import Color from "./Color.js"
-import Matrix3 from "./math/Matrix3.js"
 import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
 import Object3D from "./object/Object3D.js"
@@ -29,9 +28,7 @@ const box1 = new Object3D({
     mesh: boxMesh,
     scale: 3,
     position: new Vector3(0, 0, 5)
-})
-
-box1.rotateY(45)
+}).rotateY(45)
 
 const box2 = new Object3D({
     mesh: boxMesh,
