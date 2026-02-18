@@ -258,6 +258,8 @@ export default class Canvas {
     * @param {Color} color
     */
     drawLine(p1, p2, color = new Color()) {
+        p1.floor(); p2.floor()
+
         if (Math.abs(p2.x - p1.x) > Math.abs(p2.y - p1.y)) {
             // Line is horizontal-ish
             // Make sure p1.x < p2.x

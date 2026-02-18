@@ -8,4 +8,9 @@ export default class Vector2 {
     }
 
     toArray() { return [this.x, this.y] }
+
+    floor() {
+        this.x = this.x | 0
+        this.y = this.y | 0
+    }
 }
