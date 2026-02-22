@@ -12,10 +12,12 @@
     "type": "module",
     "main": "src/index.js",
     "scripts": {
-        "dev": "npx serve -c serve.json",
+        "serve": "serve -c serve.json",
+        "dev": "vite",
         "test": "vitest"
     },
     "devDependencies": {
+        "serve": "^14.2.5",
         "vite": "^7.3.1",
         "vitest": "^4.0.18"
     }
