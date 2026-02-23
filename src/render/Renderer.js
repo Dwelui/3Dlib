@@ -26,17 +26,18 @@ export default class Renderer {
     * @param {Scene} scene
     */
     renderScene(scene) {
-        const mCamera = Renderer.calculateCameraMatrix(this.#camera)
+        const cameraMatrix = Renderer.calculateCameraMatrix(this.#camera)
 
         for (const object of scene.objects) {
-            this.renderObject(object)
+            this.renderObject(object, cameraMatrix)
         }
     }
 
     /**
     * @param {Object3D} object
+    * @param {Matrix4} cameraMatrix
     */
-    renderObject(object) {
+    renderObject(object, cameraMatrix) {
         const mesh = object.mesh
         if (!mesh) return
 
@@ -93,8 +94,10 @@ export default class Renderer {
      * @return {Matrix4}
      */
     static calculateCameraMatrix(camera) {
-        const m4Rotation = Matrix4.fromMatrix3(camera.rotation)
-        const m4Position = Matrix4.fromVector3(camera.position)
+        const m4Rotation = Matrix4.fromMatrix3(camera.rotation).transpose()
+        const m4Position = Matrix4.fromVector3(camera.position).transpose()
+
+        console.log(m4Rotation.toArray(), m4Position.toArray())
 
         return Matrix4.multiplyMatrix4(m4Rotation, m4Position)
     }

@@ -97,4 +97,27 @@ export default class Matrix4 {
             ac[12] * bc[3] + ac[13] * bc[7] + ac[14] * bc[11] + ac[15] * bc[15],
         ])
     }
+
+    transpose() {
+        const c = this.toArray()
+
+        this.#components[0] = c[0]
+        this.#components[1] = c[4]
+        this.#components[2] = c[8]
+        this.#components[3] = c[12]
+        this.#components[4] = c[1]
+        this.#components[5] = c[5]
+        this.#components[6] = c[9]
+        this.#components[7] = c[13]
+        this.#components[8] = c[2]
+        this.#components[9] = c[6]
+        this.#components[10] = c[10]
+        this.#components[11] = c[14]
+        this.#components[12] = c[3]
+        this.#components[13] = c[7]
+        this.#components[14] = c[11]
+        this.#components[15] = c[15]
+
+        return this
+    }
 }
