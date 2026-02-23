@@ -1,5 +1,6 @@
 import Canvas from "../Canvas.js"
 import Matrix3 from "../math/Matrix3.js"
+import Matrix4 from "../math/Matrix4.js"
 import Vector2 from "../math/Vector2.js"
 import Camera from "../object/Camera.js"
 import Object3D from "../object/Object3D.js"
@@ -25,6 +26,8 @@ export default class Renderer {
     * @param {Scene} scene
     */
     renderScene(scene) {
+        const mCamera = Renderer.calculateCameraMatrix(this.#camera)
+
         for (const object of scene.objects) {
             this.renderObject(object)
         }
@@ -83,5 +86,16 @@ export default class Renderer {
         vertex.position.subtract(this.#camera.position)
 
         return vertex
+    }
+
+    /**
+     * @param {Camera} camera
+     * @return {Matrix4}
+     */
+    static calculateCameraMatrix(camera) {
+        const m4Rotation = Matrix4.fromMatrix3(camera.rotation)
+        const m4Position = Matrix4.fromVector3(camera.position)
+
+        return Matrix4.multiplyMatrix4(m4Rotation, m4Position)
     }
 }
