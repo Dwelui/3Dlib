@@ -97,8 +97,6 @@ export default class Renderer {
         const m4Rotation = Matrix4.fromMatrix3(camera.rotation).transpose()
         const m4Position = Matrix4.fromVector3(camera.position).transpose()
 
-        console.log(m4Rotation.toArray(), m4Position.toArray())
-
         return Matrix4.multiplyMatrix4(m4Rotation, m4Position)
     }
 }

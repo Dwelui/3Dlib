@@ -9,10 +9,10 @@ test('correctly calculate camera matrix', () => {
     const cameraMatrix = Renderer.calculateCameraMatrix(camera)
 
     expect(cameraMatrix.toArray()).toStrictEqual([
-        0, 0, 0, 1,
-        0, 0, 1, 0,
-        0, 1, 0, 0,
         1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1,
     ])
 })
 
@@ -25,10 +25,10 @@ test('correctly calculate camera matrix with position offset', () => {
     const cameraMatrix = Renderer.calculateCameraMatrix(camera)
 
     expect(cameraMatrix.toArray()).toStrictEqual([
-        1, 0, 0, position.x,
-        0, 1, 0, position.y,
-        0, 0, 1, position.z,
-        0, 0, 0, 1,
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        position.x, position.y, position.z, 1,
     ])
 })
 
