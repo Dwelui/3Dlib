@@ -5,6 +5,7 @@ import Vector2 from "../math/Vector2.js"
 import Camera from "../object/Camera.js"
 import Object3D from "../object/Object3D.js"
 import Scene from "../object/Scene.js"
+import Viewport from "../Viewport.js"
 import Triangle from "./Triangle.js"
 import Vertex from "./Vertex.js"
 
@@ -26,6 +27,7 @@ export default class Renderer {
     * @param {Scene} scene
     */
     renderScene(scene) {
+        // TODO: Might want to move to camera object and update only on camera rotation or position updates.
         const cameraMatrix = Renderer.calculateCameraMatrix(this.#camera)
 
         for (const object of scene.objects) {
@@ -46,7 +48,7 @@ export default class Renderer {
         for (const vertex of mesh.vertices) {
             const transformedVertex = this.applyTransform(vertex.clone(), object)
             const cameraSpaceVertex = this.applyCameraSpaceTransform(transformedVertex)
-            projectedVertices.push(this.#canvas.projectVertex(cameraSpaceVertex))
+            projectedVertices.push(this.#canvas.projectVertexOld(cameraSpaceVertex))
         }
 
         for (let triangle of mesh.triangles) {
@@ -91,6 +93,7 @@ export default class Renderer {
 
     /**
      * @param {Camera} camera
+     *
      * @return {Matrix4}
      */
     static calculateCameraMatrix(camera) {
@@ -98,5 +101,24 @@ export default class Renderer {
         const m4Position = Matrix4.fromVector3(camera.position).transpose()
 
         return Matrix4.multiplyMatrix4(m4Rotation, m4Position)
+    }
+    /**
+     * @param {Viewport} viewport
+     * @param {{
+     *    width: number,
+     *    height: number
+     * }} canvasSize
+     *
+     * @return {Matrix4}
+     */
+    static calculate3DtoCanvasMatrix(viewport, canvasSize) {
+        const m4 = Matrix4.identity()
+        const widthModifier = 0
+        const heightModifier = 0
+
+        m4.set(0, 0, widthModifier)
+        m4.set(1, 1, heightModifier)
+
+        return m4
     }
 }

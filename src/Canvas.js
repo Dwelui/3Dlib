@@ -1,6 +1,7 @@
 import Color from "./Color.js"
 import Vector2 from "./math/Vector2.js"
 import Vector3 from "./math/Vector3.js"
+import Vector4 from "./math/Vector4.js"
 import Camera from "./object/Camera.js"
 import Object3D from "./object/Object3D.js"
 import Scene from "./object/Scene.js"
@@ -327,11 +328,22 @@ export default class Canvas {
     /**
     * @param {Vertex} vertex
     */
-    projectVertex(vertex) {
+    projectVertexOld(vertex) {
         const d = this.#options.viewport.distanceToCamera
         const position = vertex.position
 
         return this.viewportToCanvas(position.x * d / position.z, position.y * d / position.z)
+    }
+
+    /**
+     * Calculate 3D-to-Canvas matrix.
+     *
+     * @param {Vector4} vertex
+     *
+     * @returns {Vector2}
+     */
+    projectVertex(vertex) {
+        return new Vector2();
     }
 
     /**

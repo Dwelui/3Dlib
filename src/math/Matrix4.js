@@ -20,6 +20,68 @@ export default class Matrix4 {
         }
     }
 
+    /**
+    * @overload
+    * @param {number} row - Number between 0 and 3.
+    * @param {number} col - Number between 0 and 3.
+    * @return {number}
+    */
+
+    /**
+    * @overload
+    * @param {number} index - Number between 0 and 15.
+    * @return {number}
+    */
+
+    /** @param {...number} args */
+    get(...args) {
+        let index = null
+
+        if (args.length === 1) {
+            index = args[0]
+        } else if (args.length === 2) {
+            const [row, col] = args
+            index = row * 4 + col
+        } else {
+            throw new Error(`Bad '..args' parameter ${args}`)
+        }
+
+        return this.#components[index]
+    }
+
+    /**
+    * @overload
+    * @param {number} row - Number between 0 and 3.
+    * @param {number} col - Number between 0 and 3.
+    * @param {number} value
+    * @return {void}
+    */
+
+    /**
+    * @overload
+    * @param {number} index - Number between 0 and 15.
+    * @param {number} value
+    * @return {void}
+    */
+
+    /** @param {...number} args */
+    set(...args) {
+        let index = null
+        let value = null
+
+        if (args.length == 2) {
+            [index, value] = args
+        } else if (args.length === 3) {
+            const [row, col] = args
+            index = row * 3 + col
+            value = args[2]
+        } else {
+            throw new Error(`Bad '..args' parameter ${args}`)
+        }
+
+        this.#components[index] = value
+    }
+
     toArray() {
         return this.#components.slice()
     }
