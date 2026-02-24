@@ -6,6 +6,8 @@ import Vector3 from "../../../src/math/Vector3.js";
 import Viewport from "../../../src/Viewport.js";
 import Canvas from "../../../src/Canvas.js";
 import Color from "../../../src/Color.js";
+import Vector4 from "../../../src/math/Vector4.js";
+import Vector2 from "../../../src/math/Vector2.js";
 
 describe.concurrent('camera matrix', () => {
     test('default', () => {
@@ -79,18 +81,61 @@ describe.concurrent('camera matrix', () => {
 
 describe.concurrent('3d to canvas matrix', () => {
     test('1x1x1 viewport and 100x100 canvas size', () => {
+        const viewportWidth = 1
+        const viewportHeight = 1
+        const viewportDistance = 1
+        const canvasWidth = 100
+        const canvasHeight = 100
+
         const viewport = new Viewport({
-            height: 1,
-            width: 1
-        }, 1)
+            width: viewportWidth,
+            height: viewportHeight,
+        }, viewportDistance)
 
         const m4 = Renderer.calculate3DtoCanvasMatrix(viewport, {
-            height: 100,
-            width: 100
+            height: canvasHeight,
+            width: canvasWidth
         })
 
-        expect(m4.toArray()).toStrictEqual([
+        const widthModifier = (viewportDistance * canvasWidth) / viewportWidth
+        const heightModifier = (viewportDistance * canvasHeight) / viewportHeight
 
+        expect(m4.toArray()).toStrictEqual([
+            widthModifier, 0, 0, 0,
+            0, heightModifier, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1,
         ])
+    })
+
+    test('1x1x1 viewport and 100x100 canvas size project vertex (1 2 3 1)', () => {
+        const viewportWidth = 1
+        const viewportHeight = 1
+        const viewportDistance = 1
+        const canvasWidth = 100
+        const canvasHeight = 100
+        const vertex = new Vector4(1, 2, 3, 1)
+
+        const viewport = new Viewport({
+            width: viewportWidth,
+            height: viewportHeight,
+        }, viewportDistance)
+
+        const m4 = Renderer.calculate3DtoCanvasMatrix(viewport, {
+            height: canvasHeight,
+            width: canvasWidth
+        })
+
+        const widthModifier = (viewportDistance * canvasWidth) / viewportWidth
+        const heightModifier = (viewportDistance * canvasHeight) / viewportHeight
+
+        const expectedProjectedVertex = new Vector2(
+            widthModifier * vertex.x / vertex.z,
+            heightModifier * vertex.y / vertex.z,
+        ).floor()
+
+        const projectedVertex = Renderer.projectVertex(vertex, m4)
+
+        expect(projectedVertex.toArray()).toStrictEqual(expectedProjectedVertex.toArray())
     })
 })

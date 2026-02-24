@@ -2,6 +2,7 @@ import Canvas from "../Canvas.js"
 import Matrix3 from "../math/Matrix3.js"
 import Matrix4 from "../math/Matrix4.js"
 import Vector2 from "../math/Vector2.js"
+import Vector4 from "../math/Vector4.js"
 import Camera from "../object/Camera.js"
 import Object3D from "../object/Object3D.js"
 import Scene from "../object/Scene.js"
@@ -102,6 +103,7 @@ export default class Renderer {
 
         return Matrix4.multiplyMatrix4(m4Rotation, m4Position)
     }
+
     /**
      * @param {Viewport} viewport
      * @param {{
@@ -113,12 +115,28 @@ export default class Renderer {
      */
     static calculate3DtoCanvasMatrix(viewport, canvasSize) {
         const m4 = Matrix4.identity()
-        const widthModifier = 0
-        const heightModifier = 0
+        const widthModifier = (viewport.distanceToCamera * canvasSize.width) / viewport.width
+        const heightModifier = (viewport.distanceToCamera * canvasSize.height) / viewport.height
 
         m4.set(0, 0, widthModifier)
         m4.set(1, 1, heightModifier)
 
         return m4
+    }
+
+    /**
+     * @param {Vector4} vertex
+     * @param {Matrix4} m4 - 3D to Canvas projection matrix
+     *
+     * @returns {Vector2}
+     */
+    static projectVertex(vertex, m4) {
+        const projectedVertex = vertex.clone().multiplyMatrix4(m4)
+        projectedVertex.divideScalar(projectedVertex.z)
+
+        return new Vector2(
+            projectedVertex.x,
+            projectedVertex.y,
+        ).floor();
     }
 }

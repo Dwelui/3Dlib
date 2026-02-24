@@ -12,5 +12,15 @@ export default class Vector2 {
     floor() {
         this.x = this.x | 0
         this.y = this.y | 0
+
+        return this
+    }
+
+    /** @param {number} number */
+    divideScalar(number) {
+        this.x /= number
+        this.y /= number
+
+        return this
     }
 }

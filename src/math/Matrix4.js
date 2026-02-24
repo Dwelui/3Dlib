@@ -73,7 +73,7 @@ export default class Matrix4 {
             [index, value] = args
         } else if (args.length === 3) {
             const [row, col] = args
-            index = row * 3 + col
+            index = row * 4 + col
             value = args[2]
         } else {
             throw new Error(`Bad '..args' parameter ${args}`)

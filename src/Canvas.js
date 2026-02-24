@@ -3,9 +3,7 @@ import Vector2 from "./math/Vector2.js"
 import Vector3 from "./math/Vector3.js"
 import Vector4 from "./math/Vector4.js"
 import Camera from "./object/Camera.js"
-import Object3D from "./object/Object3D.js"
 import Scene from "./object/Scene.js"
-import Triangle from "./render/Triangle.js"
 import Vertex from "./render/Vertex.js"
 import Viewport from "./Viewport.js"
 
@@ -333,17 +331,6 @@ export default class Canvas {
         const position = vertex.position
 
         return this.viewportToCanvas(position.x * d / position.z, position.y * d / position.z)
-    }
-
-    /**
-     * Calculate 3D-to-Canvas matrix.
-     *
-     * @param {Vector4} vertex
-     *
-     * @returns {Vector2}
-     */
-    projectVertex(vertex) {
-        return new Vector2();
     }
 
     /**
