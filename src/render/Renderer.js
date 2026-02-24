@@ -26,30 +26,32 @@ export default class Renderer {
 
     /**
     * @param {Scene} scene
+    * @param {Matrix4} threeDToCanvasMatrix
     */
-    renderScene(scene) {
+    renderScene(scene, threeDToCanvasMatrix) {
         // TODO: Might want to move to camera object and update only on camera rotation or position updates.
         const cameraMatrix = Renderer.calculateCameraMatrix(this.#camera)
 
         for (const object of scene.objects) {
-            this.renderObject(object, cameraMatrix)
+            this.renderObject(object, cameraMatrix, threeDToCanvasMatrix)
         }
     }
 
     /**
     * @param {Object3D} object
     * @param {Matrix4} cameraMatrix
+    * @param {Matrix4} treeDtoCanvasMatrix - 3D to canvas matrix
     */
-    renderObject(object, cameraMatrix) {
+    renderObject(object, cameraMatrix, treeDtoCanvasMatrix) {
         const mesh = object.mesh
         if (!mesh) return
 
         /** @type {Array<Vector2>} */
         const projectedVertices = []
         for (const vertex of mesh.vertices) {
-            const transformedVertex = this.applyTransform(vertex.clone(), object)
-            const cameraSpaceVertex = this.applyCameraSpaceTransform(transformedVertex)
-            projectedVertices.push(this.#canvas.projectVertexOld(cameraSpaceVertex))
+            const objectMatrix = Renderer.calculateModelMatrix(object)
+            const matrix = Matrix4.multiplyMatrix4(cameraMatrix, objectMatrix)
+            projectedVertices.push(Renderer.projectVertex(cameraSpaceVertex, treeDtoCanvasMatrix))
         }
 
         for (let triangle of mesh.triangles) {

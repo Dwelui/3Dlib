@@ -8,6 +8,7 @@ import Canvas from "../../../src/Canvas.js";
 import Color from "../../../src/Color.js";
 import Vector4 from "../../../src/math/Vector4.js";
 import Vector2 from "../../../src/math/Vector2.js";
+import Object3D from "../../../src/object/Object3D.js";
 
 describe.concurrent('camera matrix', () => {
     test('default', () => {
@@ -137,5 +138,11 @@ describe.concurrent('3d to canvas matrix', () => {
         const projectedVertex = Renderer.projectVertex(vertex, m4)
 
         expect(projectedVertex.toArray()).toStrictEqual(expectedProjectedVertex.toArray())
+    })
+})
+
+describe.concurrent('object matrix', () => {
+    test('default', () => {
+        const object = new Object3D()
     })
 })
