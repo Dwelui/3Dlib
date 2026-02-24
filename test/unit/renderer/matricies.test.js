@@ -44,8 +44,8 @@ test('correctly calculate camera matrix with rotation', () => {
 
     expect(cameraMatrix.toArray()).toStrictEqual([
         1, 0, 0, 0,
-        0, cos, -1 * sin, 0,
-        0, sin, cos, 0,
+        0, cos, sin, 0,
+        0, -sin, cos, 0,
         0, 0, 0, 1,
     ])
 })
@@ -64,9 +64,9 @@ test('correctly calculate camera matrix with rotation and position', () => {
     const sin = Math.sin(radians)
 
     expect(cameraMatrix.toArray()).toStrictEqual([
-        1, 0, 0, position.x,
-        0, cos, -1 * sin, - position.z,
-        0, sin, cos, position.y,
-        0, 0, 0, 1,
+        1, 0, 0, 0,
+        0, cos, sin, 0,
+        0, -sin, cos, 0,
+        position.x, position.y, position.z, 1,
     ])
 })

@@ -77,7 +77,7 @@ export default class Object3D {
 
         const rotationMatrix = new Matrix3([
             1, 0, 0,
-            0, cos, -1 * sin,
+            0, cos, -sin,
             0, sin, cos
         ])
 
@@ -95,7 +95,7 @@ export default class Object3D {
         const rotationMatrix = new Matrix3([
             cos, 0, sin,
             0, 1, 0,
-            -1 * sin, 0, cos
+            -sin, 0, cos
         ])
 
         this.rotation = Matrix3.multiplyMatrix3(this.rotation, rotationMatrix)
@@ -110,7 +110,7 @@ export default class Object3D {
         const sin = Math.sin(radians)
 
         const rotationMatrix = new Matrix3([
-            cos, -1 * sin, 0,
+            cos, -sin, 0,
             sin, cos, 0,
             0, 0, 1
         ])
