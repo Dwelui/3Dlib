@@ -35,7 +35,7 @@ const box2 = new Object3D({
     position: new Vector3(1, 2, 3)
 })
 
-const matrix3dToCanvas = Renderer.calculate3DtoCanvasMatrix(viewport, {
+const matrix3dToCanvas = Renderer.calculateProjectionMatrix(viewport, {
     width: canvas.width,
     height: canvas.height
 })

@@ -26,23 +26,23 @@ export default class Renderer {
 
     /**
     * @param {Scene} scene
-    * @param {Matrix4} threeDToCanvasMatrix
+    * @param {Matrix4} projectionMatrix
     */
-    renderScene(scene, threeDToCanvasMatrix) {
+    renderScene(scene, projectionMatrix) {
         // TODO: Might want to move to camera object and update only on camera rotation or position updates.
         const cameraMatrix = Renderer.calculateCameraMatrix(this.#camera)
 
         for (const object of scene.objects) {
-            this.renderObject(object, cameraMatrix, threeDToCanvasMatrix)
+            this.renderObject(object, cameraMatrix, projectionMatrix)
         }
     }
 
     /**
     * @param {Object3D} object
     * @param {Matrix4} cameraMatrix
-    * @param {Matrix4} treeDtoCanvasMatrix - 3D to canvas matrix
+    * @param {Matrix4} projectionMatrix - 3D to canvas matrix
     */
-    renderObject(object, cameraMatrix, treeDtoCanvasMatrix) {
+    renderObject(object, cameraMatrix, projectionMatrix) {
         const mesh = object.mesh
         if (!mesh) return
 
@@ -51,8 +51,10 @@ export default class Renderer {
         for (const vertex of mesh.vertices) {
             // TODO: Move to object and update on object translation, rotation, scale
             const objectMatrix = Renderer.calculateObjectMatrix(object)
+
             let m4 = Matrix4.multiplyMatrix4(cameraMatrix, objectMatrix)
-            projectedVertices.push(Renderer.projectVertex(vertex.clone(), treeDtoCanvasMatrix))
+            m4 = Matrix4.multiplyMatrix4(m4, projectionMatrix)
+            projectedVertices.push(Renderer.projectVertex(vertex.clone(), m4))
         }
 
         for (let triangle of mesh.triangles) {
@@ -116,7 +118,7 @@ export default class Renderer {
      *
      * @return {Matrix4}
      */
-    static calculate3DtoCanvasMatrix(viewport, canvasSize) {
+    static calculateProjectionMatrix(viewport, canvasSize) {
         const m4 = Matrix4.identity()
         const widthModifier = (viewport.distanceToCamera * canvasSize.width) / viewport.width
         const heightModifier = (viewport.distanceToCamera * canvasSize.height) / viewport.height

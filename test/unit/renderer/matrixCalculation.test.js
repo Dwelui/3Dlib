@@ -91,7 +91,7 @@ describe('3d to canvas matrix', () => {
             height: viewportHeight,
         }, viewportDistance)
 
-        const m4 = Renderer.calculate3DtoCanvasMatrix(viewport, {
+        const m4 = Renderer.calculateProjectionMatrix(viewport, {
             height: canvasHeight,
             width: canvasWidth
         })
@@ -120,7 +120,7 @@ describe('3d to canvas matrix', () => {
             height: viewportHeight,
         }, viewportDistance)
 
-        const m4 = Renderer.calculate3DtoCanvasMatrix(viewport, {
+        const m4 = Renderer.calculateProjectionMatrix(viewport, {
             height: canvasHeight,
             width: canvasWidth
         })
