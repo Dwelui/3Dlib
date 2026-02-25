@@ -5,7 +5,7 @@ import Vector4 from "../../../src/math/Vector4.js";
 
 /**
  * @param {Vector2|Vector3|Vector4} vector
- * @param {Object} expected
+ * @param {Record<string, number>} expected
  */
 const validateComponents = (vector, expected) => {
     for (const [key, value] of Object.entries(expected)) {
@@ -60,7 +60,7 @@ describe('Vector2', () => {
                     const v2 = new Vector2(...Object.values(vector))
                     v2.multiplyScalar(scalar)
 
-                    validateComponents(v2, Object.values(expected))
+                    validateComponents(v2, expected)
                 })
         })
     })
@@ -114,7 +114,7 @@ describe('Vector3', () => {
                     const v3 = new Vector3(...Object.values(vector))
                     v3.multiplyScalar(scalar)
 
-                    validateComponents(v3, Object.values(expected))
+                    validateComponents(v3, expected)
                 })
         })
     })
@@ -169,7 +169,7 @@ describe('Vector4', () => {
                     const v4 = new Vector4(...Object.values(vector))
                     v4.multiplyScalar(scalar)
 
-                    validateComponents(v4, Object.values(expected))
+                    validateComponents(v4, expected)
                 })
         })
     })
