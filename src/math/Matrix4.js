@@ -54,14 +54,14 @@ export default class Matrix4 {
     * @param {number} row - Number between 0 and 3.
     * @param {number} col - Number between 0 and 3.
     * @param {number} value
-    * @return {void}
+    * @return {this}
     */
 
     /**
     * @overload
     * @param {number} index - Number between 0 and 15.
     * @param {number} value
-    * @return {void}
+    * @return {this}
     */
 
     /** @param {...number} args */

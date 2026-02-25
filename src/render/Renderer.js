@@ -148,12 +148,12 @@ export default class Renderer {
      */
     static projectVertex(vertex, m4) {
         const vertexPosition = Vector4.fromVertex3(vertex.position)
-        const projectedVertex = vertexPosition.multiplyMatrix4(m4)
-        projectedVertex.divideScalar(projectedVertex.z)
+        const projectedVertexPosition = vertexPosition.multiplyMatrix4(m4)
+        projectedVertexPosition.divideScalar(projectedVertexPosition.z)
 
         return new Vector2(
-            projectedVertex.x,
-            projectedVertex.y,
+            projectedVertexPosition.x,
+            projectedVertexPosition.y,
         ).floor();
     }
 }

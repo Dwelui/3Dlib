@@ -6,6 +6,7 @@ import Camera from "../../../src/object/Camera.js";
 import Object3D from "../../../src/object/Object3D.js";
 import Renderer from "../../../src/render/Renderer.js";
 import Viewport from "../../../src/Viewport.js";
+import Vertex from "../../../src/render/Vertex.js";
 
 describe('camera matrix', () => {
     test('default', () => {
@@ -112,7 +113,7 @@ describe('3d to canvas matrix', () => {
         const viewportDistance = 1
         const canvasWidth = 100
         const canvasHeight = 100
-        const vertex = new Vector4(1, 2, 3, 1)
+        const vertex = new Vertex(new Vector3(1, 2, 3))
 
         const viewport = new Viewport({
             width: viewportWidth,
@@ -128,8 +129,8 @@ describe('3d to canvas matrix', () => {
         const heightModifier = (viewportDistance * canvasHeight) / viewportHeight
 
         const expectedProjectedVertex = new Vector2(
-            widthModifier * vertex.x / vertex.z,
-            heightModifier * vertex.y / vertex.z,
+            widthModifier * vertex.position.x / vertex.position.z,
+            heightModifier * vertex.position.y / vertex.position.z,
         ).floor()
 
         const projectedVertex = Renderer.projectVertex(vertex, m4)
