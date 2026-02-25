@@ -80,10 +80,23 @@ export default class Matrix4 {
         }
 
         this.#components[index] = value
+
+        return this
     }
 
     toArray() {
         return this.#components.slice()
+    }
+
+    /**
+     * @param {number} scalar
+     */
+    multiplyScalar(scalar) {
+        for (let i = 0; i < this.#components.length; i++) {
+            this.#components[i] *= scalar
+        }
+
+        return this
     }
 
     static zero() {

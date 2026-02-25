@@ -85,6 +85,8 @@ export default class Matrix3 {
         }
 
         this.#components[index] = value
+
+        return this
     }
 
     toArray() {
@@ -98,6 +100,17 @@ export default class Matrix3 {
             4: c[3], 5: c[4], 6: c[5],
             7: c[6], 8: c[7], 9: c[8]
         }
+    }
+
+    /**
+     * @param {number} scalar
+     */
+    multiplyScalar(scalar) {
+        for (let i = 0; i < this.#components.length; i++) {
+            this.#components[i] *= scalar
+        }
+
+        return this
     }
 
     /** @param {Record<string, number> | undefined} object */

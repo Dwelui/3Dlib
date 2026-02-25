@@ -127,6 +127,19 @@ export default class Renderer {
     }
 
     /**
+     * @param {Object3D} object
+     *
+     * @returns {Matrix4}
+     */
+    static calculateObjectMatrix(object) {
+        const m4Scale = Matrix4.identity().multiplyScalar(object.scale).set(3, 3, 1)
+        const m4Rotation = Matrix4.fromMatrix3(object.rotation)
+        const m4Position = Matrix4.fromVector3(object.position)
+
+        return Matrix4.multiplyMatrix4(Matrix4.multiplyMatrix4(m4Position, m4Rotation), m4Scale)
+    }
+
+    /**
      * @param {Vector4} vertex
      * @param {Matrix4} m4 - 3D to Canvas projection matrix
      *

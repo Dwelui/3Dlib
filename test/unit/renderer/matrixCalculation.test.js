@@ -139,7 +139,22 @@ describe('3d to canvas matrix', () => {
 })
 
 describe('object matrix', () => {
-    test('default', () => {
-        const object = new Object3D()
+    test.each([
+        {
+            position: new Vector3(1, 2, 3), scale: 2, rotation: 90, expected: [
+                2, 0, 0, 1,
+                0, 1.2246467991473532e-16, -2, 2,
+                0, 2, 1.2246467991473532e-16, 3,
+                0, 0, 0, 1
+            ]
+        }
+    ])('calculate for (position: $position, scale: $scale, rotation: $rotation)', ({ position, scale, rotation, expected }) => {
+        const object = new Object3D({
+            position, scale
+        }).rotateX(rotation)
+
+        const m4 = Renderer.calculateObjectMatrix(object)
+
+        expect(m4.toArray()).toStrictEqual(expected)
     })
 })
