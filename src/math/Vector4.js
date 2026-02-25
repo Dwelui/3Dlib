@@ -1,4 +1,5 @@
 import Matrix4 from "./Matrix4.js"
+import Vector3 from "./Vector3.js"
 
 export default class Vector4 {
     /** @type{number} */ x
@@ -14,6 +15,13 @@ export default class Vector4 {
     }
 
     clone() { return new Vector4(this.x, this.y, this.z, this.w) }
+
+    /**
+     * @param {Vector3} v3
+     */
+    static fromVertex3(v3) {
+        return new Vector4(...v3.toArray(), 1)
+    }
 
     /** @param {number} number */
     divideScalar(number) {

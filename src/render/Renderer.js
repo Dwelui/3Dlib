@@ -49,9 +49,10 @@ export default class Renderer {
         /** @type {Array<Vector2>} */
         const projectedVertices = []
         for (const vertex of mesh.vertices) {
-            const objectMatrix = Renderer.calculateModelMatrix(object)
-            const matrix = Matrix4.multiplyMatrix4(cameraMatrix, objectMatrix)
-            projectedVertices.push(Renderer.projectVertex(cameraSpaceVertex, treeDtoCanvasMatrix))
+            // TODO: Move to object and update on object translation, rotation, scale
+            const objectMatrix = Renderer.calculateObjectMatrix(object)
+            let m4 = Matrix4.multiplyMatrix4(cameraMatrix, objectMatrix)
+            projectedVertices.push(Renderer.projectVertex(vertex.clone(), treeDtoCanvasMatrix))
         }
 
         for (let triangle of mesh.triangles) {
@@ -140,13 +141,14 @@ export default class Renderer {
     }
 
     /**
-     * @param {Vector4} vertex
+     * @param {Vertex} vertex
      * @param {Matrix4} m4 - 3D to Canvas projection matrix
      *
      * @returns {Vector2}
      */
     static projectVertex(vertex, m4) {
-        const projectedVertex = vertex.clone().multiplyMatrix4(m4)
+        const vertexPosition = Vector4.fromVertex3(vertex.position)
+        const projectedVertex = vertexPosition.multiplyMatrix4(m4)
         projectedVertex.divideScalar(projectedVertex.z)
 
         return new Vector2(
