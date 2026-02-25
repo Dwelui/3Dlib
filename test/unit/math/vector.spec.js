@@ -40,6 +40,7 @@ describe('Vector2', () => {
         })
     })
 
+    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
     describe('multiplication', () => {
         describe('scalar', () => {
             const scalarCases = [
@@ -93,6 +94,7 @@ describe('Vector3', () => {
         })
     })
 
+    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
     describe('multiplication', () => {
         describe('scalar', () => {
             const scalarCases = [
@@ -148,6 +150,7 @@ describe('Vector4', () => {
         })
     })
 
+    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
     describe('multiplication', () => {
         describe('scalar', () => {
             const scalarCases = [
