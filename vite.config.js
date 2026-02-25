@@ -5,6 +5,7 @@ export default defineConfig({
     test: {
         include: [
             './test/**/*.test.js',
+            './test/**/*.spec.js',
         ]
     },
 })
