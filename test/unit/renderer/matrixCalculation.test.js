@@ -1,16 +1,13 @@
 import { describe, expect, test } from "vitest";
-import Camera from "../../../src/object/Camera.js";
-import Renderer from "../../../src/render/Renderer.js";
-import Matrix4 from "../../../src/math/Matrix4.js";
-import Vector3 from "../../../src/math/Vector3.js";
-import Viewport from "../../../src/Viewport.js";
-import Canvas from "../../../src/Canvas.js";
-import Color from "../../../src/Color.js";
-import Vector4 from "../../../src/math/Vector4.js";
 import Vector2 from "../../../src/math/Vector2.js";
+import Vector3 from "../../../src/math/Vector3.js";
+import Vector4 from "../../../src/math/Vector4.js";
+import Camera from "../../../src/object/Camera.js";
 import Object3D from "../../../src/object/Object3D.js";
+import Renderer from "../../../src/render/Renderer.js";
+import Viewport from "../../../src/Viewport.js";
 
-describe.concurrent('camera matrix', () => {
+describe('camera matrix', () => {
     test('default', () => {
         const camera = new Camera()
         const cameraMatrix = Renderer.calculateCameraMatrix(camera)
@@ -80,7 +77,7 @@ describe.concurrent('camera matrix', () => {
     })
 })
 
-describe.concurrent('3d to canvas matrix', () => {
+describe('3d to canvas matrix', () => {
     test('1x1x1 viewport and 100x100 canvas size', () => {
         const viewportWidth = 1
         const viewportHeight = 1
@@ -141,7 +138,7 @@ describe.concurrent('3d to canvas matrix', () => {
     })
 })
 
-describe.concurrent('object matrix', () => {
+describe('object matrix', () => {
     test('default', () => {
         const object = new Object3D()
     })
