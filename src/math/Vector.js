@@ -28,6 +28,8 @@ export default class Vector extends Float64Array {
 
     toArray() { return [...this] }
 
+    clone() { return new Vector([...this]) }
+
     /** @param {number} scalar */
     multiplyScalar(scalar) {
         const l = this.length
