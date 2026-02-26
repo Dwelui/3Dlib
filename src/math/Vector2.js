@@ -17,4 +17,6 @@ export default class Vector2 extends Vector {
     set y(number) { (this[1]) = number }
 
     clone() { return new Vector2(...this) }
+
+    toJSON() { return { x: this.x, y: this.y } }
 }

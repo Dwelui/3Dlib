@@ -16,6 +16,8 @@ export default class Vector4 {
 
     clone() { return new Vector4(this.x, this.y, this.z, this.w) }
 
+    toJSON() { return { x: this.x, y: this.y, z: this.z, w: this.w } }
+
     /** @param {Vector3} v3 */
     static fromVertex3(v3) {
         return new Vector4(...v3.toArray(), 1)

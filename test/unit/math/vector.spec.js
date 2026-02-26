@@ -95,6 +95,17 @@ describe('Vector', () => {
         ])('copy keeps correct type', ({ vector, expected }) => {
             expect(vector.clone()).toBeInstanceOf(expected)
         })
+
+        test.for([
+            { vector: { x: 1, y: 2 }, contructor: Vector2 },
+            { vector: { x: 1, y: 2, z: 3 }, contructor: Vector3 },
+            { vector: { x: 1, y: 2, z: 3, w: 4 }, contructor: Vector4 },
+        ])('toJSON returns correct json ($vector)', ({ vector, contructor }) => {
+            const json = new contructor(...Object.values(vector)).toJSON()
+
+            // @ts-ignore
+            validateComponents(json, vector)
+        })
     })
 
     describe('magnitude & normalization', () => {
