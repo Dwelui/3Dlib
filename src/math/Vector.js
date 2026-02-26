@@ -8,6 +8,16 @@ export default class Vector extends Float64Array {
         this.set(values)
     }
 
+    get magnitude() {
+        const l = this.length
+
+        let result = 0
+        for (let i = 0; i < l; i++)
+            result += this[i] * this[i]
+
+        return Math.sqrt(result)
+    }
+
     floor() {
         const l = this.length
         for (let i = 0; i < l; i++)

@@ -87,6 +87,20 @@ describe('Vector', () => {
             expect(v.toArray()).toEqual(vector)
         })
     })
+
+    describe('magnitude & normalization', () => {
+        const lengthInputs = [
+            { vector: [1, 2, 3], expected: 3.7416573867739413 },
+            { vector: [1, 2, 3, 4, 5], expected: 7.416198487095663 },
+            { vector: [1, 2], expected: 2.23606797749979 },
+        ];
+
+        test.for(lengthInputs)('($vector) length calculated correctly ($expected)', ({ vector, expected }) => {
+            const v = new Vector(vector);
+
+            expect(v.magnitude).toEqual(expected)
+        })
+    })
 })
 
 describe('Vector2', () => {
