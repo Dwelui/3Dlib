@@ -2,6 +2,7 @@ import { describe, test, expect } from "vitest";
 import Vector2 from "../../../src/math/Vector2.js";
 import Vector3 from "../../../src/math/Vector3.js";
 import Vector4 from "../../../src/math/Vector4.js";
+import Vector from "../../../src/math/Vector.js";
 
 /**
  * @param {Vector2|Vector3|Vector4} vector
@@ -13,6 +14,47 @@ const validateComponents = (vector, expected) => {
         expect(vector[key]).toBe(value)
     }
 }
+
+describe('Vector', () => {
+    describe('scalar', () => {
+        const scalarInputs = [
+            { vector: [1, 1], scalar: 2, },
+            { vector: [-3, 4], scalar: -1, },
+            { vector: [1, 2, 3, 4], scalar: 10, },
+        ]
+
+        /** @param {(value: number, scalar: number) => number} operation */
+        function scalarTestCases(operation) {
+            return scalarInputs.map(({ vector, scalar }) => ({
+                vector,
+                scalar,
+                expected: vector.map((v) => operation(v, scalar))
+            }))
+        }
+
+        describe('multiplication', () => {
+            test.for(scalarTestCases((v, s) => v * s))('($vector) * $scalar => ($expected)', ({ vector, scalar, expected }) => {
+                const v = new Vector(vector).multiplyScalar(scalar)
+
+                expect([...v]).toEqual(expected)
+            })
+        })
+
+        describe('division', () => {
+            test.for(scalarTestCases((v, s) => v / s))('($vector) / $scalar => ($expected)', ({ vector, scalar, expected }) => {
+                const v = new Vector(vector).divideScalar(scalar)
+
+                expect([...v]).toEqual(expected)
+            })
+
+            test('by zero throws error', () => {
+                expect(() => {
+                    new Vector([0, 0]).divideScalar(0)
+                }).toThrow("Vector: division by zero")
+            })
+        })
+    })
+})
 
 describe('Vector2', () => {
     describe('getters return the same values after setting with', () => {
@@ -37,32 +79,6 @@ describe('Vector2', () => {
 
                 validateComponents(v2, values)
             })
-        })
-    })
-
-    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
-    describe('multiplication', () => {
-        describe('scalar', () => {
-            const scalarCases = [
-                {
-                    vector: { x: 1, y: 1 },
-                    scalar: 2,
-                    expected: { x: 2, y: 2 },
-                },
-                {
-                    vector: { x: -3, y: 4 },
-                    scalar: -1,
-                    expected: { x: 3, y: -4 },
-                },
-            ]
-            test.for(scalarCases)(
-                '($vector.x, $vector.y) * $scalar => ($expected.x, $expected.y)',
-                ({ vector, scalar, expected }) => {
-                    const v2 = new Vector2(...Object.values(vector))
-                    v2.multiplyScalar(scalar)
-
-                    validateComponents(v2, expected)
-                })
         })
     })
 })
@@ -93,33 +109,6 @@ describe('Vector3', () => {
             })
         })
     })
-
-    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
-    describe('multiplication', () => {
-        describe('scalar', () => {
-            const scalarCases = [
-                {
-                    vector: { x: 1, y: 1, z: 1 },
-                    scalar: 2,
-                    expected: { x: 2, y: 2, z: 2 },
-                },
-                {
-                    vector: { x: -3, y: 4, z: 100 },
-                    scalar: -1,
-                    expected: { x: 3, y: -4, z: -100 },
-                },
-            ]
-
-            test.for(scalarCases)(
-                '($vector.x, $vector.y, $vector.z) * $scalar => ($expected.x, $expected.y, $expected.z)',
-                ({ vector, scalar, expected }) => {
-                    const v3 = new Vector3(...Object.values(vector))
-                    v3.multiplyScalar(scalar)
-
-                    validateComponents(v3, expected)
-                })
-        })
-    })
 })
 
 describe('Vector4', () => {
@@ -147,33 +136,6 @@ describe('Vector4', () => {
 
                 validateComponents(v4, values)
             })
-        })
-    })
-
-    // TODO: Move to generic Vector block. Every specific vector will implement the generic one anyway. Setters and getters are tested.
-    describe('multiplication', () => {
-        describe('scalar', () => {
-            const scalarCases = [
-                {
-                    vector: { x: 1, y: 1, z: 1, w: 1 },
-                    scalar: 2,
-                    expected: { x: 2, y: 2, z: 2, w: 2 },
-                },
-                {
-                    vector: { x: -3, y: 4, z: 100, w: -1 },
-                    scalar: -1,
-                    expected: { x: 3, y: -4, z: -100, w: 1 },
-                },
-            ]
-
-            test.for(scalarCases)(
-                '($vector.x, $vector.y, $vector.z, $vector.w) * $scalar => ($expected.x, $expected.y, $expected.z, $expected.w)',
-                ({ vector, scalar, expected }) => {
-                    const v4 = new Vector4(...Object.values(vector))
-                    v4.multiplyScalar(scalar)
-
-                    validateComponents(v4, expected)
-                })
         })
     })
 })
