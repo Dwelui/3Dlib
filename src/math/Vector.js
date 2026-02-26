@@ -8,6 +8,16 @@ export default class Vector extends Float64Array {
         this.set(values)
     }
 
+    floor() {
+        const l = this.length
+        for (let i = 0; i < l; i++)
+            this[i] = this[i] | 0
+
+        return this
+    }
+
+    toArray() { return [...this] }
+
     /** @param {number} scalar */
     multiplyScalar(scalar) {
         const l = this.length

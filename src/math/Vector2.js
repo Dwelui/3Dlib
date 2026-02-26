@@ -1,26 +1,18 @@
-export default class Vector2 {
-    /** @type{number} */ x
-    /** @type{number} */ y
+import Vector from "./Vector.js"
 
+export default class Vector2 extends Vector {
+
+    /**
+     * @param {number} [x=0]
+     * @param {number} [y=0]
+     */
     constructor(x = 0, y = 0) {
-        this.x = x
-        this.y = y
+        super([x, y], 2)
     }
 
-    toArray() { return [this.x, this.y] }
+    get x() { return this[0] }
+    set x(number) { (this[0]) = number }
 
-    floor() {
-        this.x = this.x | 0
-        this.y = this.y | 0
-
-        return this
-    }
-
-    /** @param {number} number */
-    divideScalar(number) {
-        this.x /= number
-        this.y /= number
-
-        return this
-    }
+    get y() { return this[1] }
+    set y(number) { (this[1]) = number }
 }

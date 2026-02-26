@@ -54,6 +54,39 @@ describe('Vector', () => {
             })
         })
     })
+
+    describe('modification', () => {
+        const modificationInputs = [
+            { vector: [1.5, 2.2, 3.9] },
+            { vector: [-0.1, -1.2] },
+        ]
+
+        /** @param {(value: number) => number} operation */
+        function modificationTestCases(operation) {
+            return modificationInputs.map(({ vector }) => ({
+                vector,
+                expected: vector.map((v) => operation(v))
+            }))
+        }
+
+        test.for(modificationTestCases((v) => v | 0))('($vector) floored to ($expected) correctly', ({ vector, expected }) => {
+            const v = new Vector(vector).floor();
+
+            expect(v.toArray()).toEqual(expected)
+        })
+    })
+
+    describe('construction & conversion', () => {
+        test.for([
+            { vector: [1, 2, 3] },
+            { vector: [1, 2, 3, 4, 5] },
+            { vector: [1, 2] },
+        ])('toArray returns correct values ($vector)', ({ vector }) => {
+            const v = new Vector(vector);
+
+            expect(v.toArray()).toEqual(vector)
+        })
+    })
 })
 
 describe('Vector2', () => {
