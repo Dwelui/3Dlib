@@ -1,52 +1,49 @@
-import Matrix4 from "./Matrix4.js"
-import Vector3 from "./Vector3.js"
+import Vector from "./Vector.js"
 
-export default class Vector4 {
-    /** @type{number} */ x
-    /** @type{number} */ y
-    /** @type{number} */ z
-    /** @type{number} */ w
+export default class Vector4 extends Vector {
+    static SIZE = 4
 
-    constructor(x = 0, y = 0, z = 0, w = 0) {
-        this.x = x
-        this.y = y
-        this.z = z
-        this.w = w
+    /**
+     * @overload
+     * @param {number} [x=0]
+     * @param {number} [y=0]
+     * @param {number} [z=0]
+     * @param {number} [w=0]
+     */
+
+    /**
+     * @overload
+     * @param {Array<number|undefined>} values
+     */
+
+    /** @param {...(number | undefined | Array<number | undefined>)} args */
+    constructor(...args) {
+        const values =
+            args.length === 1 && Array.isArray(args[0])
+                ? args[0]
+                : args
+
+        for (let i = 0; i < Vector4.SIZE; i++) {
+            values[i] = values[i] ?? 0
+        }
+
+        //@ts-ignore
+        super(values, Vector4.SIZE)
     }
 
-    clone() { return new Vector4(this.x, this.y, this.z, this.w) }
+    get x() { return this[0] }
+    set x(number) { (this[0]) = number }
 
-    toJSON() { return { x: this.x, y: this.y, z: this.z, w: this.w } }
+    get y() { return this[1] }
+    set y(number) { (this[1]) = number }
 
-    /** @param {Vector3} v3 */
-    static fromVertex3(v3) {
-        return new Vector4(...v3.toArray(), 1)
-    }
+    get z() { return this[2] }
+    set z(number) { (this[2]) = number }
 
-    /** @param {number} number */
-    divideScalar(number) {
-        this.x /= number
-        this.y /= number
-        this.z /= number
-        this.w /= number
+    get w() { return this[3] }
+    set w(number) { (this[3]) = number }
 
-        return this
-    }
+    clone() { return new Vector4(...this) }
 
-    /** @param {Matrix4} m4 */
-    multiplyMatrix4(m4) {
-        const m4Components = m4.toArray()
-
-        const x = this.x
-        const y = this.y
-        const z = this.z
-        const w = this.w
-
-        this.x = m4Components[0] * x + m4Components[1] * x + m4Components[2] * x + m4Components[3] * x
-        this.y = m4Components[4] * y + m4Components[5] * y + m4Components[6] * y + m4Components[7] * y
-        this.z = m4Components[8] * z + m4Components[9] * z + m4Components[10] * z + m4Components[11] * z
-        this.w = m4Components[12] * w + m4Components[13] * w + m4Components[14] * w + m4Components[15] * w
-
-        return this
-    }
+    toJSON() { return { x: this[0], y: this[1], z: this[2], w: this[3] } }
 }

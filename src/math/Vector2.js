@@ -1,13 +1,32 @@
 import Vector from "./Vector.js"
 
 export default class Vector2 extends Vector {
+    static SIZE = 2
 
     /**
+     * @overload
      * @param {number} [x=0]
      * @param {number} [y=0]
      */
-    constructor(x = 0, y = 0) {
-        super([x, y], 2)
+
+    /**
+     * @overload
+     * @param {Array<number|undefined>} values
+     */
+
+    /** @param {...(number | undefined | Array<number | undefined>)} args */
+    constructor(...args) {
+        const values =
+            args.length === 1 && Array.isArray(args[0])
+                ? args[0]
+                : args
+
+        for (let i = 0; i < Vector2.SIZE; i++) {
+            values[i] = values[i] ?? 0
+        }
+
+        //@ts-ignore
+        super(values, Vector2.SIZE)
     }
 
     get x() { return this[0] }

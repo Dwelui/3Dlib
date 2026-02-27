@@ -5,6 +5,7 @@ export default class Vector extends Float64Array {
     */
     constructor(values, length) {
         super(length ?? values.length)
+
         this.set(values)
     }
 

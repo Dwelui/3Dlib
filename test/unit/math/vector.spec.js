@@ -16,41 +16,76 @@ const validateComponents = (vector, expected) => {
 }
 
 describe('Vector', () => {
-    describe('scalar', () => {
-        const scalarInputs = [
-            { vector: [1, 1], scalar: 2, },
-            { vector: [-3, 4], scalar: -1, },
-            { vector: [1, 2, 3, 4], scalar: 10, },
-        ]
+    describe('arithmetics', () => {
+        describe('scalar', () => {
+            const inputs = [
+                { vector: [1, 1], scalar: 2, },
+                { vector: [-3, 4], scalar: -1, },
+                { vector: [1, 2, 3, 4], scalar: 10, },
+            ]
 
-        /** @param {(value: number, scalar: number) => number} operation */
-        function scalarTestCases(operation) {
-            return scalarInputs.map(({ vector, scalar }) => ({
-                vector,
-                scalar,
-                expected: vector.map((v) => operation(v, scalar))
-            }))
-        }
+            /** @param {(value: number, scalar: number) => number} operation */
+            function testCases(operation) {
+                return inputs.map(({ vector, scalar }) => ({
+                    vector,
+                    scalar,
+                    expected: vector.map((v) => operation(v, scalar))
+                }))
+            }
 
-        describe('multiplication', () => {
-            test.for(scalarTestCases((v, s) => v * s))('($vector) * $scalar => ($expected)', ({ vector, scalar, expected }) => {
-                const v = new Vector(vector).multiplyScalar(scalar)
+            describe('multiplication', () => {
+                test.for(testCases((v, s) => v * s))('($vector) * $scalar => ($expected)', ({ vector, scalar, expected }) => {
+                    const v = new Vector(vector).multiplyScalar(scalar)
 
-                expect([...v]).toEqual(expected)
+                    expect([...v]).toEqual(expected)
+                })
+            })
+
+            describe('division', () => {
+                test.for(testCases((v, s) => v / s))('($vector) / $scalar => ($expected)', ({ vector, scalar, expected }) => {
+                    const v = new Vector(vector).divideScalar(scalar)
+
+                    expect([...v]).toEqual(expected)
+                })
+
+                test('by zero throws error', () => {
+                    expect(() => {
+                        new Vector([0, 0]).divideScalar(0)
+                    }).toThrow("Vector: division by zero")
+                })
             })
         })
 
-        describe('division', () => {
-            test.for(scalarTestCases((v, s) => v / s))('($vector) / $scalar => ($expected)', ({ vector, scalar, expected }) => {
-                const v = new Vector(vector).divideScalar(scalar)
+        describe('vector', () => {
+            const inputs = [
+                { a: [1, 1], b: [1, 3], constructor: Vector2 },
+                { a: [-3, 4, 2], b: [-3, 1, 2], constructor: Vector3 },
+                { a: [-3, 4, 2, 0], b: [- 6, 2, 2, 10], constructor: Vector4 },
+                { a: [- 3, 4, 2, 0], b: [- 6, 2, 2, 10], constructor: Vector },
+            ]
 
-                expect([...v]).toEqual(expected)
-            })
+            /** @param {(aComponent: number, bComponent: number) => number} operation */
+            function testCases(operation) {
+                return inputs.map(({ a, b, constructor }) => {
+                    const expectedComponents = []
+                    for (let i = 0; i < a.length; i++) {
+                        expectedComponents.push(operation(a[i], b[i]))
+                    }
 
-            test('by zero throws error', () => {
-                expect(() => {
-                    new Vector([0, 0]).divideScalar(0)
-                }).toThrow("Vector: division by zero")
+                    return {
+                        a: new constructor(a),
+                        b: new constructor(b),
+                        expected: new constructor(expectedComponents)
+                    }
+                })
+            }
+
+            describe('addition', () => {
+                test.for(testCases(((ac, bc) => ac + bc)))('($a) * ($b) => ($expected)', ({ a, b, expected }) => {
+                    const v = a.add(b)
+
+                    expect(v).toEqual(expected)
+                })
             })
         })
     })
