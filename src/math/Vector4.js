@@ -43,7 +43,5 @@ export default class Vector4 extends Vector {
     get w() { return this[3] }
     set w(number) { (this[3]) = number }
 
-    clone() { return new Vector4(...this) }
-
     toJSON() { return { x: this[0], y: this[1], z: this[2], w: this[3] } }
 }

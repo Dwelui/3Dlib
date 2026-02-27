@@ -39,8 +39,6 @@ export default class Vector3 extends Vector {
     get z() { return this[2] }
     set z(number) { (this[2]) = number }
 
-    clone() { return new Vector3(...this) }
-
     toJSON() { return { x: this[0], y: this[1], z: this[2] } }
 
     // /** @param {Vector3} vector */

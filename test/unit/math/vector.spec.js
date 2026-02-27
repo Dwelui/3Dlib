@@ -127,7 +127,7 @@ describe('Vector', () => {
             { vector: new Vector3(1, 2, 3), expected: Vector3 },
             { vector: new Vector4(1, 2, 3, 4), expected: Vector4 },
             { vector: new Vector([1, 2, 3, 4, 5]), expected: Vector },
-        ])('copy keeps correct type', ({ vector, expected }) => {
+        ])('clone keeps correct type', ({ vector, expected }) => {
             expect(vector.clone()).toBeInstanceOf(expected)
         })
 

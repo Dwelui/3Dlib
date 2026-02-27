@@ -29,7 +29,8 @@ export default class Vector extends Float64Array {
 
     toArray() { return [...this] }
 
-    clone() { return new Vector([...this]) }
+    // @ts-ignore
+    clone() { return new this.constructor(this) }
 
     /** @param {number} scalar */
     multiplyScalar(scalar) {
