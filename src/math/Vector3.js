@@ -41,37 +41,6 @@ export default class Vector3 extends Vector {
 
     toJSON() { return { x: this[0], y: this[1], z: this[2] } }
 
-    // /** @param {Vector3} vector */
-    // add(vector) {
-    //     this.x += vector.x
-    //     this.y += vector.y
-    //     this.z += vector.z
-    // }
-    //
-    // /** @param {Vector3} vector */
-    // subtract(vector) {
-    //     this.x -= vector.x
-    //     this.y -= vector.y
-    //     this.z -= vector.z
-    // }
-    //
-    // /** @param {number} number */
-    // multiplyScalar(number) {
-    //     this.x *= number
-    //     this.y *= number
-    //     this.z *= number
-    // }
-    //
-    // /** @param {Matrix3} matrix */
-    // multiplyMatrix3(matrix) {
-    //     const m = matrix.toArray()
-    //     const x = this.x, y = this.y, z = this.z
-    //
-    //     this.x = m[0] * x + m[1] * y + m[2] * z
-    //     this.y = m[3] * x + m[4] * y + m[5] * z
-    //     this.z = m[6] * x + m[7] * y + m[8] * z
-    // }
-    //
     // /**
     // * @param {{
     // *       x?: number,
@@ -104,35 +73,4 @@ export default class Vector3 extends Vector {
     //     return vector
     // }
     //
-    // /**
-    // * @param {Vector3} a
-    // * @param {Vector3} b
-    // */
-    // static add(a, b) {
-    //     return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z)
-    // }
-    //
-    // /**
-    // * @param {Vector3} vector
-    // * @param {number} number
-    // */
-    // static multiplyScalar(vector, number) {
-    //     return new Vector3(vector.x * number, vector.y * number, vector.z * number)
-    // }
-    //
-    // /**
-    // * @param {Vector3} a
-    // * @param {Vector3} b
-    // */
-    // static subtract(a, b) {
-    //     return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z)
-    // }
-    //
-    // /**
-    // * @param {Vector3} a
-    // * @param {Vector3} b
-    // */
-    // static dot(a, b) {
-    //     return a.x * b.x + a.y * b.y + a.z * b.z
-    // }
 }

@@ -52,4 +52,31 @@ export default class Vector extends Float64Array {
 
         return this
     }
+
+    /** @param {this} vector */
+    add(vector) {
+        const l = this.length
+        for (let i = 0; i < l; i++)
+            this[i] += vector[i]
+
+        return this
+    }
+
+    /** @param {this} vector */
+    sub(vector) {
+        const l = this.length
+        for (let i = 0; i < l; i++)
+            this[i] -= vector[i]
+
+        return this
+    }
+
+    /** @param {this} vector */
+    multiplyVector(vector) {
+        const l = this.length
+        for (let i = 0; i < l; i++)
+            this[i] *= vector[i]
+
+        return this
+    }
 }

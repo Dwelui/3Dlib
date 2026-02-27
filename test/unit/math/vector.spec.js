@@ -81,8 +81,24 @@ describe('Vector', () => {
             }
 
             describe('addition', () => {
-                test.for(testCases(((ac, bc) => ac + bc)))('($a) * ($b) => ($expected)', ({ a, b, expected }) => {
+                test.for(testCases(((ac, bc) => ac + bc)))('($a) + ($b) => ($expected)', ({ a, b, expected }) => {
                     const v = a.add(b)
+
+                    expect(v).toEqual(expected)
+                })
+            })
+
+            describe('subtraction', () => {
+                test.for(testCases(((ac, bc) => ac - bc)))('($a) - ($b) => ($expected)', ({ a, b, expected }) => {
+                    const v = a.sub(b)
+
+                    expect(v).toEqual(expected)
+                })
+            })
+
+            describe('multiply', () => {
+                test.for(testCases(((ac, bc) => ac * bc)))('($a) - ($b) => ($expected)', ({ a, b, expected }) => {
+                    const v = a.multiplyVector(b)
 
                     expect(v).toEqual(expected)
                 })
