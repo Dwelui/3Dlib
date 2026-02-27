@@ -108,22 +108,56 @@ describe('Vector', () => {
 
     describe('modification', () => {
         const inputs = [
-            { vector: [1.5, 2.2, 3.9] },
-            { vector: [-0.1, -1.2] },
+            { vector: new Vector2(1, 2) },
+            { vector: new Vector2(-0.1, -1.2) },
+            { vector: new Vector3(1, 2, 3) },
+            { vector: new Vector3(1.5, 2.2, 3.9) },
+            { vector: new Vector4(1, 2, 3, 4) },
+            { vector: new Vector([1, 2, 3, 4, 5]) },
         ]
 
         /** @param {(value: number) => number} operation */
         function testCases(operation) {
-            return inputs.map(({ vector }) => ({
-                vector,
-                expected: vector.map((v) => operation(v))
-            }))
+            return inputs.map(({ vector }) => {
+                const expectedComponents = []
+                for (let i = 0; i < vector.length; i++) {
+                    expectedComponents.push(operation(vector[i]))
+                }
+
+                //@ts-ignore
+                const expected = new vector.constructor(expectedComponents)
+
+                return {
+                    vector: vector.clone(),
+                    expected
+                }
+            })
         }
 
         test.for(testCases((v) => v | 0))('($vector) floored to ($expected) correctly', ({ vector, expected }) => {
-            const v = new Vector(vector).floor()
+            expect(vector.floor().toArray()).toEqual(expected.toArray())
+        })
 
-            expect(v.toArray()).toEqual(expected)
+        test.for(testCases((v) => -v))('($vector) invert correctly ($expected)', ({ vector, expected }) => {
+            expect(vector.invert().toArray()).toEqual(expected.toArray())
+        })
+
+        test.for([
+            { vector: new Vector2(1, 2), expected: 2.23606797749979 },
+            { vector: new Vector3(1, 2, 3), expected: 3.7416573867739413 },
+            { vector: new Vector4(1, 2, 3, 4), expected: 5.477225575051661 },
+            { vector: new Vector([1, 2, 3, 4, 5]), expected: 7.416198487095663 },
+        ])('($vector) length calculated correctly ($expected)', ({ vector, expected }) => {
+            expect(vector.magnitude).toEqual(expected)
+        })
+
+        test.for([
+            { vector: new Vector2(1, 2) },
+            { vector: new Vector3(1, 2, 3) },
+            { vector: new Vector4(1, 2, 3, 4) },
+            { vector: new Vector([1, 2, 3, 4, 5]) },
+        ])('($vector) normalize correctly', ({ vector }) => {
+            expect(vector.normalize().magnitude).toBeCloseTo(1)
         })
     })
 
@@ -168,28 +202,6 @@ describe('Vector', () => {
 
             // @ts-ignore
             validateComponents(json, vector)
-        })
-    })
-
-    describe('magnitude & normalization', () => {
-        const lengthInputs = [
-            { vector: new Vector2(1, 2), expected: 2.23606797749979 },
-            { vector: new Vector3(1, 2, 3), expected: 3.7416573867739413 },
-            { vector: new Vector4(1, 2, 3, 4), expected: 5.477225575051661 },
-            { vector: new Vector([1, 2, 3, 4, 5]), expected: 7.416198487095663 },
-        ];
-
-        test.for(lengthInputs)('($vector) length calculated correctly ($expected)', ({ vector, expected }) => {
-            expect(vector.magnitude).toEqual(expected)
-        })
-
-        test.for([
-            { vector: new Vector2(1, 2) },
-            { vector: new Vector3(1, 2, 3) },
-            { vector: new Vector4(1, 2, 3, 4) },
-            { vector: new Vector([1, 2, 3, 4, 5]) },
-        ])('($vector) normalize correctly', ({ vector }) => {
-            expect(vector.normalize().magnitude).toBeCloseTo(1)
         })
     })
 })

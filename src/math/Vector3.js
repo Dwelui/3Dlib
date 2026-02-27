@@ -50,13 +50,4 @@ export default class Vector3 extends Vector {
     static fromJSON({ x, y, z } = {}) {
         return new Vector3(x, y, z)
     }
-
-    // /** @param {Vector3} vector */
-    // static invert(vector) {
-    //     vector.x = -vector.x
-    //     vector.y = -vector.y
-    //     vector.z = -vector.z
-    //     return vector
-    // }
-    //
 }
