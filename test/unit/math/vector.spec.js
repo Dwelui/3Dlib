@@ -162,24 +162,29 @@ describe('Vector', () => {
     })
 
     describe('construction & conversion', () => {
-        test.for([
-            { vector: [1, 2], constructor: Vector2 },
-            { vector: [1, 2, 3], constructor: Vector3 },
-            { vector: [1, 2, 3, 4], constructor: Vector4 },
-            { vector: [1, 2, 3, 4, 5], constructor: Vector },
-        ])('toArray returns correct values ($vector)', ({ vector, constructor }) => {
-            const v = new constructor(vector)
+        const inputs = [
+            { values: [1, 2], constructor: Vector2 },
+            { values: [1, 2, 3], constructor: Vector3 },
+            { values: [1, 2, 3, 4], constructor: Vector4 },
+            { values: [1, 2, 3, 4, 5], constructor: Vector },
+        ]
 
-            expect(v.toArray()).toEqual(vector)
+        test.for(inputs)('toArray returns correct values ($values)', ({ values, constructor }) => {
+            const v = new constructor(values)
+
+            expect(v.toArray()).toEqual(values)
         })
 
-        test.for([
-            { vector: new Vector2(1, 2) },
-            { vector: new Vector3(1, 2, 3) },
-            { vector: new Vector4(1, 2, 3, 4) },
-            { vector: new Vector([1, 2, 3, 4, 5]) },
-        ])('clone keeps correct type', ({ vector }) => {
-            expect(vector.clone()).toBeInstanceOf(vector.constructor)
+        test.for(inputs)('clone keeps correct type ($constructor)', ({ values, constructor }) => {
+            const v = new constructor(values)
+
+            expect(v.clone()).toBeInstanceOf(v.constructor)
+        })
+
+        test.for(inputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => {
+            const v = new constructor(values)
+
+            expect(v.clone().toArray()).toEqual(values)
         })
 
         test.for([
