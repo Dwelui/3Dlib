@@ -41,17 +41,16 @@ export default class Vector3 extends Vector {
 
     toJSON() { return { x: this[0], y: this[1], z: this[2] } }
 
-    // /**
-    // * @param {{
-    // *       x?: number,
-    // *       y?: number,
-    // *       z?: number,
-    // *   }} [object]
-    // */
-    // static fromJSON({ x, y, z } = {}) {
-    //     return new Vector3(x, y, z)
-    // }
-    //
+    /**
+     * @param {Object} [obj={}] - Object containing numeric keys corresponding to vector axes.
+     * @param {number} [obj.x]
+     * @param {number} [obj.y]
+     * @param {number} [obj.z]
+     */
+    static fromJSON({ x, y, z } = {}) {
+        return new Vector3(x, y, z)
+    }
+
     // /** @param {Vector3} vector */
     // static normalize(vector) {
     //     const x = vector.x, y = vector.y, z = vector.z

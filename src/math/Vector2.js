@@ -36,4 +36,13 @@ export default class Vector2 extends Vector {
     set y(number) { (this[1]) = number }
 
     toJSON() { return { x: this.x, y: this.y } }
+
+    /**
+     * @param {Object} [obj={}] - Object containing numeric keys corresponding to vector axes.
+     * @param {number} [obj.x]
+     * @param {number} [obj.y]
+     */
+    static fromJSON({ x, y } = {}) {
+        return new Vector2(x, y)
+    }
 }

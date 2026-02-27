@@ -44,4 +44,15 @@ export default class Vector4 extends Vector {
     set w(number) { (this[3]) = number }
 
     toJSON() { return { x: this[0], y: this[1], z: this[2], w: this[3] } }
+
+    /**
+     * @param {Object} [obj={}] - Object containing numeric keys corresponding to vector axes.
+     * @param {number} [obj.x]
+     * @param {number} [obj.y]
+     * @param {number} [obj.z]
+     * @param {number} [obj.w]
+     */
+    static fromJSON({ x, y, z, w } = {}) {
+        return new Vector4(x, y, z, w)
+    }
 }
