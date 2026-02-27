@@ -1,8 +1,8 @@
-import { describe, test, expect } from "vitest";
-import Vector2 from "../../../src/math/Vector2.js";
-import Vector3 from "../../../src/math/Vector3.js";
-import Vector4 from "../../../src/math/Vector4.js";
-import Vector from "../../../src/math/Vector.js";
+import { describe, test, expect } from "vitest"
+import Vector2 from "../../../src/math/Vector2.js"
+import Vector3 from "../../../src/math/Vector3.js"
+import Vector4 from "../../../src/math/Vector4.js"
+import Vector from "../../../src/math/Vector.js"
 
 /**
  * @param {Vector2|Vector3|Vector4} vector
@@ -70,7 +70,7 @@ describe('Vector', () => {
         }
 
         test.for(modificationTestCases((v) => v | 0))('($vector) floored to ($expected) correctly', ({ vector, expected }) => {
-            const v = new Vector(vector).floor();
+            const v = new Vector(vector).floor()
 
             expect(v.toArray()).toEqual(expected)
         })
@@ -82,7 +82,7 @@ describe('Vector', () => {
             { vector: [1, 2, 3, 4, 5] },
             { vector: [1, 2] },
         ])('toArray returns correct values ($vector)', ({ vector }) => {
-            const v = new Vector(vector);
+            const v = new Vector(vector)
 
             expect(v.toArray()).toEqual(vector)
         })
