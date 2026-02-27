@@ -52,19 +52,6 @@ export default class Vector3 extends Vector {
     }
 
     // /** @param {Vector3} vector */
-    // static normalize(vector) {
-    //     const x = vector.x, y = vector.y, z = vector.z
-    //     const inv = 1 / Math.sqrt(x * x + y * y + z * z)
-    //
-    //     if (inv !== Infinity) {
-    //         vector.x = x * inv
-    //         vector.y = y * inv
-    //         vector.z = z * inv
-    //     }
-    //     return vector
-    // }
-    //
-    // /** @param {Vector3} vector */
     // static invert(vector) {
     //     vector.x = -vector.x
     //     vector.y = -vector.y

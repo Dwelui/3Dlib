@@ -32,6 +32,14 @@ export default class Vector extends Float64Array {
     // @ts-ignore
     clone() { return new this.constructor(this) }
 
+    normalize() {
+        const vl = this.magnitude
+        if (vl !== 0)
+            this.divideScalar(vl)
+
+        return this
+    }
+
     /** @param {number} scalar */
     multiplyScalar(scalar) {
         const l = this.length
