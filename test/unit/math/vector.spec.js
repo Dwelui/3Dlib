@@ -107,20 +107,20 @@ describe('Vector', () => {
     })
 
     describe('modification', () => {
-        const modificationInputs = [
+        const inputs = [
             { vector: [1.5, 2.2, 3.9] },
             { vector: [-0.1, -1.2] },
         ]
 
         /** @param {(value: number) => number} operation */
-        function modificationTestCases(operation) {
-            return modificationInputs.map(({ vector }) => ({
+        function testCases(operation) {
+            return inputs.map(({ vector }) => ({
                 vector,
                 expected: vector.map((v) => operation(v))
             }))
         }
 
-        test.for(modificationTestCases((v) => v | 0))('($vector) floored to ($expected) correctly', ({ vector, expected }) => {
+        test.for(testCases((v) => v | 0))('($vector) floored to ($expected) correctly', ({ vector, expected }) => {
             const v = new Vector(vector).floor()
 
             expect(v.toArray()).toEqual(expected)
@@ -129,22 +129,23 @@ describe('Vector', () => {
 
     describe('construction & conversion', () => {
         test.for([
-            { vector: [1, 2, 3] },
-            { vector: [1, 2, 3, 4, 5] },
-            { vector: [1, 2] },
-        ])('toArray returns correct values ($vector)', ({ vector }) => {
-            const v = new Vector(vector)
+            { vector: [1, 2], constructor: Vector2 },
+            { vector: [1, 2, 3], constructor: Vector3 },
+            { vector: [1, 2, 3, 4], constructor: Vector4 },
+            { vector: [1, 2, 3, 4, 5], constructor: Vector },
+        ])('toArray returns correct values ($vector)', ({ vector, constructor }) => {
+            const v = new constructor(vector)
 
             expect(v.toArray()).toEqual(vector)
         })
 
         test.for([
-            { vector: new Vector2(1, 2), expected: Vector2 },
-            { vector: new Vector3(1, 2, 3), expected: Vector3 },
-            { vector: new Vector4(1, 2, 3, 4), expected: Vector4 },
-            { vector: new Vector([1, 2, 3, 4, 5]), expected: Vector },
-        ])('clone keeps correct type', ({ vector, expected }) => {
-            expect(vector.clone()).toBeInstanceOf(expected)
+            { vector: new Vector2(1, 2) },
+            { vector: new Vector3(1, 2, 3) },
+            { vector: new Vector4(1, 2, 3, 4) },
+            { vector: new Vector([1, 2, 3, 4, 5]) },
+        ])('clone keeps correct type', ({ vector }) => {
+            expect(vector.clone()).toBeInstanceOf(vector.constructor)
         })
 
         test.for([
