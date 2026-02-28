@@ -9,14 +9,10 @@ export default class Vector4 extends Vector {
      * @param {number} [y=0]
      * @param {number} [z=0]
      * @param {number} [w=0]
-     */
-
-    /**
+     *
      * @overload
      * @param {Array<number|undefined>} values
-     */
-
-    /**
+     *
      * @overload
      * @param {Vector} vector
      */

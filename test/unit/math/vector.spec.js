@@ -181,6 +181,12 @@ describe('Vector', () => {
             expect(v.clone()).toBeInstanceOf(v.constructor)
         })
 
+        test.for(inputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => {
+            const v = new constructor(values)
+
+            expect(v.clone().toArray()).toEqual(values)
+        })
+
         const constructorInputs = [
             { vector: new Vector2(1, 2), constructor: Vector },
             { vector: new Vector2(1, 2), constructor: Vector3 },
@@ -204,6 +210,7 @@ describe('Vector', () => {
                 return {
                     vector: vector.clone(),
                     constructor,
+                    // @ts-ignore
                     expected: new constructor(expectedComponents)
                 }
             })
@@ -216,12 +223,6 @@ describe('Vector', () => {
 
                 expect(v.toArray()).toEqual(expected.toArray())
             })
-
-        test.for(inputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => {
-            const v = new constructor(values)
-
-            expect(v.clone().toArray()).toEqual(values)
-        })
 
         test.for([
             { vector: { x: 1, y: 2 }, contructor: Vector2 },

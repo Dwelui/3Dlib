@@ -2,13 +2,34 @@ export default class Vector extends Float64Array {
     static SIZE = Infinity
 
     /**
-    * @param {number[]|Vector} values
-    * @param {number} [length]
-    */
-    constructor(values, length) {
-        const l = length ?? values.length
-        super(l)
+     * @overload
+     * @param {Array<number|undefined>} values
+     * @param {number} [length]
+     *
+     * @overload
+     * @param {Vector} vector
+     */
 
+    /** @param {...(number | undefined | Array<number | undefined> | Vector)} args */
+    constructor(...args) {
+        /** @type {(number|undefined)[]} */
+        let values = []
+        let l = undefined
+
+        if (Array.isArray(args[0])) {
+            values = Array.isArray(args[0][0]) ? args[0][0] : args[0]
+        } else if (args[0] instanceof Vector) {
+            values = args[0].toArray()
+        }
+
+        if (new.target.SIZE !== Infinity)
+            l = new.target.SIZE
+        else if (typeof args[1] === "number")
+            l = args[1]
+        else
+            l = values.length
+
+        super(l)
         for (let i = 0; i < l; i++) {
             this[i] = values[i] ?? 0
         }

@@ -8,14 +8,10 @@ export default class Vector3 extends Vector {
      * @param {number} [x=0]
      * @param {number} [y=0]
      * @param {number} [z=0]
-     */
-
-    /**
+     *
      * @overload
      * @param {Array<number|undefined>} values
-     */
-
-    /**
+     *
      * @overload
      * @param {Vector} vector
      */

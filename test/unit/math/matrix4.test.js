@@ -3,7 +3,7 @@ import Matrix3 from "../../../src/math/Matrix3.js"
 import Matrix4 from "../../../src/math/Matrix4.js";
 import Vector3 from "../../../src/math/Vector3.js";
 
-describe.concurrent('from', () => {
+describe('from', () => {
     test('matrix3', () => {
         const m3 = new Matrix3([
             1, 2, 3,
