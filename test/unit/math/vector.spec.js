@@ -196,6 +196,7 @@ describe('Vector', () => {
             { vector: new Vector4(1, 2, 3, 4), constructor: Vector },
             { vector: new Vector([1, 2, 3, 4, 5]), constructor: Vector4 },
             { vector: new Vector([1, 2, 3, 4, 5]), constructor: Vector3 },
+            { vector: new Vector([1, 2, 3, 4, 5]), constructor: Vector2 },
         ]
 
         function constructorTestCases() {

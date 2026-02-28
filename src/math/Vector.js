@@ -10,17 +10,19 @@ export default class Vector extends Float64Array {
      * @param {Vector} vector
      */
 
-    /** @param {...(number | undefined | Array<number | undefined> | Vector)} args */
+    /** @param {...(any)} args */
     constructor(...args) {
         /** @type {(number|undefined)[]} */
         let values = []
         let l = undefined
 
-        if (Array.isArray(args[0])) {
+        if (Array.isArray(args[0]))
             values = Array.isArray(args[0][0]) ? args[0][0] : args[0]
-        } else if (args[0] instanceof Vector) {
+
+        if (args[0][0] instanceof Vector)
+            values = args[0][0].toArray()
+        else if (args[0] instanceof Vector)
             values = args[0].toArray()
-        }
 
         if (new.target.SIZE !== Infinity)
             l = new.target.SIZE
