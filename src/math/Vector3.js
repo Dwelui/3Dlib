@@ -16,24 +16,9 @@ export default class Vector3 extends Vector {
      * @param {Vector} vector
      */
 
-    /** @param {...(number | undefined | Array<number | undefined> | Vector)} args */
+    /** @param {any} args */
     constructor(...args) {
-        /** @type {number[]} */
-        let values = []
-
-        if (args.length === 1) {
-            if (Array.isArray(args[0])) {
-                //@ts-ignore
-                values = args[0]
-            } else if (args[0] instanceof Vector) {
-                values = args[0].toArray()
-            }
-        } else {
-            //@ts-ignore
-            values = args
-        }
-
-        super(values, new.target.SIZE)
+        super(args)
     }
 
     get x() { return this[0] }
