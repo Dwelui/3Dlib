@@ -1,10 +1,17 @@
 export default class Vector extends Float64Array {
+    static SIZE = Infinity
+
     /**
-    * @param {number[]} values
+    * @param {number[]|Vector} values
     * @param {number} [length]
     */
     constructor(values, length) {
         super(length ?? values.length)
+
+        const l = values.length
+        for (let i = 0; i < l; i++) {
+            values[i] = values[i] ?? 0
+        }
 
         this.set(values)
     }

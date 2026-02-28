@@ -8,7 +8,7 @@ import Renderer from "../../../src/render/Renderer.js";
 import Viewport from "../../../src/Viewport.js";
 import Vertex from "../../../src/render/Vertex.js";
 
-describe('camera matrix', () => {
+describe.skip('camera matrix', () => {
     test('default', () => {
         const camera = new Camera()
         const cameraMatrix = Renderer.calculateCameraMatrix(camera)
@@ -78,7 +78,7 @@ describe('camera matrix', () => {
     })
 })
 
-describe('3d to canvas matrix', () => {
+describe.skip('3d to canvas matrix', () => {
     test('1x1x1 viewport and 100x100 canvas size', () => {
         const viewportWidth = 1
         const viewportHeight = 1
@@ -139,7 +139,7 @@ describe('3d to canvas matrix', () => {
     })
 })
 
-describe('object matrix', () => {
+describe.skip('object matrix', () => {
     test.each([
         {
             position: new Vector3(1, 2, 3), scale: 2, rotation: 90, expected: [

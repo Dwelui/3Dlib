@@ -14,19 +14,27 @@ export default class Vector2 extends Vector {
      * @param {Array<number|undefined>} values
      */
 
-    /** @param {...(number | undefined | Array<number | undefined>)} args */
-    constructor(...args) {
-        const values =
-            args.length === 1 && Array.isArray(args[0])
-                ? args[0]
-                : args
+    /**
+     * @overload
+     * @param {Vector} vector
+     */
 
-        for (let i = 0; i < Vector2.SIZE; i++) {
-            values[i] = values[i] ?? 0
+    /** @param {...(number | undefined | Array<number | undefined> | Vector)} args */
+    constructor(...args) {
+        /** @type {number[]} */
+        let values = []
+
+        if (args.length === 1) {
+            if (Array.isArray(args[0])) {
+                //@ts-ignore
+                values = args[0]
+            }
+        } else {
+            //@ts-ignore
+            values = args
         }
 
-        //@ts-ignore
-        super(values, Vector2.SIZE)
+        super(values, new.target.SIZE)
     }
 
     get x() { return this[0] }

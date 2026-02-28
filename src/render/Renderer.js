@@ -149,7 +149,7 @@ export default class Renderer {
      * @returns {Vector2}
      */
     static projectVertex(vertex, m4) {
-        const vertexPosition = Vector4.fromVertex3(vertex.position)
+        const vertexPosition = new Vector4(vertex.position)
         const projectedVertexPosition = vertexPosition.multiplyMatrix4(m4)
         projectedVertexPosition.divideScalar(projectedVertexPosition.z)
 

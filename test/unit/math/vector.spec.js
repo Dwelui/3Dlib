@@ -181,6 +181,42 @@ describe('Vector', () => {
             expect(v.clone()).toBeInstanceOf(v.constructor)
         })
 
+        const constructorInputs = [
+            { vector: new Vector2(1, 2), constructor: Vector },
+            { vector: new Vector2(1, 2), constructor: Vector3 },
+            { vector: new Vector3(1, 2, 3), constructor: Vector2 },
+            { vector: new Vector3(1, 2, 3), constructor: Vector4 },
+            { vector: new Vector4(1, 2, 3, 4), constructor: Vector3 },
+            { vector: new Vector4(1, 2, 3, 4), constructor: Vector },
+            { vector: new Vector([1, 2, 3, 4, 5]), constructor: Vector4 },
+            { vector: new Vector([1, 2, 3, 4, 5]), constructor: Vector3 },
+        ]
+
+        function constructorTestCases() {
+            return constructorInputs.map(({ vector, constructor }) => {
+                const expectedComponents = []
+
+                const expectedLength = Math.min(vector.length, constructor.SIZE)
+                for (let i = 0; i < expectedLength; i++) {
+                    expectedComponents.push(vector[i])
+                }
+
+                return {
+                    vector: vector.clone(),
+                    constructor,
+                    expected: new constructor(expectedComponents)
+                }
+            })
+        }
+
+        test.for(constructorTestCases())(
+            'constructor ($constructor) creates from other vector ($vector) with correct values ($expected)',
+            ({ vector, constructor, expected }) => {
+                const v = new constructor(vector)
+
+                expect(v.toArray()).toEqual(expected.toArray())
+            })
+
         test.for(inputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => {
             const v = new constructor(values)
 
