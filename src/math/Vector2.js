@@ -28,6 +28,8 @@ export default class Vector2 extends Vector {
             if (Array.isArray(args[0])) {
                 //@ts-ignore
                 values = args[0]
+            } else if (args[0] instanceof Vector) {
+                values = args[0].toArray()
             }
         } else {
             //@ts-ignore

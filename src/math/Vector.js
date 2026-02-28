@@ -6,14 +6,12 @@ export default class Vector extends Float64Array {
     * @param {number} [length]
     */
     constructor(values, length) {
-        super(length ?? values.length)
+        const l = length ?? values.length
+        super(l)
 
-        const l = values.length
         for (let i = 0; i < l; i++) {
-            values[i] = values[i] ?? 0
+            this[i] = values[i] ?? 0
         }
-
-        this.set(values)
     }
 
     get magnitude() {
