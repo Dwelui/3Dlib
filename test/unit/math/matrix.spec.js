@@ -52,7 +52,11 @@ describe('Matrix', () => {
             expect(actualMatrix.toArray()).toEqual(values)
         })
 
-        test.todo.for(arrayInputs)('clone keeps correct type ($constructor)', ({ values, constructor }) => { })
+        test.for(arrayInputs)('clone keeps correct type ($constructor)', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+
+            expect(actualMatrix.clone()).toBeInstanceOf(actualMatrix.constructor)
+        })
 
         test.todo.for(arrayInputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => { })
 

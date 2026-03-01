@@ -61,4 +61,8 @@ export default class Matrix extends Float64Array {
     get cols() { return this.#cols }
 
     toArray() { return [...this] }
+
+    /** @returns {this} */
+    // @ts-ignore
+    clone() { return new this.constructor([...this]) }
 }
