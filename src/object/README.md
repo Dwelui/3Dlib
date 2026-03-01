@@ -11,5 +11,6 @@ Scene should be compositive of Transform only
 
 # Add Box subclass of Instance
 It should the subclass of Instance with it's own API to control Mesh
+Collapse BoxMesh into Box
 
 # Instance and Camera should have their own translate, scale, rotate methods
