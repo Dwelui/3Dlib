@@ -17,8 +17,8 @@ export default class Transform {
     * @param {number} scale
     */
     constructor(position, rotation, scale) {
-        this.#position = position
-        this.#rotation = rotation
+        this.#position = position.clone()
+        this.#rotation = rotation.clone()
         this.#scale = scale
 
         this.#matrixCache = null
