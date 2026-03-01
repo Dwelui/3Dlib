@@ -37,8 +37,9 @@ export default class Matrix extends Float64Array {
             }
         } else if (args[0] instanceof Matrix) {
             values = [...args[0]]
+
             rows = args[0].rows
-            rows = args[0].cols
+            cols = args[0].cols
         }
 
         if (rows === null || cols === null) {
