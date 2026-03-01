@@ -64,7 +64,11 @@ describe('Matrix', () => {
             expect(actualMatrix.clone().toArray()).toEqual(values)
         })
 
-        test.todo.for(arrayInputs)('toJSON returns correct json', ({ values, constructor }) => { })
+        test.for(arrayInputs)('toJSON returns correct json', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+
+            expect(actualMatrix.toJSON()).toEqual({...values})
+        })
 
         test.todo.for(arrayInputs)('fromJSON creates correct matrix', ({ values, constructor }) => { })
 

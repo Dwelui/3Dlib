@@ -62,6 +62,20 @@ export default class Matrix extends Float64Array {
 
     toArray() { return [...this] }
 
+    /**
+    * Returns object with keys as element position. { '0': 10, '1': 20... }
+    */
+    toJSON() {
+        /** @type {Record<string, number>} */
+        const obj = {}
+        const l = this.length
+        for (let i = 0; i < l; i++) {
+            obj[i] = this[i]
+        }
+
+        return obj
+    }
+
     /** @returns {this} */
     // @ts-ignore
     clone() { return new this.constructor([...this]) }
