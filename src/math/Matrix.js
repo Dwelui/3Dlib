@@ -43,6 +43,7 @@ export default class Matrix extends Float64Array {
                 cols = args[2]
             }
         } else if (args[0] instanceof Matrix) {
+            // TODO: .slice() is more performant than [...<arrayBuffer>]
             values = [...args[0]]
 
             rows = args[0].rows
@@ -92,5 +93,5 @@ export default class Matrix extends Float64Array {
 
     /** @returns {this} */
     // @ts-ignore
-    clone() { return new this.constructor([...this]) }
+    clone() { return new this.constructor(this) }
 }

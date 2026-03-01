@@ -19,10 +19,11 @@ export default class Vector extends Float64Array {
         if (Array.isArray(args[0]))
             values = Array.isArray(args[0][0]) ? args[0][0] : args[0]
 
+        // TODO: .slice() is more performant than [...<arrayBuffer>]
         if (args[0][0] instanceof Vector)
-            values = args[0][0].toArray()
+            values = [...args[0][0]]
         else if (args[0] instanceof Vector)
-            values = args[0].toArray()
+            values = [...args[0]]
 
         if (new.target.SIZE !== Infinity)
             l = new.target.SIZE
@@ -59,7 +60,7 @@ export default class Vector extends Float64Array {
 
     /** @returns {this} */
     // @ts-ignore
-    clone() { return new this.constructor([...this]) }
+    clone() { return new this.constructor(this) }
 
     normalize() {
         const vl = this.magnitude
