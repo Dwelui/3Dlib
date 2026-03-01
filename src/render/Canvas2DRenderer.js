@@ -6,11 +6,14 @@ import Vector4 from "../math/Vector4.js"
 import Camera from "../object/Camera.js"
 import Object3D from "../object/Object3D.js"
 import Viewport from "../Viewport.js"
-import RendererInterface from "./RendererInterface.js"
 import Triangle from "./Triangle.js"
 import Vertex from "./Vertex.js"
 
-/** @implements {RendererInterface} */
+/**
+ * @typedef {import('./RendererInterface.js').default} RendererInterface
+ *
+ * @implements {RendererInterface}
+ */
 export default class Canvas2DRenderer {
     /** @type {Canvas} */ #canvas
     /** @type {Camera} */ #camera
@@ -23,10 +26,6 @@ export default class Canvas2DRenderer {
     constructor({ canvas, camera }) {
         this.#canvas = canvas
         this.#camera = camera
-    }
-
-    renderScene(scene) {
-
     }
 
     /**
