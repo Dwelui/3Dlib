@@ -10,7 +10,7 @@ import Triangle from "./Triangle.js"
 import Vertex from "./Vertex.js"
 
 /**
- * @typedef {import('./RendererInterface.js').default} RendererInterface
+ * @typedef {import('./renderer.interface.js').default} RendererInterface
  *
  * @implements {RendererInterface}
  */
