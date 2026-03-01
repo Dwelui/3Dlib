@@ -28,6 +28,10 @@ export default class Canvas2DRenderer {
         this.#camera = camera
     }
 
+    renderScene(scene) {
+
+    }
+
     /**
     * @param {Object3D} object
     * @param {Matrix4} cameraMatrix
