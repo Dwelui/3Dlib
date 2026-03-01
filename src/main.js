@@ -5,7 +5,7 @@ import Camera from "./object/Camera.js"
 import Object3D from "./object/Object3D.js"
 import Scene from "./object/Scene.js"
 import BoxMesh from "./render/BoxMesh.js"
-import Renderer from "./render/Renderer.js"
+import Renderer from "./render/Canvas2DRenderer.js"
 import Viewport from "./Viewport.js"
 
 const [width, height] = [window.innerWidth, window.innerHeight]

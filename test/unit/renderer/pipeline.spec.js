@@ -4,7 +4,7 @@ import Vector3 from "../../../src/math/Vector3.js";
 import Vector4 from "../../../src/math/Vector4.js";
 import Camera from "../../../src/object/Camera.js";
 import Object3D from "../../../src/object/Object3D.js";
-import Renderer from "../../../src/render/Renderer.js";
+import Renderer from "../../../src/render/Canvas2DRenderer.js";
 import Viewport from "../../../src/Viewport.js";
 import Vertex from "../../../src/render/Vertex.js";
 

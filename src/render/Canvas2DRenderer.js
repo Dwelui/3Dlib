@@ -10,7 +10,7 @@ import Viewport from "../Viewport.js"
 import Triangle from "./Triangle.js"
 import Vertex from "./Vertex.js"
 
-export default class Renderer {
+export default class Canvas2DRenderer {
     /** @type {Canvas} */ #canvas
     /** @type {Camera} */ #camera
 
