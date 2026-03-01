@@ -34,6 +34,7 @@ describe('Matrix', () => {
             { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },
+            { values: [1, 2, 3, 4], rows: 1, cols: 4, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 2, cols: 2, constructor: Matrix },
             { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix },
         ]
@@ -64,13 +65,45 @@ describe('Matrix', () => {
             expect(actualMatrix.clone().toArray()).toEqual(values)
         })
 
-        test.for(arrayInputs)('toJSON returns correct json', ({ values, rows, cols, constructor }) => {
+        test.for(arrayInputs)('($values) toJSON returns correct json', ({ values, rows, cols, constructor }) => {
+            if (rows === undefined || cols === undefined) {
+                const expectedDimensions = Math.sqrt(values.length)
+                rows = cols = expectedDimensions
+            }
+
+            const matrixObject = {
+                values: Object.fromEntries(
+                    values.map((v, i) => [String(i), v])
+                ),
+                rows,
+                cols
+            }
+
             const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
 
-            expect(actualMatrix.toJSON()).toEqual({...values})
+            expect(actualMatrix.toJSON()).toEqual(matrixObject)
         })
 
-        test.todo.for(arrayInputs)('fromJSON creates correct matrix', ({ values, constructor }) => { })
+        test.for(arrayInputs)('($values) fromJSON creates correct matrix', ({ values, rows, cols, constructor }) => {
+            if (rows === undefined || cols === undefined) {
+                const expectedDimensions = Math.sqrt(values.length)
+                rows = cols = expectedDimensions
+            }
+
+            const matrixObject = {
+                values: Object.fromEntries(
+                    values.map((v, i) => [String(i), v])
+                ),
+                rows,
+                cols
+            }
+
+            const m = constructor.fromJSON(matrixObject)
+
+            expect([...m]).toEqual(values)
+            expect(m.rows).toEqual(rows)
+            expect(m.cols).toEqual(cols)
+        })
 
         const matrixInputs = [
             { matrix: new Matrix([1, 2, 3, 4]), constructor: Matrix },

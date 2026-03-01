@@ -1,3 +1,10 @@
+/**
+* @typedef MatrixObject
+* @property {Record<string, number>} values
+* @property {number} rows
+* @property {number} cols
+*/
+
 export default class Matrix extends Float64Array {
     SIZE = Infinity
 
@@ -62,18 +69,25 @@ export default class Matrix extends Float64Array {
 
     toArray() { return [...this] }
 
-    /**
-    * Returns object with keys as element position. { '0': 10, '1': 20... }
-    */
+    /** @returns {MatrixObject} */
     toJSON() {
         /** @type {Record<string, number>} */
-        const obj = {}
+        const values = {}
         const l = this.length
         for (let i = 0; i < l; i++) {
-            obj[i] = this[i]
+            values[i] = this[i]
         }
 
-        return obj
+        return {
+            values,
+            rows: this.#rows,
+            cols: this.#cols
+        }
+    }
+
+    /** @param {MatrixObject} obj */
+    static fromJSON(obj) {
+        return new this(Object.values(obj.values), obj.rows, obj.cols)
     }
 
     /** @returns {this} */
