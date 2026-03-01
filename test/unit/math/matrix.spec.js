@@ -1,31 +1,64 @@
 import { describe, expect, test } from "vitest";
 import Matrix from "../../../src/math/Matrix.js";
 
+/**
+ * @template T
+ * @param {new (values: number[], rows?: number, cols?: number) => T} constructor
+ * @param {number[]} values
+ * @param {number} [rows]
+ * @param {number} [cols]
+ * @returns {{ actualMatrix: T, expectedRows: number, expectedCols: number }}
+ */
+const constructFromArrayValues = function(constructor, values, rows, cols) {
+    let matrix = null
+
+    if (rows === undefined || cols === undefined) {
+        matrix = new constructor(values)
+        const expectedDimensions = Math.sqrt(values.length)
+        rows = cols = expectedDimensions
+    } else {
+        matrix = new constructor(values, rows, cols)
+    }
+
+    return {
+        actualMatrix: matrix,
+        expectedRows: rows,
+        expectedCols: cols,
+    }
+}
+
 describe('Matrix', () => {
     describe('construction & conversion', () => {
         const arrayInputs = [
-            { values: [1, 2, 3, 4], rows: undefined, cols: undefined, constructor: Matrix },
+            { values: [1, 2, 3, 4], constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 2, cols: 2, constructor: Matrix },
+            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix },
         ]
 
         test.for(arrayInputs)('constructor ($constructor) creates from array with correct values', ({ values, rows, cols, constructor }) => {
-            let m = null
+            const { actualMatrix, expectedRows, expectedCols } = constructFromArrayValues(constructor, values, rows, cols)
 
-            if (rows === undefined || cols === undefined) {
-                m = new constructor(values)
-                const expectedDimensions = Math.sqrt(values.length)
-                rows = cols = expectedDimensions
-            } else {
-                m = new constructor(values, rows, cols)
-            }
-
-            expect([...m]).toEqual(values)
-            expect(m.rows).toEqual(rows)
-            expect(m.cols).toEqual(cols)
+            expect([...actualMatrix]).toEqual(values)
+            expect(actualMatrix.rows).toEqual(expectedRows)
+            expect(actualMatrix.cols).toEqual(expectedCols)
         })
+
+        test.for(arrayInputs)('toArray returns correct values ($values)', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+
+            expect(actualMatrix.toArray()).toEqual(values)
+        })
+
+        test.todo.for(arrayInputs)('clone keeps correct type ($constructor)', ({ values, constructor }) => { })
+
+        test.todo.for(arrayInputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => { })
+
+        test.todo.for(arrayInputs)('toJSON returns correct json', ({ values, constructor }) => { })
+
+        test.todo.for(arrayInputs)('fromJSON creates correct matrix', ({ values, constructor }) => { })
 
         const matrixInputs = [
             { matrix: new Matrix([1, 2, 3, 4]), constructor: Matrix },
@@ -52,15 +85,5 @@ describe('Matrix', () => {
                 new constructor(...args)
             }).toThrow("Matrix: invalid arguments provided.")
         })
-
-        test.todo.for(arrayInputs)('toArray returns correct values ($values)', ({ values, constructor }) => { })
-
-        test.todo.for(arrayInputs)('clone keeps correct type ($constructor)', ({ values, constructor }) => { })
-
-        test.todo.for(arrayInputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => { })
-
-        test.todo.for(arrayInputs)('toJSON returns correct json', ({ values, constructor }) => { })
-
-        test.todo.for(arrayInputs)('fromJSON creates correct matrix', ({ values, constructor }) => { })
     })
 })

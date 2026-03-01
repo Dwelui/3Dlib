@@ -59,4 +59,6 @@ export default class Matrix extends Float64Array {
 
     get rows() { return this.#rows }
     get cols() { return this.#cols }
+
+    toArray() { return [...this] }
 }
