@@ -1,12 +1,14 @@
 import Vector from "./Vector.js"
 
-export default class Vector2 extends Vector {
-    static SIZE = 2
+export default class Vector4 extends Vector {
+    static SIZE = 4
 
     /**
      * @overload
      * @param {number} [x=0]
      * @param {number} [y=0]
+     * @param {number} [z=0]
+     * @param {number} [w=0]
      *
      * @overload
      * @param {Array<number|undefined>} values
@@ -26,14 +28,22 @@ export default class Vector2 extends Vector {
     get y() { return this[1] }
     set y(number) { (this[1]) = number }
 
-    toJSON() { return { x: this.x, y: this.y } }
+    get z() { return this[2] }
+    set z(number) { (this[2]) = number }
+
+    get w() { return this[3] }
+    set w(number) { (this[3]) = number }
+
+    toJSON() { return { x: this[0], y: this[1], z: this[2], w: this[3] } }
 
     /**
      * @param {Object} [obj={}] - Object containing numeric keys corresponding to vector axes.
      * @param {number} [obj.x]
      * @param {number} [obj.y]
+     * @param {number} [obj.z]
+     * @param {number} [obj.w]
      */
-    static fromJSON({ x, y } = {}) {
-        return new Vector2(x, y)
+    static fromJSON({ x, y, z, w } = {}) {
+        return new Vector4(x, y, z, w)
     }
 }

@@ -4,10 +4,10 @@ export default class Color {
     /** @type {Uint8ClampedArray} */ #components = new Uint8ClampedArray(4)
 
     /**
-    * @param {number} [r=0] Red component (0–255)
-    * @param {number} [g=0] Green component (0–255)
-    * @param {number} [b=0] Blue component (0–255)
-    * @param {number} [a=255] Alpha component (0–255)
+    * @param {number} [r=0] Red component (0–255); Defaults to 0.
+    * @param {number} [g=0] Green component (0–255); Defaults to 0.
+    * @param {number} [b=0] Blue component (0–255); Defaults to 0.
+    * @param {number} [a=255] Alpha component (0–255); Defaults to 255.
     */
     constructor(r = 0, g = 0, b = 0, a = 255) {
         this.#components[0] = r
@@ -68,7 +68,6 @@ export default class Color {
     * Mutates vector
     *
     * @param {number} number
-    * @deprecated use static version.
     */
     multiplyScalar(number) {
         this.#components[0] *= number
