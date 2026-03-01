@@ -1,7 +1,7 @@
 import Matrix3 from "../math/Matrix3.js";
 import Matrix4 from "../math/Matrix4.js";
 import Vector3 from "../math/Vector3.js";
-import RendererUtils from "../render/RendererUtils.js";
+import RendererUtils from "../math/RendererUtils.js";
 
 export default class Transform {
     /** @type {Vector3} */ #position
