@@ -5,11 +5,12 @@ import Vector2 from "../math/Vector2.js"
 import Vector4 from "../math/Vector4.js"
 import Camera from "../object/Camera.js"
 import Object3D from "../object/Object3D.js"
-import Scene from "../object/Scene.js"
 import Viewport from "../Viewport.js"
+import RendererInterface from "./RendererInterface.js"
 import Triangle from "./Triangle.js"
 import Vertex from "./Vertex.js"
 
+/** @implements {RendererInterface} */
 export default class Canvas2DRenderer {
     /** @type {Canvas} */ #canvas
     /** @type {Camera} */ #camera
@@ -24,17 +25,8 @@ export default class Canvas2DRenderer {
         this.#camera = camera
     }
 
-    /**
-    * @param {Scene} scene
-    * @param {Matrix4} projectionMatrix
-    */
-    renderScene(scene, projectionMatrix) {
-        // TODO: Might want to move to camera object and update only on camera rotation or position updates.
-        const cameraMatrix = Canvas2DRenderer.calculateCameraMatrix(this.#camera)
+    renderScene(scene) {
 
-        for (const object of scene.objects) {
-            this.renderObject(object, cameraMatrix, projectionMatrix)
-        }
     }
 
     /**
