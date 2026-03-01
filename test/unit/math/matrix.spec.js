@@ -58,7 +58,11 @@ describe('Matrix', () => {
             expect(actualMatrix.clone()).toBeInstanceOf(actualMatrix.constructor)
         })
 
-        test.todo.for(arrayInputs)('clone keeps correct values ($values) ($constructor)', ({ values, constructor }) => { })
+        test.for(arrayInputs)('clone keeps correct values ($values) ($constructor)', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+
+            expect(actualMatrix.clone().toArray()).toEqual(values)
+        })
 
         test.todo.for(arrayInputs)('toJSON returns correct json', ({ values, constructor }) => { })
 
