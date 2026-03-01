@@ -30,7 +30,7 @@ export default class Canvas2DRenderer {
     */
     renderScene(scene, projectionMatrix) {
         // TODO: Might want to move to camera object and update only on camera rotation or position updates.
-        const cameraMatrix = Renderer.calculateCameraMatrix(this.#camera)
+        const cameraMatrix = Canvas2DRenderer.calculateCameraMatrix(this.#camera)
 
         for (const object of scene.objects) {
             this.renderObject(object, cameraMatrix, projectionMatrix)
@@ -50,11 +50,11 @@ export default class Canvas2DRenderer {
         const projectedVertices = []
         for (const vertex of mesh.vertices) {
             // TODO: Move to object and update on object translation, rotation, scale
-            const objectMatrix = Renderer.calculateObjectMatrix(object)
+            const objectMatrix = Canvas2DRenderer.calculateObjectMatrix(object)
 
             let m4 = Matrix4.multiplyMatrix4(cameraMatrix, objectMatrix)
             m4 = Matrix4.multiplyMatrix4(m4, projectionMatrix)
-            projectedVertices.push(Renderer.projectVertex(vertex.clone(), m4))
+            projectedVertices.push(Canvas2DRenderer.projectVertex(vertex.clone(), m4))
         }
 
         for (let triangle of mesh.triangles) {
