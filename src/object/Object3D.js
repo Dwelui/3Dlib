@@ -41,27 +41,6 @@ export default class Object3D {
     get mesh() { return this.#mesh }
     set mesh(mesh) { this.#mesh = mesh }
 
-    toJSON() {
-        return {
-            type: this.type,
-            Position: this.position.toJSON(),
-            Rotation: this.rotation.toJSON()
-        }
-    }
-
-    /**
-    * @param {{
-    *   Position: Object,
-    *   Rotation: Array<number> | Array<Vector3> | undefined
-    * }} abject
-    */
-    static fromJSON({ Position, Rotation }) {
-        return new Object3D({
-            position: Vector3.fromJSON(Position),
-            rotation: Matrix3.fromJSON(Rotation)
-        })
-    }
-
     /**
     * @param {Vector3} vector
     */

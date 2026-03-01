@@ -10,12 +10,6 @@ export default class Vertex {
         this.position = position ?? new Vector3()
     }
 
-    toJSON() {
-        return {
-            Position: this.position.toJSON()
-        }
-    }
-
     clone() {
         return new Vertex(this.position.clone())
     }

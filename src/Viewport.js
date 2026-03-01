@@ -36,21 +36,6 @@ export default class Viewport {
     /** @param {number} units - Must be positive */
     set distanceToCamera(units) { this.#distanceToCamera = units }
 
-    toJSON() {
-        return {
-            DistanceToCamera: this.distanceToCamera,
-            Width: this.width,
-            Height: this.height
-        }
-    }
-
-    /**
-    * @param {any} object
-    */
-    static fromJSON({ DistanceToCamera, Width, Height }) {
-        return new Viewport({ width: Width, height: Height }, DistanceToCamera)
-    }
-
     /**
     * @param {number} x
     * @param {number} y
