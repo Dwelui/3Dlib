@@ -1,7 +1,7 @@
 import Matrix4 from "../math/Matrix4.js"
 import Transform from "../object/Transform.js"
 
-export default class RendererMath {
+export default class RendererUtils {
     /**
      * @param {Transform} cameraTransform
      *
@@ -16,7 +16,7 @@ export default class RendererMath {
      *
      * @return {Matrix4}
      */
-    calculateModelMatrix(modelTransform) {
+    static calculateModelMatrix(modelTransform) {
         throw new Error('implement')
     }
 
@@ -28,7 +28,7 @@ export default class RendererMath {
      *
      * @return {Matrix4}
      */
-    calculateProjectionMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight) {
+    static calculateProjectionMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight) {
         throw new Error('implement')
     }
 }
