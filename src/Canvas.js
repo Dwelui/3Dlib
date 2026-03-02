@@ -8,25 +8,20 @@ import Viewport from "./Viewport.js"
 * @typedef {Object} CanvasOptions
 * @property {number} width  - Canvas width in pixels
 * @property {number} height - Canvas height in pixels
-* @property {Color} backroundColor - Canvas backround color
+* @property {Color} backgroundColor - Canvas backround color
 * @property {Viewport} viewport
 */
 
 export default class Canvas {
-    /** @type{HTMLCanvasElement} */ #canvas
-    /** @type{CanvasRenderingContext2D} */ #context
-    /** @type{CanvasOptions} */ #options = {
-        width: 0,
-        height: 0,
-        backroundColor: new Color(),
-        viewport: new Viewport({ width: 1, height: 1 }, 1)
-    }
+    /** @type {HTMLCanvasElement} */ #canvas
+    /** @type {CanvasRenderingContext2D} */ #context
+    /** @type {Color} */ #backgroundColor
 
     /**
     * @param {string} querySelector - Query selector to find canvas element by. Throws error if not found.
     * @param {CanvasOptions} options
     */
-    constructor(querySelector, options) {
+    constructor(querySelector, { width, height, backgroundColor, viewport }) {
         const canvas = document.querySelector(querySelector)
         if (!(canvas instanceof HTMLCanvasElement)) throw new Error("Canvas element not found")
         this.#canvas = canvas
@@ -35,30 +30,22 @@ export default class Canvas {
         if (context === null) throw new Error("Context not found")
         this.#context = context
 
-        this.backroundColor = options.backroundColor ?? new Color()
-        this.width = options.width
-        this.height = options.height
-        this.#options.viewport = options.viewport
+        this.#backgroundColor = backgroundColor
+        this.width = width
+        this.height = height
+        this.viewport = viewport
     }
 
-    get backroundColor() { return this.#options.backroundColor }
-    set backroundColor(color) {
-        this.#options.backroundColor = color
-    }
+    get backgroundColor() { return this.#backgroundColor }
+    set backgroundColor(color) { this.backgroundColor = color }
 
-    get width() { return this.#options.width }
+    get width() { return this.#canvas.width }
     /** @param {number} pixels - Must be positive */
-    set width(pixels) {
-        this.#options.width = pixels
-        this.#canvas.width = pixels
-    }
+    set width(pixels) { this.#canvas.width = pixels }
 
-    get height() { return this.#options.height }
+    get height() { return this.#canvas.height }
     /** @param {number} pixels - Must be positive */
-    set height(pixels) {
-        this.#options.height = pixels
-        this.#canvas.height = pixels
-    }
+    set height(pixels) { this.#canvas.height = pixels }
 
     /**
     * @param {Vector2} p1
@@ -190,7 +177,7 @@ export default class Canvas {
     }
 
     clear() {
-        this.#context.fillStyle = this.backroundColor.hex
+        this.#context.fillStyle = this.backgroundColor.hex
         this.#context.fillRect(0, 0, this.width, this.height)
     }
 
@@ -198,7 +185,7 @@ export default class Canvas {
     * @param {Vertex} vertex
     */
     projectVertexOld(vertex) {
-        const d = this.#options.viewport.distanceToCamera
+        const d = this.viewport.distanceToCamera
         const position = vertex.position
 
         return this.viewportToCanvas(position.x * d / position.z, position.y * d / position.z)
@@ -210,8 +197,8 @@ export default class Canvas {
     */
     viewportToCanvas(x, y) {
         return new Vector2(
-            x * this.width / this.#options.viewport.width,
-            y * this.height / this.#options.viewport.height
+            x * this.width / this.viewport.width,
+            y * this.height / this.viewport.height
         )
     }
 }

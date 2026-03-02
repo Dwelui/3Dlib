@@ -9,16 +9,16 @@ import Renderer from "./render/Canvas2DRenderer.js"
 import Viewport from "./Viewport.js"
 
 const [width, height] = [window.innerWidth, window.innerHeight]
-const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
 // TODO implement rotation to be passed into initilization
 const camera = new Camera({
     position: new Vector3(0, 0, -3),
 }).rotateY(25)
 
+const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
 const canvas = new Canvas('#canvas', {
     width,
     height,
-    backroundColor: new Color(255, 255, 255),
+    backgroundColor: new Color(255, 255, 255),
     viewport
 })
 
@@ -35,12 +35,6 @@ const box2 = new Object3D({
     position: new Vector3(1, 2, 3)
 })
 
-const matrix3dToCanvas = Renderer.calculateProjectionMatrix(viewport, {
-    width: canvas.width,
-    height: canvas.height
-})
-
 new Renderer({ canvas, camera }).renderScene(
     new Scene().add([box1, box2]),
-    matrix3dToCanvas
 )
