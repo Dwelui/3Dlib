@@ -15,6 +15,7 @@ import Viewport from "./Viewport.js"
 export default class Canvas {
     /** @type {HTMLCanvasElement} */ #canvas
     /** @type {CanvasRenderingContext2D} */ #context
+    /** @type {Viewport} */ #viewport
     /** @type {Color} */ #backgroundColor
 
     /**
@@ -30,14 +31,12 @@ export default class Canvas {
         if (context === null) throw new Error("Context not found")
         this.#context = context
 
-        this.#backgroundColor = backgroundColor
         this.width = width
         this.height = height
+        this.backgroundColor = backgroundColor
+        // TODO: Move viewport to camera
         this.viewport = viewport
     }
-
-    get backgroundColor() { return this.#backgroundColor }
-    set backgroundColor(color) { this.backgroundColor = color }
 
     get width() { return this.#canvas.width }
     /** @param {number} pixels - Must be positive */
@@ -46,6 +45,13 @@ export default class Canvas {
     get height() { return this.#canvas.height }
     /** @param {number} pixels - Must be positive */
     set height(pixels) { this.#canvas.height = pixels }
+
+    get backgroundColor() { return this.#backgroundColor.clone() }
+    set backgroundColor(color) { this.#backgroundColor = color.clone() }
+
+    get viewport() { return this.#viewport.clone() }
+    /** @param {Viewport} viewport */
+    set viewport(viewport) { this.#viewport = viewport.clone() }
 
     /**
     * @param {Vector2} p1
