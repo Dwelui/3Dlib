@@ -36,7 +36,7 @@ export default class Transform {
     /** @param {Matrix3} m3 */
     set rotation(m3) {
         this.#isDirty = true
-        this.#rotation.clone() = m3
+        this.#rotation = m3.clone()
     }
 
     get scale() { return this.#scale }

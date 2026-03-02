@@ -1,15 +1,20 @@
 import { describe, expect, test } from "vitest";
-import Vector2 from "../../../src/math/Vector2.js";
-import Vector3 from "../../../src/math/Vector3.js";
-import Vector4 from "../../../src/math/Vector4.js";
-import Camera from "../../../src/object/Camera.js";
-import Object3D from "../../../src/object/Object3D.js";
-import Renderer from "../../../src/render/Canvas2DRenderer.js";
-import Viewport from "../../../src/Viewport.js";
-import Vertex from "../../../src/render/Vertex.js";
+import RendererUtils from "../../../src/math/RendererUtils.js";
 
-describe.todo('Transform matrix', () => {
+describe('Transform matrix', () => {
+    describe('Projection', () => {
+        test.each([
+            { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.78, viewportHeight: 1 },
+            { canvasWidth: 1280, canvasHeight: 720, viewportWidth: 1.78, viewportHeight: 1 },
+            { canvasWidth: 854, canvasHeight: 480, viewportWidth: 1.78, viewportHeight: 1 },
+            { canvasWidth: 640, canvasHeight: 320, viewportWidth: 1.78, viewportHeight: 1 },
+        ])('calculate correct projection for canvas ($canvasWidth x $canvasHeight) and viewport ($viewportWidth x $viewportHeight)',
+            ({ canvasWidth, canvasHeight, viewportWidth, viewportHeight }) => {
+                const m4 = RendererUtils.calculateProjectionMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight)
 
+                console.log(m4)
+            })
+    })
 })
 
 // describe('camera matrix', () => {
