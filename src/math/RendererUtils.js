@@ -1,17 +1,34 @@
 import Matrix4 from "./Matrix4.js"
 import Transform from "../object/Transform.js"
+import Matrix from "./Matrix.js"
 
 export default class RendererUtils {
     /**
+     * Returns matrix for projecting and mapping to canvas.
+     *
      * @param {number} canvasWidth
      * @param {number} canvasHeight
      * @param {number} viewportWidth
      * @param {number} viewportHeight
+     * @param {number} viewportDistance
      *
-     * @return {Matrix4}
+     * @return {Matrix} 3x4 matrix.
      */
-    static calculateProjectionMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight) {
-        throw new Error('implement')
+    static calculateProjectionAndMappingMatrix(
+        canvasWidth,
+        canvasHeight,
+        viewportWidth,
+        viewportHeight,
+        viewportDistance
+    ) {
+        const widthModifier = (viewportDistance * canvasWidth) / viewportWidth
+        const heightModifier = (viewportDistance * canvasHeight) / viewportHeight
+
+        return new Matrix([
+            widthModifier, 0, 0, 0,
+            0, heightModifier, 0, 0,
+            0, 0, 1, 0,
+        ], 3, 4)
     }
 
     /**

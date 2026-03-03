@@ -1,18 +1,23 @@
 import { describe, expect, test } from "vitest";
 import RendererUtils from "../../../src/math/RendererUtils.js";
+import Vertex from "../../../src/render/Vertex.js";
+import Vector3 from "../../../src/math/Vector3.js";
+import Canvas2DRenderer from "../../../src/render/Canvas2DRenderer.js";
 
 describe('Transform matrix', () => {
     describe('Projection', () => {
         test.each([
-            { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.78, viewportHeight: 1 },
-            { canvasWidth: 1280, canvasHeight: 720, viewportWidth: 1.78, viewportHeight: 1 },
-            { canvasWidth: 854, canvasHeight: 480, viewportWidth: 1.78, viewportHeight: 1 },
-            { canvasWidth: 640, canvasHeight: 320, viewportWidth: 1.78, viewportHeight: 1 },
-        ])('calculate correct projection for canvas ($canvasWidth x $canvasHeight) and viewport ($viewportWidth x $viewportHeight)',
-            ({ canvasWidth, canvasHeight, viewportWidth, viewportHeight }) => {
-                const m4 = RendererUtils.calculateProjectionMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight)
+            {
+                vertex: new Vertex(new Vector3(1, 2, 3)),
+                matrixArguments: { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.78, viewportHeight: 1, viewportDistance: 1 }
+            },
+        ])('project vertex using projection and mapping matrix ($canvasWidth x $canvasHeight) and viewport ($viewportWidth x $viewportHeight x $viewportDistance)',
+            ({ vertex, matrixArguments }) => {
+                const { canvasWidth, canvasHeight, viewportWidth, viewportHeight, viewportDistance } = matrixArguments
 
-                console.log(m4)
+                const m = RendererUtils.calculateProjectionAndMappingMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight, viewportDistance)
+
+                const projectedVertex = Canvas2DRenderer.projectVertex()
             })
     })
 })

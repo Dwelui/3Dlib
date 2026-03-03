@@ -1,4 +1,5 @@
 import Canvas from "../Canvas.js"
+import Matrix from "../math/Matrix.js"
 import Matrix3 from "../math/Matrix3.js"
 import Matrix4 from "../math/Matrix4.js"
 import Vector2 from "../math/Vector2.js"
@@ -139,11 +140,12 @@ export default class Canvas2DRenderer {
 
     /**
      * @param {Vertex} vertex
-     * @param {Matrix4} m4 - 3D to Canvas projection matrix
+     * @param {Matrix} matrix - 3x4 projection and mapping matrix
      *
      * @returns {Vector2}
      */
-    static projectVertex(vertex, m4) {
+    static projectVertex(vertex, matrix) {
+        // TODO vertex should already store vector4 position.
         const vertexPosition = new Vector4(vertex.position)
         const projectedVertexPosition = vertexPosition.multiplyMatrix4(m4)
         projectedVertexPosition.divideScalar(projectedVertexPosition.z)
