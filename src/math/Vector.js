@@ -126,8 +126,6 @@ export default class Vector extends Float64Array {
         return this
     }
 
-    // TODO: Template the return type to matrix input m2 -> v2, m3 -> v3, m4 -> v4, m -> v
-
     /**
      * @param {Matrix} matrix
      *

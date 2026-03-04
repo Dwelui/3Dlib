@@ -1,3 +1,4 @@
+import Matrix3 from "./Matrix3.js"
 import Vector from "./Vector.js"
 
 export default class Vector3 extends Vector {
@@ -40,5 +41,15 @@ export default class Vector3 extends Vector {
      */
     static fromJSON({ x, y, z } = {}) {
         return new Vector3(x, y, z)
+    }
+
+    /**
+     * @param {Matrix3} matrix
+     *
+     * @returns {Vector3}
+     */
+    multiplyMatrix(matrix) {
+        // @ts-ignore
+        return super.multiplyMatrix(matrix)
     }
 }
