@@ -126,10 +126,36 @@ export default class Vector extends Float64Array {
         return this
     }
 
-    /** @param {Matrix} matrix */
+    // TODO: Template the return type to matrix input m2 -> v2, m3 -> v3, m4 -> v4, m -> v
+
+    /**
+     * @param {Matrix} matrix
+     *
+     * @returns {Vector} Creates new instance if resulting vector needs resizing.
+     */
     multiplyMatrix(matrix) {
-        if (matrix.cols !== this.length)
+        const l = this.length
+        const mCols = matrix.cols
+        const mRows = matrix.rows
+
+        if (mCols !== l)
             throw new Error(`Vector: multiplying ${this.length} vector with ${matrix.rows}x${matrix.cols} matrix`)
+
+        let result = Array(mRows)
+        let sum = 0
+        for (let i = 0; i < mRows; i++) {
+            for (let y = 0; y < mCols; y++)
+                sum += this[y] * matrix[y + i * mCols]
+            result[i] = sum
+            sum = 0
+        }
+
+        if (l !== mRows) {
+            return new Vector(result)
+        }
+
+        for (let i = 0; i < mRows; i++)
+            this[i] = result[i]
 
         return this
     }

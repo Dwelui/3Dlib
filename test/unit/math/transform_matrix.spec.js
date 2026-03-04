@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import RendererUtils from "../../../src/math/RendererUtils.js";
 import Vertex from "../../../src/render/Vertex.js";
-import Vector3 from "../../../src/math/Vector3.js";
+import Vector4 from "../../../src/math/Vector4.js";
 import Canvas2DRenderer from "../../../src/render/Canvas2DRenderer.js";
 
 describe('Transform matrix', () => {

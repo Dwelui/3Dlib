@@ -127,14 +127,14 @@ describe('Vector', () => {
                     expected: new Vector4(15, 31, 47, 63)
                 },
                 {
-                    vector: new Vector4([-3, 4, 2, 1]),
+                    vector: new Vector([-3, 4, 2, 1]),
                     matrix: new Matrix([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 3, 4),
                     expected: new Vector([15, 31, 47])
                 },
             ]
 
             describe('multiply', () => {
-                test.for(inputs)('correctly', ({ vector, matrix, expected }) => {
+                test.for(inputs)('($vector) correctly', ({ vector, matrix, expected }) => {
                     const v = vector.multiplyMatrix(matrix)
 
                     expect(v.toArray()).toEqual(expected.toArray())
