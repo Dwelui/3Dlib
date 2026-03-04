@@ -3,6 +3,7 @@ import Vector2 from "../../../src/math/Vector2.js"
 import Vector3 from "../../../src/math/Vector3.js"
 import Vector4 from "../../../src/math/Vector4.js"
 import Vector from "../../../src/math/Vector.js"
+import Matrix from "../../../src/math/Matrix.js"
 
 /**
  * @param {Vector2|Vector3|Vector4} vector
@@ -101,6 +102,23 @@ describe('Vector', () => {
                     const v = a.multiplyVector(b)
 
                     expect(v).toEqual(expected)
+                })
+            })
+        })
+
+        describe('matrix', () => {
+            const inputs = [
+                { vector: new Vector2(1, 1), matrix: new Matrix2([2, 1, 2, 1]), expected: new Vector2(3, 3) },
+                { vector: new Vector3(- 3, 4, 2), matrix: [-3, 1, 2], expected: new Vector3() },
+                { vector: new Vector4(- 3, 4, 2, 0), matrix: [- 6, 2, 2, 10], expected: new Vector4() },
+                { vector: new Vector([- 3, 4, 2, 0, 2]), matrix: [- 6, 2, 2, 10], expected: new Vector([]) },
+            ]
+
+            describe('multiply', () => {
+                test.for(inputs)('correctly', ({ vector, matrix, expected }) => {
+                    const v = vector.multiplyMatrix(matrix)
+
+                    expect(v.toArray()).toEqual(expected.toArray())
                 })
             })
         })

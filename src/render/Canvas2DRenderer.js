@@ -145,8 +145,8 @@ export default class Canvas2DRenderer {
      * @returns {Vector2}
      */
     static projectVertex(vertex, matrix) {
-        // TODO vertex should already store vector4 position.
-        const vertexPosition = new Vector4(vertex.position)
+        vertex.position
+
         const projectedVertexPosition = vertexPosition.multiplyMatrix4(m4)
         projectedVertexPosition.divideScalar(projectedVertexPosition.z)
 

@@ -8,7 +8,7 @@ describe('Transform matrix', () => {
     describe('Projection', () => {
         test.each([
             {
-                vertex: new Vertex(new Vector3(1, 2, 3)),
+                vertex: new Vertex(new Vector4(1, 2, 3, 1)),
                 matrixArguments: { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.78, viewportHeight: 1, viewportDistance: 1 }
             },
         ])('project vertex using projection and mapping matrix ($canvasWidth x $canvasHeight) and viewport ($viewportWidth x $viewportHeight x $viewportDistance)',
@@ -17,7 +17,7 @@ describe('Transform matrix', () => {
 
                 const m = RendererUtils.calculateProjectionAndMappingMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight, viewportDistance)
 
-                const projectedVertex = Canvas2DRenderer.projectVertex()
+                const projectedVertex = Canvas2DRenderer.projectVertex(vertex, m)
             })
     })
 })

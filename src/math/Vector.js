@@ -1,3 +1,5 @@
+import Matrix from "./Matrix.js"
+
 export default class Vector extends Float64Array {
     static SIZE = Infinity
 
@@ -120,6 +122,14 @@ export default class Vector extends Float64Array {
         const l = this.length
         for (let i = 0; i < l; i++)
             this[i] *= vector[i]
+
+        return this
+    }
+
+    /** @param {Matrix} matrix */
+    multiplyMatrix(matrix) {
+        if (matrix.cols !== this.length)
+            throw new Error(`Vector: multiplying ${this.length} vector with ${matrix.rows}x${matrix.cols} matrix`)
 
         return this
     }
