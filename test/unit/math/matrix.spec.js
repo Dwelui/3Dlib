@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import Matrix from "../../../src/math/Matrix.js";
+import Matrix2 from "../../../src/math/Matrix2.js";
 
 /**
  * @template T
@@ -9,7 +10,7 @@ import Matrix from "../../../src/math/Matrix.js";
  * @param {number} [cols]
  * @returns {{ actualMatrix: T, expectedRows: number, expectedCols: number }}
  */
-const constructFromArrayValues = function(constructor, values, rows, cols) {
+const constructFromArrayValues = function (constructor, values, rows, cols) {
     let matrix = null
 
     if (rows === undefined || cols === undefined) {
@@ -31,6 +32,7 @@ describe('Matrix', () => {
     describe('construction & conversion', () => {
         const arrayInputs = [
             { values: [1, 2, 3, 4], constructor: Matrix },
+            { values: [1, 2, 3, 4], constructor: Matrix2 },
             { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },

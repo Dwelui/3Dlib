@@ -21,11 +21,14 @@ export default class Matrix extends Float64Array {
      * @param {Matrix} matrix
      */
 
-    /** @param {...(number[] | number | undefined | Matrix)} args **/
+    /** @param {any} args **/
     constructor(...args) {
         /** @type {number[]} */
         let values = []
         let l = null, rows = null, cols = null
+
+        if (new.target !== Matrix)
+            args = args[0]
 
         if (Array.isArray(args[0])) {
             values = args[0]

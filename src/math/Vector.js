@@ -12,7 +12,7 @@ export default class Vector extends Float64Array {
      * @param {Vector} vector
      */
 
-    /** @param {...(any)} args */
+    /** @param {any} args */
     constructor(...args) {
         /** @type {(number|undefined)[]} */
         let values = []
