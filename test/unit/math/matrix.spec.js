@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 import Matrix from "../../../src/math/Matrix.js";
 import Matrix2 from "../../../src/math/Matrix2.js";
+import Matrix3 from "../../../src/math/Matrix3.js";
+import Matrix4 from "../../../src/math/Matrix4.js";
 
 /**
  * @template T
@@ -33,6 +35,8 @@ describe('Matrix', () => {
         const arrayInputs = [
             { values: [1, 2, 3, 4], constructor: Matrix },
             { values: [1, 2, 3, 4], constructor: Matrix2 },
+            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix3 },
+            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], constructor: Matrix4 },
             { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
             { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },
