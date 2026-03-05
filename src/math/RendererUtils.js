@@ -12,7 +12,7 @@ export default class RendererUtils {
      * @param {number} viewportHeight
      * @param {number} viewportDistance
      *
-     * @return {Matrix} 3x4 matrix.
+     * @return {Matrix4}
      */
     static calculateProjectionAndMappingMatrix(
         canvasWidth,
@@ -28,6 +28,7 @@ export default class RendererUtils {
             widthModifier, 0, 0, 0,
             0, heightModifier, 0, 0,
             0, 0, 1, 0,
+            0, 0, 0, 0
         ], 3, 4)
     }
 

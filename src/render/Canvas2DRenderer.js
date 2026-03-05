@@ -140,19 +140,17 @@ export default class Canvas2DRenderer {
 
     /**
      * @param {Vertex} vertex
-     * @param {Matrix} matrix - 3x4 projection and mapping matrix
+     * @param {Matrix4} matrix
      *
      * @returns {Vector2}
      */
     static projectVertex(vertex, matrix) {
-        vertex.position
-
-        const projectedVertexPosition = vertexPosition.multiplyMatrix4(m4)
-        projectedVertexPosition.divideScalar(projectedVertexPosition.z)
+        const projectedVertexPosition = vertex.position.multiplyMatrix(matrix)
+        const z = projectedVertexPosition.z
 
         return new Vector2(
-            projectedVertexPosition.x,
-            projectedVertexPosition.y,
+            projectedVertexPosition.x / z,
+            projectedVertexPosition.y / z,
         ).floor();
     }
 }

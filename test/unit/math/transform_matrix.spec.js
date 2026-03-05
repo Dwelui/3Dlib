@@ -9,15 +9,20 @@ describe('Transform matrix', () => {
         test.each([
             {
                 vertex: new Vertex(new Vector4(1, 2, 3, 1)),
-                matrixArguments: { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.78, viewportHeight: 1, viewportDistance: 1 }
+                matrixArguments: { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.777777778, viewportHeight: 1, viewportDistance: 1 },
+                expected: [359, 720]
             },
-        ])('project vertex using projection and mapping matrix ($canvasWidth x $canvasHeight) and viewport ($viewportWidth x $viewportHeight x $viewportDistance)',
-            ({ vertex, matrixArguments }) => {
+        ])('project vertex ($vertex.position) using projection and mapping matrix ($expected)',
+            ({ vertex, matrixArguments, expected }) => {
                 const { canvasWidth, canvasHeight, viewportWidth, viewportHeight, viewportDistance } = matrixArguments
 
                 const m = RendererUtils.calculateProjectionAndMappingMatrix(canvasWidth, canvasHeight, viewportWidth, viewportHeight, viewportDistance)
 
                 const projectedVertex = Canvas2DRenderer.projectVertex(vertex, m)
+
+                for (let i = 0; i < projectedVertex.length; i++) {
+                    expect(projectedVertex[i]).toBe(expected[i])
+                }
             })
     })
 })

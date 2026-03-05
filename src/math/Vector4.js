@@ -51,7 +51,7 @@ export default class Vector4 extends Vector {
     /**
      * @param {Matrix4} matrix
      *
-     * @returns {Vector4}
+     * @returns {Vector4|Vector}
      */
     multiplyMatrix(matrix) {
         // @ts-ignore

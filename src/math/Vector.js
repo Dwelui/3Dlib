@@ -148,7 +148,7 @@ export default class Vector extends Float64Array {
             sum = 0
         }
 
-        if (l !== mRows) {
+        if (l !== mRows && this.constructor === Vector) {
             return new Vector(result)
         }
 
