@@ -105,7 +105,7 @@ export default class Canvas {
 
             const hSegment = this.interpolate(xL, hLeft[y - p1.y], xR, hRight[y - p1.y])
             for (let x = xL; x <= xR; x++) {
-                const shadedColor = Color.multiplyScalar(color, hSegment[x - xL])
+                const shadedColor = color.clone().multiplyScalar(hSegment[x - xL])
                 this.putPixel(x, y, shadedColor)
             }
         }
