@@ -1,28 +1,26 @@
 import Color from "./Color.js"
 import Vector2 from "./math/Vector2.js"
 import Vector3 from "./math/Vector3.js"
-import Vertex from "./render/Vertex.js"
-import Viewport from "./Viewport.js"
 
 /**
 * @typedef {Object} CanvasOptions
-* @property {number} width  - Canvas width in pixels
-* @property {number} height - Canvas height in pixels
-* @property {Color} backgroundColor - Canvas backround color
-* @property {Viewport} viewport
+* @property {number} [width]  - Canvas width in pixels
+* @property {number} [height] - Canvas height in pixels
+* @property {Color} [backgroundColor] - Canvas backround color
 */
 
+// TODO: Make this only a wrapper over canvas element. All drawing implementation uses canvas element.
+// Store projection matrix on this class, recalculate on canvas dimensions changes.
 export default class Canvas {
     /** @type {HTMLCanvasElement} */ #canvas
     /** @type {CanvasRenderingContext2D} */ #context
-    /** @type {Viewport} */ #viewport
     /** @type {Color} */ #backgroundColor
 
     /**
     * @param {string} querySelector - Query selector to find canvas element by. Throws error if not found.
     * @param {CanvasOptions} options
     */
-    constructor(querySelector, { width, height, backgroundColor, viewport }) {
+    constructor(querySelector, options) {
         const canvas = document.querySelector(querySelector)
         if (!(canvas instanceof HTMLCanvasElement)) throw new Error("Canvas element not found")
         this.#canvas = canvas
@@ -31,11 +29,13 @@ export default class Canvas {
         if (context === null) throw new Error("Context not found")
         this.#context = context
 
-        this.width = width
-        this.height = height
-        this.backgroundColor = backgroundColor
-        // TODO: Move viewport to camera
-        this.viewport = viewport
+        if (options.width)
+            this.width = options.width
+
+        if (options.height)
+            this.height = options.height
+
+        this.backgroundColor = options.backgroundColor ?? new Color(255, 255, 255)
     }
 
     get width() { return this.#canvas.width }
@@ -48,10 +48,6 @@ export default class Canvas {
 
     get backgroundColor() { return this.#backgroundColor.clone() }
     set backgroundColor(color) { this.#backgroundColor = color.clone() }
-
-    get viewport() { return this.#viewport.clone() }
-    /** @param {Viewport} viewport */
-    set viewport(viewport) { this.#viewport = viewport.clone() }
 
     /**
     * @param {Vector2} p1
@@ -185,26 +181,5 @@ export default class Canvas {
     clear() {
         this.#context.fillStyle = this.backgroundColor.hex
         this.#context.fillRect(0, 0, this.width, this.height)
-    }
-
-    /**
-    * @param {Vertex} vertex
-    */
-    projectVertexOld(vertex) {
-        const d = this.viewport.distanceToCamera
-        const position = vertex.position
-
-        return this.viewportToCanvas(position.x * d / position.z, position.y * d / position.z)
-    }
-
-    /**
-    * @param {number} x
-    * @param {number} y
-    */
-    viewportToCanvas(x, y) {
-        return new Vector2(
-            x * this.width / this.viewport.width,
-            y * this.height / this.viewport.height
-        )
     }
 }

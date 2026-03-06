@@ -153,4 +153,14 @@ export default class Canvas2DRenderer {
             projectedVertexPosition.y / z,
         ).floor();
     }
+
+    projectVertex(vertex, matrix) {
+        const projectedVertexPosition = vertex.position.multiplyMatrix(matrix)
+        const z = projectedVertexPosition.z
+
+        return new Vector2(
+            projectedVertexPosition.x / z,
+            projectedVertexPosition.y / z,
+        ).floor();
+    }
 }
