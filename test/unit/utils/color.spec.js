@@ -14,5 +14,12 @@ describe('Color', () => {
 
             expect(c.toArray()).toEqual(expected)
         })
+
+
+        test.for(arrayInputs)('constructor ($constructor) creates from array with correct values', ({ values, expected }) => {
+            const c = new Color(...values)
+
+            expect(c.clone().toArray()).toEqual(expected)
+        })
     })
 })

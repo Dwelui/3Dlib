@@ -36,6 +36,10 @@ export default class Color extends Uint8ClampedArray {
 
     toArray() { return [...this] }
 
+    /** @returns {this} */
+    // @ts-ignore
+    clone() { return new this.constructor(...this) }
+
     /** @param {number} scalar */
     multiplyScalar(scalar) {
         const l = this.length
