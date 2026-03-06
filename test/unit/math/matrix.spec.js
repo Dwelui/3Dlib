@@ -31,20 +31,20 @@ const constructFromArrayValues = function (constructor, values, rows, cols) {
 }
 
 describe('Matrix', () => {
-    describe('construction & conversion', () => {
-        const arrayInputs = [
-            { values: [1, 2, 3, 4], constructor: Matrix },
-            { values: [1, 2, 3, 4], constructor: Matrix2 },
-            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix3 },
-            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], constructor: Matrix4 },
-            { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
-            { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
-            { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },
-            { values: [1, 2, 3, 4], rows: 1, cols: 4, constructor: Matrix },
-            { values: [1, 2, 3, 4], rows: 2, cols: 2, constructor: Matrix },
-            { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix },
-        ]
+    const arrayInputs = [
+        { values: [1, 2, 3, 4], constructor: Matrix },
+        { values: [1, 2, 3, 4], constructor: Matrix2 },
+        { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix3 },
+        { values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], constructor: Matrix4 },
+        { values: [1, 2, 3, 4], rows: 4, cols: undefined, constructor: Matrix },
+        { values: [1, 2, 3, 4], rows: undefined, cols: 2, constructor: Matrix },
+        { values: [1, 2, 3, 4], rows: 4, cols: 1, constructor: Matrix },
+        { values: [1, 2, 3, 4], rows: 1, cols: 4, constructor: Matrix },
+        { values: [1, 2, 3, 4], rows: 2, cols: 2, constructor: Matrix },
+        { values: [1, 2, 3, 4, 5, 6, 7, 8, 9], constructor: Matrix },
+    ]
 
+    describe('construction & conversion', () => {
         test.for(arrayInputs)('constructor ($constructor) creates from array with correct values', ({ values, rows, cols, constructor }) => {
             const { actualMatrix, expectedRows, expectedCols } = constructFromArrayValues(constructor, values, rows, cols)
 
@@ -135,6 +135,18 @@ describe('Matrix', () => {
                 //@ts-ignore
                 new constructor(...args)
             }).toThrow("Matrix: invalid arguments provided.")
+        })
+    })
+
+    describe('modify', () => {
+        test.for(arrayInputs)('identity correctly sets main diagonal', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+            actualMatrix.identity()
+
+            for (let i = 0; i < actualMatrix.rows; i++)
+                for (let y = 0; y < actualMatrix.cols; y++)
+                    if (i === y)
+                        expect(actualMatrix[i * actualMatrix.cols + y]).toEqual(1)
         })
     })
 })
