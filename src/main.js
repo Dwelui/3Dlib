@@ -11,9 +11,7 @@ import Viewport from "./Viewport.js"
 const [width, height] = [window.innerWidth, window.innerHeight]
 
 const viewport = new Viewport({ width: 2, height: 2 * height / width }, 1)
-const camera = new Camera({
-    position: new Vector3(0, 0, -3),
-})
+const camera = new Camera()
 
 const canvas = new Canvas('#canvas', { width, height })
 
