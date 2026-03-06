@@ -24,12 +24,12 @@ export default class RendererUtils {
         const widthModifier = (viewportDistance * canvasWidth) / viewportWidth
         const heightModifier = (viewportDistance * canvasHeight) / viewportHeight
 
-        return new Matrix([
+        return new Matrix4([
             widthModifier, 0, 0, 0,
             0, heightModifier, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 0
-        ], 3, 4)
+        ])
     }
 
     /**
