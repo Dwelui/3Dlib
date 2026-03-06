@@ -97,4 +97,12 @@ export default class Matrix extends Float64Array {
     /** @returns {this} */
     // @ts-ignore
     clone() { return new this.constructor(this) }
+
+    identity() {
+        const minDimension = Math.min(this.#rows, this.#cols)
+        for (let i = 0; i < minDimension; i++)
+            this[i * this.#cols + i] = 1
+
+        return this
+    }
 }

@@ -96,5 +96,6 @@ export default class Object3D {
 
         this.rotation = Matrix3.multiplyMatrix3(this.rotation, rotationMatrix)
 
+        return this
     }
 }
