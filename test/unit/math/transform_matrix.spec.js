@@ -3,12 +3,13 @@ import RendererUtils from "../../../src/math/RendererUtils.js";
 import Vertex from "../../../src/render/Vertex.js";
 import Vector4 from "../../../src/math/Vector4.js";
 import Canvas2DRenderer from "../../../src/render/Canvas2DRenderer.js";
+import Vector3 from "../../../src/math/Vector3.js";
 
 describe('Transform matrix', () => {
     describe('Projection', () => {
         test.each([
             {
-                vertex: new Vertex(new Vector4(1, 2, 3, 1)),
+                vertex: new Vertex(new Vector3(1, 2, 3)),
                 matrixArguments: { canvasWidth: 1920, canvasHeight: 1080, viewportWidth: 1.777777778, viewportHeight: 1, viewportDistance: 1 },
                 expected: [359, 720]
             },

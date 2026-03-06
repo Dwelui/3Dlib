@@ -145,17 +145,7 @@ export default class Canvas2DRenderer {
      * @returns {Vector2}
      */
     static projectVertex(vertex, matrix) {
-        const projectedVertexPosition = vertex.position.multiplyMatrix(matrix)
-        const z = projectedVertexPosition.z
-
-        return new Vector2(
-            projectedVertexPosition.x / z,
-            projectedVertexPosition.y / z,
-        ).floor();
-    }
-
-    projectVertex(vertex, matrix) {
-        const projectedVertexPosition = vertex.position.multiplyMatrix(matrix)
+        const projectedVertexPosition = vertex.positionV4.multiplyMatrix(matrix)
         const z = projectedVertexPosition.z
 
         return new Vector2(

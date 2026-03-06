@@ -34,6 +34,6 @@ const canvas = new Canvas('#canvas', { width, height })
 
 const renderer = new Canvas2DRenderer({ canvas, camera })
 const matrix = RendererUtils.calculateProjectionAndMappingMatrix(width, height, viewport.width, viewport.height, viewport.height)
-const vertex = new Vertex(new Vector4(0, 0, 1, 1))
+const vertex = new Vertex(new Vector3(1, 1, 5))
 const pixel = Canvas2DRenderer.projectVertex(vertex, matrix)
 canvas.putPixel(pixel.x, pixel.y, new Color(0, 0, 0))

@@ -175,7 +175,7 @@ export default class Canvas {
         if (x < 0 || x > this.width || y < 0 || y > this.height) console.warn(`pixel is out of bounds: ${x} ${y}`);
 
         this.#context.fillStyle = color.hex;
-        this.#context.fillRect(x, y, 1, 1)
+        this.#context.fillRect(x, y, 5, 5)
     }
 
     clear() {
