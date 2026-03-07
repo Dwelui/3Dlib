@@ -107,4 +107,18 @@ export default class Matrix extends Float64Array {
 
         return this
     }
+
+    transpose() {
+        const l = this.#rows * this.#cols
+
+        const temp = Array(l)
+        for (let y = 0; y < this.#cols; y++)
+            for (let i = 0; i < this.#rows; i++)
+                temp.push(this[i * this.#cols + y])
+
+        for (let i = 0; i < l; i++)
+            this[i] = temp[i]
+
+        return this
+    }
 }

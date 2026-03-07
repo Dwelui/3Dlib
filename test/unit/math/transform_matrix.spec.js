@@ -33,14 +33,14 @@ describe('Transform matrix', () => {
     describe('Camera', () => {
         test.each([
             {
-                transform: new Transform(
+                cameraTransform: new Transform(
                     new Vector3(1, 1, 1),
                 ),
                 expected: new Matrix4()
             },
-        ])('project vertex ($vertex.position) using projection and mapping matrix ($expected)',
-            ({ transform, expected }) => {
-                const m4 = RendererUtils.calculateCameraMatrix(transform)
+        ])('calculate correct camera matrix',
+            ({ cameraTransform, expected }) => {
+                const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
             })
     })
 })

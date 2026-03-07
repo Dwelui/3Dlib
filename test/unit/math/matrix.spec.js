@@ -159,5 +159,17 @@ describe('Matrix', () => {
                     if (i === y)
                         expect(actualMatrix[i * actualMatrix.cols + y]).toEqual(1)
         })
+
+        test.for(arrayInputs)('transpose correctly rotates matrix $constructor($values)', ({ values, rows, cols, constructor }) => {
+            const { actualMatrix } = constructFromArrayValues(constructor, values, rows, cols)
+            actualMatrix.transpose()
+
+            const transposeExpected = []
+            for (let y = 0; y < actualMatrix.cols; y++)
+                for (let i = 0; i < actualMatrix.rows; i++)
+                    transposeExpected.push(actualMatrix[i * actualMatrix.cols + y])
+
+            expect(transposeExpected).toEqual(actualMatrix.toArray())
+        })
     })
 })
