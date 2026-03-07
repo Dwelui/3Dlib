@@ -6,7 +6,7 @@
 */
 
 export default class Matrix extends Float64Array {
-    SIZE = Infinity
+    static SIZE = Infinity
 
     #rows = 0
     #cols = 0
@@ -27,8 +27,10 @@ export default class Matrix extends Float64Array {
         let values = []
         let l = null, rows = null, cols = null
 
-        if (new.target !== Matrix)
+        if (new.target !== Matrix) {
             args = args[0]
+            rows = cols = new.target.SIZE
+        }
 
         if (Array.isArray(args[0])) {
             values = args[0]

@@ -45,6 +45,17 @@ describe('Matrix', () => {
     ]
 
     describe('construction & conversion', () => {
+        test.for([
+            { constructor: Matrix2 },
+            { constructor: Matrix3 },
+            { constructor: Matrix4 },
+        ])('constructor ($constructor) creates without arguments with correct values', ({ constructor }) => {
+            const v = new constructor()
+
+            for (let i = 0; i < v.length; i++)
+                expect(v[i]).toEqual(0)
+        })
+
         test.for(arrayInputs)('constructor ($constructor) creates from array with correct values', ({ values, rows, cols, constructor }) => {
             const { actualMatrix, expectedRows, expectedCols } = constructFromArrayValues(constructor, values, rows, cols)
 
