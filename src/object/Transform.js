@@ -12,14 +12,14 @@ export default class Transform {
     /** @type {boolean} */ #isDirty
 
     /**
-    * @param {Vector3} position
-    * @param {Matrix3} rotation
-    * @param {number} scale
+    * @param {Vector3} [position]
+    * @param {Matrix3} [rotation]
+    * @param {number} [scale]
     */
     constructor(position, rotation, scale) {
-        this.#position = position.clone()
-        this.#rotation = rotation.clone()
-        this.#scale = scale
+        this.#position = position ? position.clone() : new Vector3()
+        this.#rotation = rotation ? rotation.clone() : new Matrix3()
+        this.#scale = scale ?? 1
 
         this.#matrixCache = null
         this.#isDirty = true

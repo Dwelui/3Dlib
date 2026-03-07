@@ -35,10 +35,8 @@ describe('Transform matrix', () => {
             {
                 transform: new Transform(
                     new Vector3(1, 1, 1),
-                    new Matrix3([]),
-                    1
                 ),
-                expected: new Matrix4([])
+                expected: new Matrix4()
             },
         ])('project vertex ($vertex.position) using projection and mapping matrix ($expected)',
             ({ transform, expected }) => {
