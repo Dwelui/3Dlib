@@ -181,12 +181,23 @@ describe('Matrix', () => {
                     b: new Matrix([2, 3, 4, 5]),
                     expected: new Matrix([10, 13, 22, 29])
                 },
+                {
+                    a: new Matrix2([1, 2, 3, 4]),
+                    b: new Matrix2([2, 3, 4, 5]),
+                    expected: new Matrix2([10, 13, 22, 29])
+                },
             ]
 
-            test.for(inputs)('($a) + ($b) => ($expected)', ({ a, b, expected }) => {
-                const m = a.multiplyMatrix(b)
+            test.for(inputs)('($a) + ($b) => ($expected) correct values', ({ a, b, expected }) => {
+                const m = a.clone().multiplyMatrix(b)
 
                 expect(expected.toArray()).toEqual(m.toArray())
+            })
+
+            test.for(inputs)('($a) + ($b) => ($expected) correct types', ({ a, b, expected }) => {
+                const m = a.multiplyMatrix(b)
+
+                expect(expected).instanceOf(m.constructor)
             })
         })
     })
