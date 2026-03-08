@@ -1,58 +1,41 @@
-import Matrix3 from "../math/Matrix3.js";
-import Matrix4 from "../math/Matrix4.js";
 import Vector3 from "../math/Vector3.js";
 import RendererUtils from "../math/RendererUtils.js";
+import MatrixUtils from "../math/MatrixUtils.js";
 
+// TODO: Cache rotation and model matricies.
 export default class Transform {
     /** @type {Vector3} */ #position
-    /** @type {Matrix3} */ #rotation
+    /** @type {Vector3} */ #rotation
     /** @type {number} */ #scale
-
-    /** @type {Matrix4|null} */ #matrixCache
-    /** @type {boolean} */ #isDirty
 
     /**
     * @param {Vector3} [position]
-    * @param {Matrix3} [rotation]
+    * @param {Vector3} [rotation]
     * @param {number} [scale]
     */
     constructor(position, rotation, scale) {
         this.#position = position ? position.clone() : new Vector3()
-        this.#rotation = rotation ? rotation.clone() : new Matrix3()
+        this.#rotation = rotation ? rotation.clone() : new Vector3()
         this.#scale = scale ?? 1
-
-        this.#matrixCache = null
-        this.#isDirty = true
     }
 
     get position() { return this.#position.clone() }
     /** @param {Vector3} v3 */
-    set position(v3) {
-        this.#isDirty = true
-        this.#position = v3.clone()
-    }
+    set position(v3) { this.#position = v3.clone() }
 
     get rotation() { return this.#rotation.clone() }
-    /** @param {Matrix3} m3 */
-    set rotation(m3) {
-        this.#isDirty = true
-        this.#rotation = m3.clone()
+    /** @param {Vector3} v3 */
+    set rotation(v3) { this.#rotation = v3.clone() }
+
+    get rotationMatrix() {
+        return MatrixUtils.calculateRotationMatrix(this.#rotation)
     }
 
     get scale() { return this.#scale }
     /** @param {number} scalar */
-    set scale(scalar) {
-        this.#isDirty = true
-        this.#scale = scalar
-    }
+    set scale(scalar) { this.#scale = scalar }
 
-    /** @returns {Matrix4} Returns a reference. */
     get modelMatrix() {
-        if (this.#isDirty === true || this.#matrixCache === null) {
-            this.#matrixCache = RendererUtils.calculateModelMatrix(this)
-            this.#isDirty = false
-        }
-
-        return this.#matrixCache
+        return RendererUtils.calculateModelMatrix(this)
     }
 }
