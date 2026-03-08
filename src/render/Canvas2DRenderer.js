@@ -38,37 +38,37 @@ export default class Canvas2DRenderer {
         const projectionMatrix = RendererUtils.calculateProjectionAndMappingMatrix(
             this.#canvas.width,
             this.#canvas.height,
-            viewport.width,
-            viewport.height,
-            viewport.height
+            this.#camera.viewport.width,
+            this.#camera.viewport.height,
+            this.#camera.viewport.distanceToCamera
         )
 
         // TODO:
         // 1. apply camera transform matrix;
-        // 2. apply projection matrix;
-        // 3. project vertex to 2d.
+        // 2. apply projection matrix - check;
+        // 3. project vertex to 2d - check.
 
-        const projectedVertices = Array(3)
+        const projectedVerticies = []
         for (const vertex of triangle.verticies) {
-
+            projectedVerticies.push(Canvas2DRenderer.projectVertex(vertex, projectionMatrix))
         }
 
-        this.#canvas.drawWireframeTriangle(
-            projectedVertices[triangle.vertices[0]],
-            projectedVertices[triangle.vertices[1]],
-            projectedVertices[triangle.vertices[2]],
+        this.#canvas.drawFilledTriangle(
+            projectedVerticies[0],
+            projectedVerticies[1],
+            projectedVerticies[2],
             triangle.color
         )
     }
 
     /**
      * @param {Vertex} vertex
-     * @param {Matrix4} matrix
+     * @param {Matrix4} projectionMatrix
      *
      * @returns {Vector2}
      */
-    static projectVertex(vertex, matrix) {
-        const projectedVertexPosition = vertex.positionVector4.multiplyMatrix(matrix)
+    static projectVertex(vertex, projectionMatrix) {
+        const projectedVertexPosition = vertex.positionVector4.multiplyMatrix(projectionMatrix)
         const z = projectedVertexPosition.z
 
         return new Vector2(

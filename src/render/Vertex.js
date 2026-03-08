@@ -15,7 +15,5 @@ export default class Vertex {
     get position() { return this.#position.clone() }
     get positionVector4() { return new Vector4([...this.#position, 1]) }
 
-    clone() {
-        return new Vertex(this.#position.clone())
-    }
+    clone() { return new Vertex(this.#position.clone()) }
 }
