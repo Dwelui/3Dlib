@@ -109,15 +109,39 @@ export default class Matrix extends Float64Array {
     }
 
     transpose() {
-        const l = this.#rows * this.#cols
-
-        const temp = Array(l)
+        const temp = Array(this.#rows * this.#cols)
+        let l = 0
         for (let y = 0; y < this.#cols; y++)
-            for (let i = 0; i < this.#rows; i++)
-                temp.push(this[i * this.#cols + y])
+            for (let i = 0; i < this.#rows; i++, l++)
+                temp[l] = this[i * this.#cols + y]
 
         for (let i = 0; i < l; i++)
             this[i] = temp[i]
+
+        return this
+    }
+
+    /** @param {Matrix} matrix */
+    multiplyMatrix(matrix) {
+        if (this.#rows !== matrix.#cols)
+            throw Error("Matrix: invalid matrix provided.")
+
+        const matrixT = matrix.clone().transpose()
+
+        const l = this.#rows * matrix.#cols
+        const temp = Array(l)
+        let sum = 0
+        for (let i = 0; i < this.#rows; i++)
+            for (let j = 0; j < matrixT.#rows; j++) {
+                for (let k = 0; k < matrixT.#cols; k++)
+                    sum += this[i * this.#rows + k] * matrixT[j * matrixT.#rows + k]
+                temp[i * this.#rows + j] = sum
+                sum = 0
+            }
+
+        for (let i = 0; i < l; i++) {
+            this[i] = temp[i]
+        }
 
         return this
     }

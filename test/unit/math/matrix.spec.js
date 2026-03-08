@@ -167,9 +167,27 @@ describe('Matrix', () => {
             const transposeExpected = []
             for (let y = 0; y < actualMatrix.cols; y++)
                 for (let i = 0; i < actualMatrix.rows; i++)
-                    transposeExpected.push(actualMatrix[i * actualMatrix.cols + y])
+                    transposeExpected.push(values[i * actualMatrix.cols + y])
 
-            expect(transposeExpected).toEqual(actualMatrix.toArray())
+            expect(actualMatrix.toArray()).toEqual(transposeExpected)
+        })
+    })
+
+    describe('arithmetics', () => {
+        describe('matrix', () => {
+            const inputs = [
+                {
+                    a: new Matrix([1, 2, 3, 4]),
+                    b: new Matrix([2, 3, 4, 5]),
+                    expected: new Matrix([10, 13, 22, 29])
+                },
+            ]
+
+            test.for(inputs)('($a) + ($b) => ($expected)', ({ a, b, expected }) => {
+                const m = a.multiplyMatrix(b)
+
+                expect(expected.toArray()).toEqual(m.toArray())
+            })
         })
     })
 })

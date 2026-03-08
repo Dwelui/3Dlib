@@ -38,7 +38,23 @@ export default class RendererUtils {
      * @return {Matrix4}
      */
     static calculateCameraMatrix(cameraTransform) {
-        throw new Error('implement')
+        const rotationM3 = cameraTransform.rotation.transpose()
+        const rotationM4 = new Matrix4([
+            rotationM3[0], rotationM3[1], rotationM3[2], 0,
+            rotationM3[3], rotationM3[4], rotationM3[5], 0,
+            rotationM3[6], rotationM3[7], rotationM3[8], 0,
+            0, 0, 0, 1
+        ])
+
+        const positionV3 = cameraTransform.position
+        const positionM4 = new Matrix4([
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            positionV3[0], positionV3[1], positionV3[2], 1
+        ])
+
+        return positionM4.multiplyMatrix(rotationM4)
     }
 
     /**
