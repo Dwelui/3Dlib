@@ -4,6 +4,7 @@ import RendererUtils from "./math/RendererUtils.js"
 import Vector3 from "./math/Vector3.js"
 import Vector4 from "./math/Vector4.js"
 import Camera from "./object/Camera.js"
+import Triangle from "./object/Triangle.js"
 import Canvas2DRenderer from "./render/Canvas2DRenderer.js"
 import Vertex from "./render/Vertex.js"
 import Viewport from "./Viewport.js"
@@ -33,7 +34,10 @@ const canvas = new Canvas('#canvas', { width, height })
 // )
 
 const renderer = new Canvas2DRenderer({ canvas, camera })
-const matrix = RendererUtils.calculateProjectionAndMappingMatrix(width, height, viewport.width, viewport.height, viewport.height)
-const vertex = new Vertex(new Vector3(1, 1, 5))
-const pixel = Canvas2DRenderer.projectVertex(vertex, matrix)
-canvas.putPixel(pixel.x, pixel.y, new Color(0, 0, 0))
+
+const triangle = new Triangle(
+    new Vertex(new Vector3(-1, -1, 5)),
+    new Vertex(new Vector3(0, 2, 5)),
+    new Vertex(new Vector3(1, 1, 5)),
+)
+renderer.renderTriangle(triangle)

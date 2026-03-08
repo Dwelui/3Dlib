@@ -27,9 +27,7 @@ export default class Transform {
     /** @param {Vector3} v3 */
     set rotation(v3) { this.#rotation = v3.clone() }
 
-    get rotationMatrix() {
-        return MatrixUtils.calculateRotationMatrix(this.#rotation)
-    }
+    get rotationMatrix() { return MatrixUtils.calculateRotationMatrix(this.#rotation) }
 
     get scale() { return this.#scale }
     /** @param {number} scalar */

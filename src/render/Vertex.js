@@ -2,21 +2,18 @@ import Vector3 from "../math/Vector3.js";
 import Vector4 from "../math/Vector4.js";
 
 export default class Vertex {
-    /** @type {Vector4} */ #position
+    /** @type {Vector3} */ #position
 
     /**
     * @param {Vector3} [position]
     */
     constructor(position) {
-        if (position instanceof Vector3)
-            this.#position = new Vector4(...position, 1)
-        else
-            this.#position = new Vector4()
+        this.#position = position ?? new Vector3()
     }
 
-    set position(v3) { this.#position = new Vector4([...v3, 1]) }
-    get position() { return new Vector3(this.#position) }
-    get positionV4() { return this.#position.clone() }
+    set position(v3) { this.#position = v3.clone() }
+    get position() { return this.#position.clone() }
+    get positionVector4() { return new Vector4([...this.#position, 1]) }
 
     clone() {
         return new Vertex(this.#position.clone())
