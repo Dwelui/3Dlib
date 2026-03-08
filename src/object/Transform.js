@@ -33,7 +33,13 @@ export default class Transform {
     /** @param {number} scalar */
     set scale(scalar) { this.#scale = scalar }
 
-    get modelMatrix() {
-        return RendererUtils.calculateModelMatrix(this)
+    get modelMatrix() { return RendererUtils.calculateModelMatrix(this) }
+
+    clone() {
+        return new Transform(
+            this.#position.clone(),
+            this.#rotation.clone(),
+            this.#scale
+        )
     }
 }

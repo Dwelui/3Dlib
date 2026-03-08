@@ -12,10 +12,10 @@ export default class Triangle {
     * @param {Color} [color]
     */
     constructor(v1, v2, v3, color) {
-        this.#vertices[0] = v1
-        this.#vertices[1] = v2
-        this.#vertices[2] = v3
-        this.#color = color ?? new Color()
+        this.#vertices[0] = v1.clone()
+        this.#vertices[1] = v2.clone()
+        this.#vertices[2] = v3.clone()
+        this.#color = color?.clone() ?? new Color()
     }
 
     set v1(vertex) { this.#vertices[0] = vertex.clone() }
@@ -28,4 +28,13 @@ export default class Triangle {
 
     set color(color) { this.#color = color.clone() }
     get color() { return this.#color.clone() }
+
+    clone() {
+        return new Triangle(
+            this.#vertices[0].clone(),
+            this.#vertices[1].clone(),
+            this.#vertices[2].clone(),
+            this.#color.clone()
+        )
+    }
 }
