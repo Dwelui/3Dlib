@@ -15,7 +15,7 @@ const canvas = new Canvas('#canvas', { width, height })
 const renderer = new Canvas2DRenderer({ canvas, camera })
 
 const instance = new Instance({
-    model: new BoxModel(),
+    model: new BoxModel({ width: 3, height: 3, length: 3 }),
 })
 
 renderer.renderInstance(instance)

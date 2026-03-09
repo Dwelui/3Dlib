@@ -14,79 +14,83 @@ export default class BoxModel extends Model {
     * @param {number} [args.height] Defaults to 1.
     * @param {number} [args.length] Defaults to 1.
     */
-    constructor({ width, height, length } = {}) {
+    constructor({ width = 1, height = 1, length = 1 } = {}) {
+        const halfWidth = width / 2
+        const halfHeight = height / 2
+        const halfLength = length / 2
+
         // INFO: This is in world coordinates
         super([
             // front
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 5)),
-                new Vertex(new Vector3(1, -1, 5)),
-                new Vertex(new Vector3(-1, -1, 5))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 5))
             ),
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 5)),
-                new Vertex(new Vector3(1, 1, 5)),
-                new Vertex(new Vector3(1, -1, 5))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5))
             ),
             // right
             new Triangle(
-                new Vertex(new Vector3(1, -1, 5)),
-                new Vertex(new Vector3(1, 1, 5)),
-                new Vertex(new Vector3(1, 1, 6))
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 6))
             ),
             new Triangle(
-                new Vertex(new Vector3(1, 1, 6)),
-                new Vertex(new Vector3(1, -1, 6)),
-                new Vertex(new Vector3(1, -1, 5))
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5))
             ),
             // back
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 6)),
-                new Vertex(new Vector3(1, -1, 6)),
-                new Vertex(new Vector3(-1, -1, 6))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 6))
             ),
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 6)),
-                new Vertex(new Vector3(1, 1, 6)),
-                new Vertex(new Vector3(1, -1, 6))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 6))
             ),
             // left
             new Triangle(
-                new Vertex(new Vector3(-1, -1, 5)),
-                new Vertex(new Vector3(-1, 1, 5)),
-                new Vertex(new Vector3(-1, 1, 6))
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6))
             ),
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 6)),
-                new Vertex(new Vector3(-1, -1, 6)),
-                new Vertex(new Vector3(-1, -1, 5))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 5))
             ),
             // top
             new Triangle(
-                new Vertex(new Vector3(1, 1, 5)),
-                new Vertex(new Vector3(-1, 1, 5)),
-                new Vertex(new Vector3(-1, 1, 6))
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6))
             ),
             new Triangle(
-                new Vertex(new Vector3(-1, 1, 6)),
-                new Vertex(new Vector3(1, 1, 6)),
-                new Vertex(new Vector3(1, 1, 5))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength + 5))
             ),
             // bottom
             new Triangle(
-                new Vertex(new Vector3(1, -1, 5)),
-                new Vertex(new Vector3(-1, -1, 5)),
-                new Vertex(new Vector3(-1, -1, 6))
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 5)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 6))
             ),
             new Triangle(
-                new Vertex(new Vector3(-1, -1, 6)),
-                new Vertex(new Vector3(1, -1, 6)),
-                new Vertex(new Vector3(1, -1, 5))
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 6)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength + 5))
             ),
         ])
 
-        this.#width = width ?? 1
-        this.#height = height ?? 1
-        this.#length = length ?? 1
+        this.#width = width
+        this.#height = height
+        this.#length = length
     }
 }
