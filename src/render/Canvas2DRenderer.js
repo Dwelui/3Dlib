@@ -32,6 +32,8 @@ export default class Canvas2DRenderer {
 
     /** @param {Instance} instance */
     renderInstance(instance) {
+        const modelMatrix = instance.transform.modelMatrix
+
         // TODO: flatten triangles into indecies and verticies and cache them in Model.
         // apply model and camera transformation matricies to flattened verticies.
         // find simial verticies and merge them, reroute indicies
