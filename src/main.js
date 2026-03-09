@@ -1,7 +1,6 @@
 import Canvas from "./Canvas.js"
 import Vector3 from "./math/Vector3.js"
 import Camera from "./object/Camera.js"
-import Transform from "./render/Transform.js"
 import Triangle from "./render/Triangle.js"
 import Canvas2DRenderer from "./render/Canvas2DRenderer.js"
 import Instance from "./render/Instance.js"
@@ -29,9 +28,8 @@ const triangle2 = new Triangle(
     new Vertex(new Vector3(1, -1, 5)),
 )
 
-const instance = new Instance(
-    new Model([triangle1, triangle2]),
-    new Transform()
-)
+const instance = new Instance({
+    model: new Model([triangle1, triangle2]),
+})
 
 renderer.renderInstance(instance)

@@ -6,12 +6,13 @@ export default class Instance {
     /** @type {Transform} */ #transform
 
     /**
-    * @param {Model} model
-    * @param {Transform} transform
+    * @param {Object} args
+    * @param {Model} args.model
+    * @param {Transform} [args.transform]
     */
-    constructor(model, transform) {
+    constructor({ model, transform }) {
         this.#model = model.clone()
-        this.#transform = transform.clone()
+        this.#transform = transform ? transform.clone() : new Transform()
     }
 
     get model() { return this.#model.clone() }
