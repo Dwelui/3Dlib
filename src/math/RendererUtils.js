@@ -1,5 +1,5 @@
 import Matrix4 from "./Matrix4.js"
-import Transform from "../object/Transform.js"
+import Transform from "../render/Transform.js"
 import Matrix from "./Matrix.js"
 
 export default class RendererUtils {

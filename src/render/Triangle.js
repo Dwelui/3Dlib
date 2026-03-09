@@ -1,5 +1,5 @@
 import Color from "../Color.js";
-import Vertex from "../render/Vertex.js";
+import Vertex from "./Vertex.js";
 
 export default class Triangle {
     /** @type {Array<Vertex>} */ #vertices = new Array(3)

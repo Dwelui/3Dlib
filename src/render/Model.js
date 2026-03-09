@@ -1,4 +1,4 @@
-import Triangle from "../object/Triangle.js";
+import Triangle from "./Triangle.js";
 
 export default class Model {
     /** @type {Triangle[]} */ #triangles

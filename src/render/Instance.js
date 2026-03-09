@@ -1,4 +1,4 @@
-import Transform from "../object/Transform.js";
+import Transform from "./Transform.js";
 import Model from "./Model.js";
 
 export default class Instance {

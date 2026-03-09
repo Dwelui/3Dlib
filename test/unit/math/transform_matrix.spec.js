@@ -4,7 +4,7 @@ import Vertex from "../../../src/render/Vertex.js";
 import Vector4 from "../../../src/math/Vector4.js";
 import Canvas2DRenderer from "../../../src/render/Canvas2DRenderer.js";
 import Vector3 from "../../../src/math/Vector3.js";
-import Transform from "../../../src/object/Transform.js";
+import Transform from "../../../src/render/Transform.js";
 import Matrix3 from "../../../src/math/Matrix3.js";
 import Matrix4 from "../../../src/math/Matrix4.js";
 

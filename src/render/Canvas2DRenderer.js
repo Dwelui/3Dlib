@@ -3,7 +3,7 @@ import Matrix4 from "../math/Matrix4.js"
 import RendererUtils from "../math/RendererUtils.js"
 import Vector2 from "../math/Vector2.js"
 import Camera from "../object/Camera.js"
-import Triangle from "../object/Triangle.js"
+import Triangle from "./Triangle.js"
 import Instance from "./Instance.js"
 import Vertex from "./Vertex.js"
 
