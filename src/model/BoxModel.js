@@ -22,16 +22,16 @@ export default class BoxModel extends Model {
         // TODO: Tiddy up triangle vertices order
         super([
             // front
-            // new Triangle(
-            //     new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
-            //     new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
-            //     new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength))
-            // ),
-            // new Triangle(
-            //     new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
-            //     new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
-            //     new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength))
-            // ),
+            new Triangle(
+                new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
+                new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength))
+            ),
+            new Triangle(
+                new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
+                new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
+                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength))
+            ),
             // left
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength)),
