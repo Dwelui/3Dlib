@@ -16,9 +16,8 @@ export default class Camera {
     }
 
     set viewport(viewport) { this.#viewport = viewport }
-    /** @returns {Viewport} Returns a reference. */
     get viewport() { return this.#viewport }
 
-    set transform(transform) { this.#transform = transform }
-    get transform() { return this.#transform }
+    set transform(transform) { this.#transform = transform.clone() }
+    get transform() { return this.#transform.clone() }
 }
