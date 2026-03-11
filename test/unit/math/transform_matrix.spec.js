@@ -36,11 +36,18 @@ describe('Transform matrix', () => {
                 cameraTransform: new Transform(
                     new Vector3(1, 1, 1),
                 ),
-                expected: new Matrix4()
+                expected: new Matrix4([
+                    1, 0, 0, -1,
+                    0, 1, 0, -1,
+                    0, 0, 1, -1,
+                    0, 0, 0, 1,
+                ])
             },
         ])('calculate correct camera matrix',
             ({ cameraTransform, expected }) => {
                 const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
+
+                expect(m4.toArray()).toEqual(expected.toArray())
             })
     })
 })
