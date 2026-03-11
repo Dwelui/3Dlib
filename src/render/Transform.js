@@ -1,5 +1,4 @@
 import Vector3 from "../math/Vector3.js";
-import RendererUtils from "../math/RendererUtils.js";
 import MatrixUtils from "../math/MatrixUtils.js";
 
 // TODO: Cache rotation and model matricies.
@@ -32,8 +31,6 @@ export default class Transform {
     get scale() { return this.#scale }
     /** @param {number} scalar */
     set scale(scalar) { this.#scale = scalar }
-
-    get modelMatrix() { return RendererUtils.calculateModelMatrix(this) }
 
     clone() {
         return new Transform(

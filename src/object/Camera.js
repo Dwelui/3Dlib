@@ -1,3 +1,4 @@
+import RendererUtils from "../math/RendererUtils.js";
 import Transform from "../render/Transform.js";
 import Viewport from "../Viewport.js";
 
@@ -20,4 +21,6 @@ export default class Camera {
 
     set transform(transform) { this.#transform = transform.clone() }
     get transform() { return this.#transform.clone() }
+
+    get cameraMatrix() { return RendererUtils.calculateCameraMatrix(this.#transform) }
 }

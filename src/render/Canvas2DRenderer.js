@@ -39,8 +39,8 @@ export default class Canvas2DRenderer {
             this.#camera.viewport.height,
             this.#camera.viewport.distanceToCamera
         )
-        const cameraMatrix = RendererUtils.calculateCameraMatrix(this.#camera.transform)
-        const modelMatrix = instance.transform.modelMatrix
+        const cameraMatrix = this.#camera.cameraMatrix
+        const modelMatrix = instance.modelMatrix
 
         const vertices = instance.model.vertices
         const l = vertices.length

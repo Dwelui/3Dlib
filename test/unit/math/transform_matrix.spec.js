@@ -131,7 +131,6 @@ describe('Transform matrix', () => {
         ])('calculate matrix', ({ transform, expected }) => {
             const m4 = RendererUtils.calculateModelMatrix(transform)
 
-            console.log(m4)
             for (let i = 0; i < m4.length; i++)
                 expect(m4[i]).toBeCloseTo(expected[i])
         })

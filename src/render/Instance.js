@@ -1,5 +1,6 @@
 import Transform from "./Transform.js";
 import Model from "./Model.js";
+import RendererUtils from "../math/RendererUtils.js";
 
 export default class Instance {
     /** @type {Model} */ #model
@@ -20,4 +21,6 @@ export default class Instance {
 
     get transform() { return this.#transform.clone() }
     set transform(transform) { this.#transform = transform.clone() }
+
+    get modelMatrix() { return RendererUtils.calculateModelMatrix(this.#transform) }
 }
