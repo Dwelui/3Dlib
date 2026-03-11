@@ -63,6 +63,24 @@ export default class RendererUtils {
      * @return {Matrix4}
      */
     static calculateModelMatrix(modelTransform) {
-        throw new Error('implement')
+        const scaleM4 = new Matrix4().identity().multiplyScalar(modelTransform.scale)
+
+        const rotationM3 = modelTransform.rotationMatrix
+        const rotationM4 = new Matrix4([
+            rotationM3[0], rotationM3[1], rotationM3[2], 0,
+            rotationM3[3], rotationM3[4], rotationM3[5], 0,
+            rotationM3[6], rotationM3[7], rotationM3[8], 0,
+            0, 0, 0, 1
+        ])
+
+        const positionV3 = modelTransform.position
+        const positionM4 = new Matrix4([
+            1, 0, 0, positionV3.x,
+            0, 1, 0, positionV3.y,
+            0, 0, 1, positionV3.z,
+            0, 0, 0, 1
+        ])
+
+        return scaleM4.multiplyMatrix(rotationM4).multiplyMatrix(positionM4)
     }
 }

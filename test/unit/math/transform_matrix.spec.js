@@ -33,7 +33,7 @@ describe('Transform matrix', () => {
     describe('Camera', () => {
         test.each([
             {
-                cameraTransform: new Transform(
+                transform: new Transform(
                     new Vector3(1, 1, 1),
                 ),
                 expected: new Matrix4([
@@ -44,7 +44,7 @@ describe('Transform matrix', () => {
                 ])
             },
             {
-                cameraTransform: new Transform(
+                transform: new Transform(
                     new Vector3(1, 1, 1),
                     new Vector3(0, 0, Math.PI)
                 ),
@@ -55,26 +55,83 @@ describe('Transform matrix', () => {
                     0, 0, 0, 1,
                 ])
             },
-        ])('calculate correct camera matrix', ({ cameraTransform, expected }) => {
-            const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
+        ])('calculate matrix', ({ transform, expected }) => {
+            const m4 = RendererUtils.calculateCameraMatrix(transform)
 
             expect(m4.toArray()).toEqual(expected.toArray())
         })
 
         test.each([
             {
-                cameraTransform: new Transform(
+                transform: new Transform(
                     new Vector3(1, 1, 1),
                 ),
                 vertex: new Vertex(new Vector3(1, 2, 3)),
                 expected: new Vertex(new Vector3(0, 1, 2))
             },
-        ])('apply camera matrix to vertex correctly', ({ cameraTransform, vertex, expected }) => {
-            const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
+        ])('apply matrix to vertex correctly', ({ transform, vertex, expected }) => {
+            const m4 = RendererUtils.calculateCameraMatrix(transform)
 
             const modifiedVertex = vertex.clone().applyTransformMatrix(m4)
 
             expect(modifiedVertex.position.toArray()).toEqual(expected.position.toArray())
+        })
+    })
+
+    describe('Instance', () => {
+        test.each([
+            {
+                transform: new Transform(
+                    new Vector3(1, 1, 1),
+                ),
+                expected: new Matrix4([
+                    1, 0, 0, 1,
+                    0, 1, 0, 1,
+                    0, 0, 1, 1,
+                    0, 0, 0, 1,
+                ])
+            },
+            {
+                transform: new Transform(
+                    new Vector3(),
+                    new Vector3(0, 0, Math.PI)
+                ),
+                expected: new Matrix4([
+                    Math.cos(Math.PI), -Math.sin(Math.PI), 0, 0,
+                    Math.sin(Math.PI), Math.cos(Math.PI), 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1,
+                ])
+            },
+            {
+                transform: new Transform(
+                    new Vector3(),
+                    new Vector3(),
+                    3
+                ),
+                expected: new Matrix4([
+                    3, 0, 0, 0,
+                    0, 3, 0, 0,
+                    0, 0, 3, 0,
+                    0, 0, 0, 1,
+                ])
+            },
+            {
+                transform: new Transform(
+                    new Vector3(1, 1, 1),
+                    new Vector3(0, 0, Math.PI)
+                ),
+                expected: new Matrix4([
+                    Math.cos(Math.PI), -Math.sin(Math.PI), 0, 1,
+                    Math.sin(Math.PI), Math.cos(Math.PI), 0, 1,
+                    0, 0, 1, 1,
+                    0, 0, 0, 1,
+                ])
+            },
+        ])('calculate matrix', ({ transform, expected }) => {
+            const m4 = RendererUtils.calculateModelMatrix(transform)
+
+            expect(m4.toArray()).toEqual(expected.toArray())
         })
     })
 })
