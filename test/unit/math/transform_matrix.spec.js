@@ -31,7 +31,7 @@ describe('Transform matrix', () => {
     })
 
     describe('Camera', () => {
-        test.todo.each([
+        test.each([
             {
                 cameraTransform: new Transform(
                     new Vector3(1, 1, 1),
