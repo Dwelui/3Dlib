@@ -38,6 +38,7 @@ export default class Canvas2DRenderer {
 
     /** @param {Instance} instance */
     renderInstance(instance) {
+        // TODO: Cache projectionMatrix and recalculate only when viewport has changed.
         const projectionMatrix = RendererUtils.calculateProjectionAndMappingMatrix(
             this.#canvas.width,
             this.#canvas.height,
@@ -49,6 +50,9 @@ export default class Canvas2DRenderer {
         const modelMatrix = instance.modelMatrix
         const model = instance.model.clone()
 
+        // TODO: Optimizations:
+        // Merging vertices by distance and recalcutating indeces
+        // Cache merged vertices
         const vertices = model.vertices
         const l = vertices.length
         for (let i = 0; i < l; i++) {

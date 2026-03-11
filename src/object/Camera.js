@@ -2,6 +2,9 @@ import RendererUtils from "../math/RendererUtils.js";
 import Transform from "../render/Transform.js";
 import Viewport from "../Viewport.js";
 
+// TODO:
+// Cache cameraMatrix;
+// Remove clone from setter and getter objects
 export default class Camera {
     /** @type {Viewport} */ #viewport
     /** @type {Transform} */ #transform
