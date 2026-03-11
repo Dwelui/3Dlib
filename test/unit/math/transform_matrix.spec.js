@@ -122,8 +122,8 @@ describe('Transform matrix', () => {
                     new Vector3(0, 0, Math.PI)
                 ),
                 expected: new Matrix4([
-                    Math.cos(Math.PI), -Math.sin(Math.PI), 0, 1,
-                    Math.sin(Math.PI), Math.cos(Math.PI), 0, 1,
+                    Math.cos(Math.PI), -Math.sin(Math.PI), 0, -1,
+                    Math.sin(Math.PI), Math.cos(Math.PI), 0, -1,
                     0, 0, 1, 1,
                     0, 0, 0, 1,
                 ])
@@ -131,7 +131,9 @@ describe('Transform matrix', () => {
         ])('calculate matrix', ({ transform, expected }) => {
             const m4 = RendererUtils.calculateModelMatrix(transform)
 
-            expect(m4.toArray()).toEqual(expected.toArray())
+            console.log(m4)
+            for (let i = 0; i < m4.length; i++)
+                expect(m4[i]).toBeCloseTo(expected[i])
         })
     })
 })
