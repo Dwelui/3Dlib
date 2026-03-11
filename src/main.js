@@ -18,26 +18,21 @@ const camera = new Camera({
     )
 })
 
-const box = new Instance({
+const box1 = new Instance({
     model: new BoxModel({ width: 3, height: 3, length: 3 }),
+    transform: new Transform(
+        new Vector3(-2, -2, 0),
+        new Vector3(0, Math.PI / 6)
+    )
 })
 
-// const box1 = new Instance({
-//     model: new BoxModel({ width: 3, height: 3, length: 3 }),
-//     transform: new Transform(
-//         new Vector3(-2, -2, 0),
-//         new Vector3(0, Math.PI / 6)
-//     )
-// })
-//
-// const box2 = new Instance({
-//     model: new BoxModel({ width: 3, height: 3, length: 3 }),
-//     transform: new Transform(
-//         new Vector3(2, 2, 0),
-//         new Vector3(0, Math.PI / 5)
-//     )
-// })
+const box2 = new Instance({
+    model: new BoxModel({ width: 3, height: 3, length: 3 }),
+    transform: new Transform(
+        new Vector3(2, 2, 0),
+        new Vector3(0, Math.PI / 5)
+    )
+})
 
-// const scene = new Scene({ instances: [box1, box2] })
-const scene = new Scene({ instances: [box] })
+const scene = new Scene({ instances: [box1, box2] })
 new Canvas2DRenderer({ canvas, camera }).renderScene(scene)
