@@ -35,11 +35,22 @@ describe('Transform matrix', () => {
             {
                 cameraTransform: new Transform(
                     new Vector3(1, 1, 1),
-                    new Vector3()
                 ),
                 expected: new Matrix4([
                     1, 0, 0, -1,
                     0, 1, 0, -1,
+                    0, 0, 1, -1,
+                    0, 0, 0, 1,
+                ])
+            },
+            {
+                cameraTransform: new Transform(
+                    new Vector3(1, 1, 1),
+                    new Vector3(0, 0, Math.PI)
+                ),
+                expected: new Matrix4([
+                    Math.cos(Math.PI), Math.sin(Math.PI), 0, -1,
+                    -Math.sin(Math.PI), Math.cos(Math.PI), 0, -1,
                     0, 0, 1, -1,
                     0, 0, 0, 1,
                 ])
@@ -58,7 +69,7 @@ describe('Transform matrix', () => {
                 vertex: new Vertex(new Vector3(1, 2, 3)),
                 expected: new Vertex(new Vector3(0, 1, 2))
             },
-        ])('calculate correct camera matrix', ({ cameraTransform, vertex, expected }) => {
+        ])('apply camera matrix to vertex correctly', ({ cameraTransform, vertex, expected }) => {
             const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
 
             const modifiedVertex = vertex.clone().applyTransformMatrix(m4)
