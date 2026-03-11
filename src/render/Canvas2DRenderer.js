@@ -45,6 +45,7 @@ export default class Canvas2DRenderer {
         const vertices = instance.model.vertices
         const l = vertices.length
         for (let i = 0; i < l; i++) {
+            vertices[i] = vertices[i].applyTransformMatrix(modelMatrix)
             vertices[i] = vertices[i].applyTransformMatrix(cameraMatrix)
         }
 
