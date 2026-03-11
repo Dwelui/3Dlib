@@ -1,0 +1,117 @@
+import Canvas from "../Canvas.js"
+import Matrix4 from "../math/Matrix4.js"
+import RendererUtils from "../math/RendererUtils.js"
+import Vector2 from "../math/Vector2.js"
+import Camera from "../object/Camera.js"
+import Triangle from "./Triangle.js"
+import Instance from "./Instance.js"
+import Vertex from "./Vertex.js"
+import Scene from "../object/Scene.js"
+
+/**
+ * @typedef {import('./renderer.interface.js').default} RendererInterface
+ *
+ * @implements {RendererInterface}
+ */
+export default class Canvas2DRenderer {
+    /** @type {Canvas} */ #canvas
+    /** @type {Camera} */ #camera
+
+    /**
+    * @param {Object} args
+    * @param {Canvas} args.canvas
+    * @param {Camera} args.camera
+    */
+    constructor({ canvas, camera }) {
+        this.#canvas = canvas
+        this.#camera = camera
+    }
+
+    /**
+     * @param {Scene} scene
+     */
+    renderScene(scene) {
+        for (const instance of scene.instances) {
+            this.renderInstance(instance)
+        }
+    }
+
+    /** @param {Instance} instance */
+    renderInstance(instance) {
+        // TODO: Cache projectionMatrix and recalculate only when viewport has changed.
+        const projectionMatrix = RendererUtils.calculateProjectionAndMappingMatrix(
+            this.#canvas.width,
+            this.#canvas.height,
+            this.#camera.viewport.width,
+            this.#camera.viewport.height,
+            this.#camera.viewport.distanceToCamera
+        )
+        const cameraMatrix = this.#camera.cameraMatrix
+        const modelMatrix = instance.modelMatrix
+        const model = instance.model.clone()
+
+        // TODO: Optimizations:
+        // Merging vertices by distance and recalcutating indeces
+        // Cache merged vertices
+        const vertices = model.vertices
+        const l = vertices.length
+        for (let i = 0; i < l; i++) {
+            vertices[i].applyTransformMatrix(modelMatrix)
+            vertices[i].applyTransformMatrix(cameraMatrix)
+        }
+
+        const projectedVerticies = Array(l)
+        for (let i = 0; i < l; i++) {
+            projectedVerticies[i] = Canvas2DRenderer.projectVertex(vertices[i], projectionMatrix);
+        }
+
+        const triangles = model.triangles
+        for (let i = 0; i < l; i += 3) {
+            this.#canvas.drawWireframeTriangle(
+                projectedVerticies[i + 0],
+                projectedVerticies[i + 1],
+                projectedVerticies[i + 2],
+                triangles[i / 3].color
+            )
+        }
+    }
+
+    /** @param {Triangle} triangle */
+    renderTriangle(triangle) {
+        const projectionMatrix = RendererUtils.calculateProjectionAndMappingMatrix(
+            this.#canvas.width,
+            this.#canvas.height,
+            this.#camera.viewport.width,
+            this.#camera.viewport.height,
+            this.#camera.viewport.distanceToCamera
+        )
+
+        const projectedVerticies = []
+        for (const vertex of triangle.verticies) {
+            projectedVerticies.push(Canvas2DRenderer.projectVertex(vertex, projectionMatrix))
+        }
+
+        this.#canvas.drawWireframeTriangle(
+            projectedVerticies[0],
+            projectedVerticies[1],
+            projectedVerticies[2],
+            triangle.color
+        )
+    }
+
+    /**
+     * @param {Vertex} vertex
+     * @param {Matrix4} projectionMatrix
+     *
+     * @returns {Vector2}
+     */
+    static projectVertex(vertex, projectionMatrix) {
+        const projectedVertex = vertex.clone().applyTransformMatrix(projectionMatrix)
+        const z = projectedVertex.position.z
+
+        return new Vector2(
+            projectedVertex.position.x / z,
+            projectedVertex.position.y / z,
+        ).floor();
+    }
+}

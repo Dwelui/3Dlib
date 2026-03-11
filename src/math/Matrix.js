@@ -1,0 +1,157 @@
+/**
+* @typedef MatrixObject
+* @property {Record<string, number>} values
+* @property {number} rows
+* @property {number} cols
+*/
+
+export default class Matrix extends Float64Array {
+    static SIZE = Infinity
+
+    #rows = 0
+    #cols = 0
+
+    /**
+     * @overload
+     * @param {number[]} values - Array be the length of square matricies (4, 9, 16...)
+     * @param {number} [rows]
+     * @param {number} [cols]
+     *
+     * @overload
+     * @param {Matrix} matrix
+     */
+
+    /** @param {any} args **/
+    constructor(...args) {
+        /** @type {number[]} */
+        let values = []
+        let l = null, rows = null, cols = null
+
+        if (new.target !== Matrix) {
+            args = args[0]
+            rows = cols = new.target.SIZE
+        }
+
+        if (Array.isArray(args[0])) {
+            values = args[0]
+            if (args.length === 1) {
+                const temp = Math.sqrt(args[0].length)
+                if (temp % 1 === 0) {
+                    rows = cols = temp
+                }
+            } else if (
+                args.length === 3 &&
+                typeof args[1] === "number" &&
+                typeof args[2] === "number"
+            ) {
+                rows = args[1]
+                cols = args[2]
+            }
+        } else if (args[0] instanceof Matrix) {
+            // TODO: .slice() is more performant than [...<arrayBuffer>]
+            values = [...args[0]]
+
+            rows = args[0].rows
+            cols = args[0].cols
+        }
+
+        if (rows === null || cols === null) {
+            throw Error("Matrix: invalid arguments provided.")
+        }
+
+        l = rows * cols
+
+        super(l)
+        for (let i = 0; i < l; i++) {
+            this[i] = values[i] ?? 0
+        }
+
+        this.#rows = rows
+        this.#cols = cols
+    }
+
+    get rows() { return this.#rows }
+    get cols() { return this.#cols }
+
+    toArray() { return [...this] }
+
+    /** @returns {MatrixObject} */
+    toJSON() {
+        /** @type {Record<string, number>} */
+        const values = {}
+        const l = this.length
+        for (let i = 0; i < l; i++) {
+            values[i] = this[i]
+        }
+
+        return {
+            values,
+            rows: this.#rows,
+            cols: this.#cols
+        }
+    }
+
+    /** @param {MatrixObject} obj */
+    static fromJSON(obj) {
+        return new this(Object.values(obj.values), obj.rows, obj.cols)
+    }
+
+    /** @returns {this} */
+    // @ts-ignore
+    clone() { return new this.constructor(this) }
+
+    identity() {
+        const minDimension = Math.min(this.#rows, this.#cols)
+        for (let i = 0; i < minDimension; i++)
+            this[i * this.#cols + i] = 1
+
+        return this
+    }
+
+    transpose() {
+        const temp = Array(this.#rows * this.#cols)
+        let l = 0
+        for (let y = 0; y < this.#cols; y++)
+            for (let i = 0; i < this.#rows; i++, l++)
+                temp[l] = this[i * this.#cols + y]
+
+        for (let i = 0; i < l; i++)
+            this[i] = temp[i]
+
+        return this
+    }
+
+    /** @param {Matrix} matrix */
+    multiplyMatrix(matrix) {
+        if (this.#rows !== matrix.#cols)
+            throw Error("Matrix: invalid matrix provided.")
+
+        const matrixT = matrix.clone().transpose()
+
+        const l = this.#rows * matrix.#cols
+        const temp = Array(l)
+        let sum = 0
+        for (let i = 0; i < this.#rows; i++)
+            for (let j = 0; j < matrixT.#rows; j++) {
+                for (let k = 0; k < matrixT.#cols; k++)
+                    sum += this[i * this.#rows + k] * matrixT[j * matrixT.#rows + k]
+                temp[i * this.#rows + j] = sum
+                sum = 0
+            }
+
+        for (let i = 0; i < l; i++) {
+            this[i] = temp[i]
+        }
+
+        return this
+    }
+
+    /** @param {number} scalar */
+    multiplyScalar(scalar) {
+        const l = this.#rows * this.#cols
+        for (let i = 0; i < l; i++)
+            this[i] *= scalar
+
+        return this
+    }
+}
