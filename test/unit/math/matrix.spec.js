@@ -200,5 +200,26 @@ describe('Matrix', () => {
                 expect(expected).instanceOf(m.constructor)
             })
         })
+
+        describe('scalar', () => {
+            const inputs = [
+                {
+                    matrix: new Matrix([1, 2, 3, 4]),
+                    scalar: 3,
+                    expected: new Matrix([3, 6, 9, 12])
+                },
+                {
+                    matrix: new Matrix2([1, 2, 3, 4]),
+                    scalar: 2,
+                    expected: new Matrix2([2, 4, 6, 8])
+                },
+            ]
+
+            test.for(inputs)('($matrix) * ($scalar) => ($expected) correct values', ({ matrix, scalar, expected }) => {
+                const m = matrix.clone().multiplyScalar(scalar)
+
+                expect(expected.toArray()).toEqual(m.toArray())
+            })
+        })
     })
 })

@@ -145,4 +145,13 @@ export default class Matrix extends Float64Array {
 
         return this
     }
+
+    /** @param {number} scalar */
+    multiplyScalar(scalar) {
+        const l = this.#rows * this.#cols
+        for (let i = 0; i < l; i++)
+            this[i] *= scalar
+
+        return this
+    }
 }
