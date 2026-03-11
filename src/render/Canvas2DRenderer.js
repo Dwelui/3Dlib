@@ -32,13 +32,30 @@ export default class Canvas2DRenderer {
 
     /** @param {Instance} instance */
     renderInstance(instance) {
-        const modelMatrix = instance.transform.modelMatrix
+        const projectionMatrix = RendererUtils.calculateProjectionAndMappingMatrix(
+            this.#canvas.width,
+            this.#canvas.height,
+            this.#camera.viewport.width,
+            this.#camera.viewport.height,
+            this.#camera.viewport.distanceToCamera
+        )
+        // const modelMatrix = instance.transform.modelMatrix
 
-        // TODO: flatten triangles into indecies and verticies and cache them in Model.
-        // apply model and camera transformation matricies to flattened verticies.
-        // find simial verticies and merge them, reroute indicies
-        for (const triangle of instance.model.triangles) {
-            this.renderTriangle(triangle)
+        const vertices = instance.model.vertices
+        const l = vertices.length
+        const projectedVerticies = Array(l)
+        for (let i = 0; i < l; i++) {
+            projectedVerticies[i] = Canvas2DRenderer.projectVertex(vertices[i], projectionMatrix);
+        }
+
+        const triangles = instance.model.triangles
+        for (let i = 0; i < l; i += 3) {
+            this.#canvas.drawWireframeTriangle(
+                projectedVerticies[i + 0],
+                projectedVerticies[i + 1],
+                projectedVerticies[i + 2],
+                triangles[i / 3].color
+            )
         }
     }
 
