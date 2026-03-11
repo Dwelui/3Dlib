@@ -1,3 +1,4 @@
+import Color from "../Color.js";
 import Vector3 from "../math/Vector3.js";
 import Model from "../render/Model.js";
 import Triangle from "../render/Triangle.js";
@@ -25,67 +26,79 @@ export default class BoxModel extends Model {
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
                 new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
-                new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength))
+                new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength)),
+                new Color(255, 0, 0)
             ),
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
                 new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
-                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength))
+                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
+                new Color(255, 0, 0)
             ),
             // left
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength)),
                 new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
-                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength)),
+                new Color(0, 255, 0)
             ),
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, halfHeight, halfLength)),
                 new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength)),
-                new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength))
+                new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength)),
+                new Color(0, 255, 0)
             ),
             // back
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength)),
                 new Vertex(new Vector3(-halfWidth, halfHeight, halfLength)),
-                new Vertex(new Vector3(halfWidth, halfHeight, halfLength))
+                new Vertex(new Vector3(halfWidth, halfHeight, halfLength)),
+                new Color(0, 0, 255)
             ),
             new Triangle(
                 new Vertex(new Vector3(halfWidth, halfHeight, halfLength)),
                 new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength)),
-                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength))
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength)),
+                new Color(0, 0, 255)
             ),
             // right
             new Triangle(
                 new Vertex(new Vector3(halfWidth, -halfHeight, halfLength)),
                 new Vertex(new Vector3(halfWidth, halfHeight, halfLength)),
-                new Vertex(new Vector3(halfWidth, halfHeight, -halfLength))
+                new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
+                new Color(128, 128, 0)
             ),
             new Triangle(
                 new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
                 new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
-                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength))
+                new Vertex(new Vector3(halfWidth, -halfHeight, halfLength)),
+                new Color(128, 128, 0)
             ),
             // top
             new Triangle(
                 new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
                 new Vertex(new Vector3(-halfWidth, halfHeight, -halfLength)),
-                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength))
+                new Vertex(new Vector3(-halfWidth, halfHeight, halfLength)),
+                new Color(128, 0, 128)
             ),
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, halfHeight, halfLength)),
                 new Vertex(new Vector3(halfWidth, halfHeight, halfLength)),
-                new Vertex(new Vector3(halfWidth, halfHeight, -halfLength))
+                new Vertex(new Vector3(halfWidth, halfHeight, -halfLength)),
+                new Color(128, 0, 128)
             ),
             // bottom
             new Triangle(
                 new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
                 new Vertex(new Vector3(-halfWidth, -halfHeight, -halfLength)),
-                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength))
+                new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength)),
+                new Color(0, 128, 128)
             ),
             new Triangle(
                 new Vertex(new Vector3(-halfWidth, -halfHeight, halfLength)),
                 new Vertex(new Vector3(halfWidth, -halfHeight, halfLength)),
-                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength))
+                new Vertex(new Vector3(halfWidth, -halfHeight, -halfLength)),
+                new Color(0, 128, 128)
             ),
         ])
 
