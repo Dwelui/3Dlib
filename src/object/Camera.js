@@ -8,11 +8,11 @@ export default class Camera {
     /**
     * @param {Object} args
     * @param {Viewport} args.viewport
-    * @param {Transform} args.transform
+    * @param {Transform} [args.transform]
     */
     constructor({ viewport, transform }) {
         this.#viewport = viewport
-        this.#transform = transform
+        this.#transform = transform ?? new Transform()
     }
 
     set viewport(viewport) { this.#viewport = viewport }

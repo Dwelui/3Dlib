@@ -10,7 +10,10 @@ import Vector3 from "./math/Vector3.js"
 const [width, height] = [window.innerWidth, window.innerHeight]
 
 const camera = new Camera({
-    viewport: new Viewport({ width: 3, height: 3 * height / width }, 1)
+    viewport: new Viewport({ width: 3, height: 3 * height / width }, 1),
+    transform: new Transform(
+        new Vector3()
+    )
 })
 
 const canvas = new Canvas('#canvas', { width, height })
