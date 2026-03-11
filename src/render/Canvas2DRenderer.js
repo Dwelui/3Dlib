@@ -6,6 +6,7 @@ import Camera from "../object/Camera.js"
 import Triangle from "./Triangle.js"
 import Instance from "./Instance.js"
 import Vertex from "./Vertex.js"
+import Scene from "../object/Scene.js"
 
 /**
  * @typedef {import('./renderer.interface.js').default} RendererInterface
@@ -26,8 +27,13 @@ export default class Canvas2DRenderer {
         this.#camera = camera
     }
 
+    /**
+     * @param {Scene} scene
+     */
     renderScene(scene) {
-
+        for (const instance of scene.instances) {
+            this.renderInstance(instance)
+        }
     }
 
     /** @param {Instance} instance */
