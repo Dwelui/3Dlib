@@ -18,8 +18,10 @@ const camera = new Camera({
     )
 })
 
+const boxModel = new BoxModel({ width: 3, height: 3, length: 3 })
+
 const box1 = new Instance({
-    model: new BoxModel({ width: 3, height: 3, length: 3 }),
+    model: boxModel,
     transform: new Transform(
         new Vector3(-2, -2, 0),
         new Vector3(0, Math.PI / 6)
@@ -27,7 +29,7 @@ const box1 = new Instance({
 })
 
 const box2 = new Instance({
-    model: new BoxModel({ width: 3, height: 3, length: 3 }),
+    model: boxModel,
     transform: new Transform(
         new Vector3(2, 2, 0),
         new Vector3(0, Math.PI / 5)

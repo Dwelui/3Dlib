@@ -12,15 +12,15 @@ export default class Instance {
     * @param {Transform} [args.transform]
     */
     constructor({ model, transform }) {
-        this.#model = model.clone()
-        this.#transform = transform ? transform.clone() : new Transform()
+        this.#model = model
+        this.#transform = transform ?? new Transform()
     }
 
-    get model() { return this.#model.clone() }
-    set model(model) { this.#model = model.clone() }
+    get model() { return this.#model }
+    set model(model) { this.#model = model }
 
-    get transform() { return this.#transform.clone() }
-    set transform(transform) { this.#transform = transform.clone() }
+    get transform() { return this.#transform }
+    set transform(transform) { this.#transform = transform }
 
     get modelMatrix() { return RendererUtils.calculateModelMatrix(this.#transform) }
 }

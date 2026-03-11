@@ -47,12 +47,13 @@ export default class Canvas2DRenderer {
         )
         const cameraMatrix = this.#camera.cameraMatrix
         const modelMatrix = instance.modelMatrix
+        const model = instance.model.clone()
 
-        const vertices = instance.model.vertices
+        const vertices = model.vertices
         const l = vertices.length
         for (let i = 0; i < l; i++) {
-            vertices[i] = vertices[i].applyTransformMatrix(modelMatrix)
-            vertices[i] = vertices[i].applyTransformMatrix(cameraMatrix)
+            vertices[i].applyTransformMatrix(modelMatrix)
+            vertices[i].applyTransformMatrix(cameraMatrix)
         }
 
         const projectedVerticies = Array(l)
@@ -60,7 +61,7 @@ export default class Canvas2DRenderer {
             projectedVerticies[i] = Canvas2DRenderer.projectVertex(vertices[i], projectionMatrix);
         }
 
-        const triangles = instance.model.triangles
+        const triangles = model.triangles
         for (let i = 0; i < l; i += 3) {
             this.#canvas.drawWireframeTriangle(
                 projectedVerticies[i + 0],
@@ -80,11 +81,6 @@ export default class Canvas2DRenderer {
             this.#camera.viewport.height,
             this.#camera.viewport.distanceToCamera
         )
-
-        // TODO:
-        // 1. apply camera transform matrix;
-        // 2. apply projection matrix - check;
-        // 3. project vertex to 2d - check.
 
         const projectedVerticies = []
         for (const vertex of triangle.verticies) {

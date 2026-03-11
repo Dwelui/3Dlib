@@ -1,7 +1,11 @@
 import Vector3 from "../math/Vector3.js";
 import MatrixUtils from "../math/MatrixUtils.js";
 
-// TODO: Cache rotation and model matricies.
+// TODO: Optimizations:
+// Cache rotation matrix;
+// Cache model matrix;
+// Remove clone on every setter and getter object;
+
 export default class Transform {
     /** @type {Vector3} */ #position
     /** @type {Vector3} */ #rotation
