@@ -9,7 +9,7 @@ export default class MatrixUtils {
     */
     static calculateRotationMatrix(rotationVector3) {
         const x = rotationVector3.x
-        const y = rotationVector3.y
+        const y = -rotationVector3.y
         const z = rotationVector3.z
 
         const xRotationMatrix = new Matrix3([

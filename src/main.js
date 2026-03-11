@@ -12,7 +12,8 @@ const [width, height] = [window.innerWidth, window.innerHeight]
 const camera = new Camera({
     viewport: new Viewport({ width: 3, height: 3 * height / width }, 1),
     transform: new Transform(
-        new Vector3()
+        new Vector3(0, 0, 0),
+        new Vector3(0, 0, 0)
     )
 })
 
