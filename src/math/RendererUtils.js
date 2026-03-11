@@ -86,6 +86,6 @@ export default class RendererUtils {
             0, 0, 0, 1
         ])
 
-        return scaleM4.multiplyMatrix(rotationM4).multiplyMatrix(positionM4)
+        return positionM4.multiplyMatrix(rotationM4).multiplyMatrix(scaleM4)
     }
 }
