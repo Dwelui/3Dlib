@@ -19,6 +19,7 @@ export default class BoxModel extends Model {
         const halfHeight = height / 2
         const halfLength = length / 2
 
+        // TODO: Tiddy up triangle vertices order
         super([
             // front
             new Triangle(

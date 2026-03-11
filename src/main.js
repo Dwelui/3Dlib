@@ -12,26 +12,25 @@ const [width, height] = [window.innerWidth, window.innerHeight]
 
 const canvas = new Canvas('#canvas', { width, height })
 const camera = new Camera({
-    viewport: new Viewport({ width: 3, height: 3 * height / width }, 1),
+    viewport: new Viewport({ width: 2, height: 2 * height / width }, 1),
     transform: new Transform(
-        new Vector3(0, 0, -5),
-        new Vector3(0, 0, 0)
+        new Vector3(0, 0, 8),
     )
 })
 
 const box1 = new Instance({
     model: new BoxModel({ width: 3, height: 3, length: 3 }),
     transform: new Transform(
-        new Vector3(0, 0, 4),
-        new Vector3(Math.PI / 6)
+        new Vector3(-2, -2, 0),
+        new Vector3(0, Math.PI / 6)
     )
 })
 
 const box2 = new Instance({
     model: new BoxModel({ width: 3, height: 3, length: 3 }),
     transform: new Transform(
-        new Vector3(0, 0, 4),
-        new Vector3(Math.PI / 6)
+        new Vector3(2, 2, 0),
+        new Vector3(0, Math.PI / 5)
     )
 })
 
