@@ -43,11 +43,26 @@ describe('Transform matrix', () => {
                     0, 0, 0, 1,
                 ])
             },
-        ])('calculate correct camera matrix',
-            ({ cameraTransform, expected }) => {
-                const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
+        ])('calculate correct camera matrix', ({ cameraTransform, expected }) => {
+            const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
 
-                expect(m4.toArray()).toEqual(expected.toArray())
-            })
+            expect(m4.toArray()).toEqual(expected.toArray())
+        })
+
+        test.each([
+            {
+                cameraTransform: new Transform(
+                    new Vector3(1, 1, 1),
+                ),
+                vertex: new Vertex(new Vector3(1, 2, 3)),
+                expected: new Vertex(new Vector3(0, 1, 2))
+            },
+        ])('calculate correct camera matrix', ({ cameraTransform, vertex, expected }) => {
+            const m4 = RendererUtils.calculateCameraMatrix(cameraTransform)
+
+            const modifiedVertex = vertex.clone().applyTransformMatrix(m4)
+
+            expect(modifiedVertex.position.toArray()).toEqual(expected.position.toArray())
+        })
     })
 })
