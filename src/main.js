@@ -14,7 +14,7 @@ const canvas = new Canvas('#canvas', { width, height })
 const camera = new Camera({
     viewport: new Viewport({ width: 2, height: 2 * height / width }, 1),
     transform: new Transform(
-        new Vector3(0, 0, 8),
+        new Vector3(0, 0, -8),
     )
 })
 
